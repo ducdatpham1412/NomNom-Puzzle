@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - VFX
+  - Obstacle
+  - Grass
+  - Item
+  - Bullet
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Environment
+  - Water
+  - UI
+  - PlayerBlue
+  - PlayerRed
+  - VFX
+  - Bullet
+  - Minimap
+  - Light
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 45855593
+    locked: 0
+  - name: Middleground
+    uniqueID: 1913875523
+    locked: 0
+  - name: Foreground
+    uniqueID: 92008043
+    locked: 0
+  - name: VFXDown
+    uniqueID: 2635764883
+    locked: 0
+  - name: VFXUp
+    uniqueID: 2400628075
+    locked: 0
+  - name: Minimap
+    uniqueID: 3083825877
+    locked: 0
+  - name: Playertest
+    uniqueID: 945598811
+    locked: 0
+  m_RenderingLayers:
+  - Default

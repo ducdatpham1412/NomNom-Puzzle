@@ -1,0 +1,13 @@
+[*.cs]
+indent_style = space
+indent_size = 4
+
+# Place all method parameters on a single line if they fit.
+csharp_preserve_single_line_statements = true
+csharp_preserve_single_line_blocks = true
+
+# Prevent unnecessary line breaks after commas.
+csharp_new_line_before_open_brace = none
+csharp_new_line_between_method_parameters = false
+csharp_new_line_before_open_brace_methods = none
+

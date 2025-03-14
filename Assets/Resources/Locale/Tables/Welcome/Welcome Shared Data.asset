@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Welcome Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Welcome
+  m_TableCollectionNameGuidString: 8aa419dad34004269b5776aa9a7f4315
+  m_Entries:
+  - m_Id: 336935772160
+    m_Key: login
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1488280608768
+    m_Key: quickLogin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1552176635904
+    m_Key: createAccount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1645785112576
+    m_Key: username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5823651635200
+    m_Key: password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5957701591040
+    m_Key: createdSuccessfully
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6080183656448
+    m_Key: enterPlayerName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6187499118592
+    m_Key: letFight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6474116882432
+    m_Key: usernameHasBeenTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8129772249088
+    m_Key: playerName
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1220104477823467842
+  references:
+    version: 2
+    RefIds:
+    - rid: 1220104477823467842
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1735288953020

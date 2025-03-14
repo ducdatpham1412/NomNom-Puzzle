@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Game_en-US
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en-US
+  m_SharedData: {fileID: 11400000, guid: 09972f08cc61d4bada0aa6d10b6794a5, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4339586626695463054
+  m_TableData:
+  - m_Id: 24959246336
+    m_Localized: Loading match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1070287343837184
+    m_Localized: You Go First
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1070513018363904
+    m_Localized: 'Opponent Go First
+
+'
+    m_Metadata:
+      m_Items:
+      - rid: 4339586626695463054
+  - m_Id: 1071031786659840
+    m_Localized: Continue ({0})
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1071217858568192
+    m_Localized: '{0} is the winner'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1074806404407296
+    m_Localized: Are you ready?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1074924599894016
+    m_Localized: Fight!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1077867176779776
+    m_Localized: Too slow!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1078089156124672
+    m_Localized: Nice shot!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1084541589512192
+    m_Localized: Hehe missed!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4647794521399296
+    m_Localized: Round
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4647951333842944
+    m_Localized: Final Leadeboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4651908978434048
+    m_Localized: Throw Egg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4651957640749056
+    m_Localized: Solve Math
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4652151782498304
+    m_Localized: Flappy Egg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4653825167187968
+    m_Localized: Begin in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4653923498450944
+    m_Localized: Ended
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4760396618522624
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5144310520471552
+    m_Localized: '{0} is the winner and earns {1} dragon eggs'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6580749267361792
+    m_Localized: Back To Lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11600631084081152
+    m_Localized: Who solves math faster?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12934611645489152
+    m_Localized: Victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12934618557702144
+    m_Localized: Tie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12934725340487680
+    m_Localized: Lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12934866382348288
+    m_Localized: Egg collected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23455988513234944
+    m_Localized: Egg
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23456037762752512
+    m_Localized: Gun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23456101042216960
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23461098039533568
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23461103206916096
+    m_Localized: Sell
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4339586626695463054
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 1070513018363904

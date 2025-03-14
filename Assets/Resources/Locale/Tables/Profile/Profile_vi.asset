@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Profile_vi
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: vi
+  m_SharedData: {fileID: 11400000, guid: b3ef0f9ef9351463bb12d3271e5b1549, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 1220104545343373488
+  m_TableData:
+  - m_Id: 5111799808
+    m_Localized: "X\u1EBFp h\u1EA1ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94622441472
+    m_Localized: "Tr\u1EE9ng r\u1ED3ng"
+    m_Metadata:
+      m_Items:
+      - rid: 1220104545343373488
+  - m_Id: 278332956672
+    m_Localized: "X\u1EBFp h\u1EA1ng: #{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 1220104545343373488
+  - m_Id: 609984962560
+    m_Localized: "Tr\u1EE9ng thu th\u1EADp: #{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1117315391488
+    m_Localized: " C\xE0i \u0111\u1EB7t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1188345929728
+    m_Localized: "S\u1EEDa th\xF4ng tin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1372631064576
+    m_Localized: "Ng\xF4n ng\u1EEF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1457427308544
+    m_Localized: "Th\xF4ng tin t\xE0i kho\u1EA3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1570052759552
+    m_Localized: "\u0110\u0103ng xu\u1EA5t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1690789994496
+    m_Localized: "T\xEAn ng\u01B0\u1EDDi ch\u01A1i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1787011522560
+    m_Localized: "L\u01B0u"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2032193757184
+    m_Localized: "B\u1EA3ng x\u1EBFp h\u1EA1ng"
+    m_Metadata:
+      m_Items:
+      - rid: 1220104545343373488
+  - m_Id: 2180995080192
+    m_Localized: "X\u1EBFp h\u1EA1ng c\u1EE7a b\u1EA1n: #{0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343723807334400
+    m_Localized: '{0}. {1}'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1220104545343373488
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 94622441472
+        - id: 278332956672
+        - id: 2032193757184

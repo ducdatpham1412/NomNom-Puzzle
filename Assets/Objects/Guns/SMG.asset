@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64bdd35368144606a4782fcbe92cf55, type: 3}
+  m_Name: SMG
+  m_EditorClassIdentifier: 
+  id: smg
+  Gun: {fileID: -7349882584872989000, guid: 7f8f89f6b728f4f20b63d03c8a7b522a, type: 3}
+  GunUI: {fileID: 0}
+  Bullet: {fileID: 1115682805434658061, guid: c2983b5b8c76c495fb519b4c8e199f49, type: 3}
+  ShotSound: {fileID: 8300000, guid: d10281821ab644e478059872dee9936b, type: 3}
+  ReloadSound: {fileID: 8300000, guid: fb22ecc8c1a7a4e05a1d8640efd1941d, type: 3}
+  EquipSound: {fileID: 8300000, guid: cda5d943923e8454cb7befb2a8ec69a0, type: 3}
+  gunNames:
+  - key: vi
+    name: SMG
+  - key: en
+    name: SMG
+  price: 2000
+  sellPrice: 1600
+  burstAmount: 3
+  holdToBurst: 1
+  fireDelay: 0.05
+  burstDelay: 0.1
+  reloadDelay: 2
+  isLimitBullets: 1
+  numberBullets: 200
+  magazineSize: 50
+  currentBullets: 50
+  bulletStats:
+    damage: 50
+    speed: 25
+  aimingRadius: 14
+  aimingAngle: 50

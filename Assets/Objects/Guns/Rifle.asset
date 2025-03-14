@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64bdd35368144606a4782fcbe92cf55, type: 3}
+  m_Name: Rifle
+  m_EditorClassIdentifier: 
+  id: rifle
+  Gun: {fileID: -3476979527478288156, guid: 7f8f89f6b728f4f20b63d03c8a7b522a, type: 3}
+  GunUI: {fileID: 0}
+  Bullet: {fileID: 5056628667063805970, guid: c2983b5b8c76c495fb519b4c8e199f49, type: 3}
+  ShotSound: {fileID: 8300000, guid: 3dd31e4cd0c4d41b987ff3c606de99a5, type: 3}
+  ReloadSound: {fileID: 8300000, guid: fb22ecc8c1a7a4e05a1d8640efd1941d, type: 3}
+  EquipSound: {fileID: 8300000, guid: cda5d943923e8454cb7befb2a8ec69a0, type: 3}
+  gunNames:
+  - key: vi
+    name: "S\xFAng tr\u01B0\u1EDDng"
+  - key: en
+    name: Rifle
+  price: 2500
+  sellPrice: 2000
+  burstAmount: 1
+  holdToBurst: 1
+  fireDelay: 0.05
+  burstDelay: 0.15
+  reloadDelay: 2
+  isLimitBullets: 1
+  numberBullets: 130
+  magazineSize: 30
+  currentBullets: 30
+  bulletStats:
+    damage: 180
+    speed: 20
+  aimingRadius: 14
+  aimingAngle: 50
