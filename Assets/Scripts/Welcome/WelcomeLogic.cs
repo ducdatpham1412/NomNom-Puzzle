@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 
@@ -14,7 +13,7 @@ public class WelcomeLogic : MonoBehaviour {
     void Start() {
         GameManager.Instance.Initialize();
         SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
-        // InitApp();
+        InitApp();
     }
 
     private async void InitApp() {
@@ -70,33 +69,6 @@ public class WelcomeLogic : MonoBehaviour {
 
     public void SetLocale(int localeID) {
         LocalizationManager.Instance.SetLocale(localeID);
-    }
-
-    public async void TestLogin() {
-        TestCreate testCreate = GameObject.Find("TestCreate").GetComponent<TestCreate>();
-
-        Debug.Log($"Check: {testCreate.input_01} - {LocalizationManager.Instance.GetLocale()}");
-
-        try {
-            var res = await ApiManager.POST<JObject>(
-                "/auth/login",
-                data: new Dictionary<string, object> {
-                    {"device_id", testCreate.input_01}
-                },
-                parameters: new Dictionary<string, string> {
-                    {"type", "device_id"},
-                }
-            );
-            ApiManager.SetAccount(resLogin: res);
-            GameManager.Instance.appState.resource = await ApiManager.GET<Resource>("/common/resource");
-            var passport = await ApiManager.GET<Passport>("/common/passport");
-            GameManager.Instance.appState.profile = passport.profile;
-            Storage.SetProfile(passport.profile);
-            Navigator.Instance.NavigateTo(Navigator.Scene.Home);
-        }
-        catch (Exception e) {
-            Debug.LogWarning(e.Message);
-        }
     }
 
     public enum CanvasName {

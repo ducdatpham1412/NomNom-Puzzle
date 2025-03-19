@@ -19,5 +19,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Eggvenger.sln"
+    "dotnet.defaultSolution": "NomNom.sln"
 }

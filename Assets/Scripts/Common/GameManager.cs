@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Threading;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
@@ -11,7 +9,6 @@ public class GameManager : Singleton<GameManager> {
     public Sprite background;
     SpriteRenderer spriteRenderer;
     SynchronizationContext context;
-    Coroutine matchFoundSound;
 
 
     // AppState
@@ -64,51 +61,10 @@ public class GameManager : Singleton<GameManager> {
         }
         FitTheScreen();
 
-        SocketManager.OnHandleData += HandleSocketEvent;
-    }
-
-    // This function for common socket event, which need to handle without depending on current scene on app
-    void HandleSocketEvent(JObject evt) {
-        string eventType = evt["type"]?.ToString();
-
-        if (eventType == Event.Name.match_found.ToString()) {
-            MatchState match = JsonConvert.DeserializeObject<MatchState>(evt["data"].ToString());
-            context.Post(_ => {
-                StopCountUp();
-                UpdateAppState(state => {
-                    state.client.match_ip = match.configs.ip;
-                    state.client.match_port = match.configs.port;
-                    return state;
-                });
-                matchFoundSound = StartCoroutine(MatchFoundSound());
-            }, null);
-            return;
-        }
-
-        if (eventType == Event.Name.server_ready.ToString()) {
-            context.Post(_ => {
-                UpdateGameState(state => {
-                    state.status = GameState.Status.inGame;
-                    return state;
-                });
-                StopCoroutine(matchFoundSound);
-                Navigator.Instance.NavigateTo(Navigator.Scene.MatchScene);
-            }, null);
-            return;
-        }
-    }
-
-    IEnumerator MatchFoundSound() {
-        int count = 0;
-        while (count <= 3) {
-            SoundManager.Instance.PlaySF(SoundManager.SF.NewTing);
-            count++;
-            yield return new WaitForSeconds(1.5f);
-        }
     }
 
     void OnApplicationQuit() {
-        SocketManager.Disconnected();
+        // TODO: On Application quit
     }
 
     void OnApplicationPause(bool pauseStatus) {
