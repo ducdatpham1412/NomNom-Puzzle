@@ -3,12 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - VFX
-  - Obstacle
-  - Grass
-  - Item
-  - Bullet
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -16,12 +11,12 @@ TagManager:
   - Environment
   - Water
   - UI
-  - PlayerBlue
-  - PlayerRed
-  - VFX
-  - Bullet
-  - Minimap
-  - Light
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -54,18 +49,6 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 92008043
-    locked: 0
-  - name: VFXDown
-    uniqueID: 2635764883
-    locked: 0
-  - name: VFXUp
-    uniqueID: 2400628075
-    locked: 0
-  - name: Minimap
-    uniqueID: 3083825877
-    locked: 0
-  - name: Playertest
-    uniqueID: 945598811
     locked: 0
   m_RenderingLayers:
   - Default
