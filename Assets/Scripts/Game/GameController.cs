@@ -22,6 +22,12 @@ public class GameController : MonoBehaviour {
         GameInit.InitGame(size: chessSize);
     }
 
+    void Start() {
+        // TODO: Remove this LifeCycle, do it in WelcomeLogic
+        GameManager.Instance.Initialize();
+        SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
+    }
+
     public void ShowHideSettingDialog() {
         SettingDialog.SetActive(!SettingDialog.activeInHierarchy);
     }

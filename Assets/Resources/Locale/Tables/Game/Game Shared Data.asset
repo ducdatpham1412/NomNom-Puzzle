@@ -15,124 +15,16 @@ MonoBehaviour:
   m_TableCollectionName: Game
   m_TableCollectionNameGuidString: 09972f08cc61d4bada0aa6d10b6794a5
   m_Entries:
-  - m_Id: 24959246336
-    m_Key: loadingMatch
+  - m_Id: 28888578351161344
+    m_Key: setting
     m_Metadata:
       m_Items: []
-  - m_Id: 1070287343837184
-    m_Key: youAreTheFirst
+  - m_Id: 28889885619249152
+    m_Key: music
     m_Metadata:
       m_Items: []
-  - m_Id: 1070513018363904
-    m_Key: opponentBeFirst
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1071031786659840
-    m_Key: continueCountdown
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1071217858568192
-    m_Key: isTheWinner
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1074806404407296
-    m_Key: areYouReady
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1074924599894016
-    m_Key: fight
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1077867176779776
-    m_Key: tooSlow
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1078089156124672
-    m_Key: niceShot
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1084541589512192
-    m_Key: heheMissed
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4647794521399296
-    m_Key: round
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4647951333842944
-    m_Key: finalLeaderboard
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4651908978434048
-    m_Key: throwEgg
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4651957640749056
-    m_Key: solveMath
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4652151782498304
-    m_Key: flappyEgg
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4653825167187968
-    m_Key: beginIn
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4653923498450944
-    m_Key: ended
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4760396618522624
-    m_Key: start
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5144310520471552
-    m_Key: winnerEarnEggs
-    m_Metadata:
-      m_Items: []
-  - m_Id: 6580749267361792
-    m_Key: backToLobby
-    m_Metadata:
-      m_Items: []
-  - m_Id: 11600631084081152
-    m_Key: whoSolveFaster
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934611645489152
-    m_Key: victory
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934618557702144
-    m_Key: tie
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934725340487680
-    m_Key: lose
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934866382348288
-    m_Key: eggCollected
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23455988513234944
-    m_Key: egg
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23456037762752512
-    m_Key: gun
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23456101042216960
-    m_Key: skill
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23461098039533568
-    m_Key: buy
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23461103206916096
-    m_Key: sell
+  - m_Id: 28954885096464384
+    m_Key: language
     m_Metadata:
       m_Items: []
   m_Metadata:

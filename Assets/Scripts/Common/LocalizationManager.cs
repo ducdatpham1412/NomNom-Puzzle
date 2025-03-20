@@ -15,11 +15,8 @@ public class LocalizationManager : Singleton<LocalizationManager> {
 
     private bool active = false;
 
-
     public void SetLocale(int localeID) {
-        if (active) {
-            return;
-        }
+        if (active) return;
         IEnumerator _SetLocale(int localeID) {
             active = true;
             yield return LocalizationSettings.InitializationOperation;

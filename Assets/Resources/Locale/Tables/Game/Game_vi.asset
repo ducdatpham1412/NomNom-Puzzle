@@ -16,137 +16,20 @@ MonoBehaviour:
     m_Code: vi
   m_SharedData: {fileID: 11400000, guid: 09972f08cc61d4bada0aa6d10b6794a5, type: 2}
   m_Metadata:
-    m_Items:
-    - rid: 4339586626695463055
+    m_Items: []
   m_TableData:
-  - m_Id: 24959246336
-    m_Localized: "\u0110ang t\u1EA3i tr\u1EADn"
+  - m_Id: 28889885619249152
+    m_Localized: "Nh\u1EA1c n\u1EC1n"
     m_Metadata:
       m_Items: []
-  - m_Id: 1070287343837184
-    m_Localized: "B\u1EA1n N\xE9m Tr\u01B0\u1EDBc"
+  - m_Id: 28888578351161344
+    m_Localized: "C\xE0i \u0111\u1EB7t"
     m_Metadata:
       m_Items: []
-  - m_Id: 1070513018363904
-    m_Localized: "\u0110\u1ED1i Th\u1EE7 N\xE9m Tr\u01B0\u1EDBc"
-    m_Metadata:
-      m_Items:
-      - rid: 4339586626695463055
-  - m_Id: 1071031786659840
-    m_Localized: "Ti\u1EBFp t\u1EE5c ({0})"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1071217858568192
-    m_Localized: "{0} l\xE0 ng\u01B0\u1EDDi chi\u1EBFn th\u1EAFng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1074806404407296
-    m_Localized: "S\u1EB5n s\xE0ng ch\u01B0a?"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1074924599894016
-    m_Localized: "Chi\u1EBFn th\xF4i!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1077867176779776
-    m_Localized: "Qu\xE1 ch\u1EADm!!!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1078089156124672
-    m_Localized: "\u0110\u01B0\u1EE3c \u0111\u1EA5y!!!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 1084541589512192
-    m_Localized: "Hehe tr\u01B0\u1EE3t r\u1ED3i!!!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4647794521399296
-    m_Localized: "V\xF2ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4647951333842944
-    m_Localized: "X\u1EBFp h\u1EA1ng t\u1ED5ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4651908978434048
-    m_Localized: "N\xE9m Tr\u1EE9ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4651957640749056
-    m_Localized: "Gi\u1EA3i To\xE1n"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4652151782498304
-    m_Localized: Flappy Egg
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4653825167187968
-    m_Localized: "B\u1EAFt \u0111\u1EA7u trong"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4653923498450944
-    m_Localized: "\u0110\xE3 k\u1EBFt th\xFAc"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4760396618522624
-    m_Localized: "B\u1EAFt \u0111\u1EA7u"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5144310520471552
-    m_Localized: "{0} l\xE0 ng\u01B0\u1EDDi chi\u1EBFn th\u1EAFng v\xE0 thu v\u1EC1
-      {1} tr\u1EE9ng r\u1ED3ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 6580749267361792
-    m_Localized: "Tr\u1EDF L\u1EA1i S\u1EA3nh"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 11600631084081152
-    m_Localized: "Ai gi\u1EA3i to\xE1n nhanh h\u01A1n?"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934611645489152
-    m_Localized: "Chi\u1EBFn th\u1EAFng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934618557702144
-    m_Localized: "Ho\xE0"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934725340487680
-    m_Localized: "Th\u1EA5t b\u1EA1i"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 12934866382348288
-    m_Localized: "Tr\u1EE9ng thu th\u1EADp"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23455988513234944
-    m_Localized: "Tr\u1EE9ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23456037762752512
-    m_Localized: "S\xFAng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23456101042216960
-    m_Localized: "K\u1EF9 n\u0103ng"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23461098039533568
-    m_Localized: Mua
-    m_Metadata:
-      m_Items: []
-  - m_Id: 23461103206916096
-    m_Localized: "B\xE1n"
+  - m_Id: 28954885096464384
+    m_Localized: "Ng\xF4n ng\u1EEF"
     m_Metadata:
       m_Items: []
   references:
     version: 2
-    RefIds:
-    - rid: 4339586626695463055
-      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_Entries: 
-        m_SharedEntries:
-        - id: 1070513018363904
+    RefIds: []

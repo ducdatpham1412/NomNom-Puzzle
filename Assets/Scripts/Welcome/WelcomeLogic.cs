@@ -16,17 +16,12 @@ public class WelcomeLogic : MonoBehaviour {
         InitApp();
     }
 
-    private async void InitApp() {
+    private void InitApp() {
         try {
             var storageProfile = Storage.GET<Profile>(Storage.Key.account);
 
             if (storageProfile != null) {
-                GameManager.Instance.appState.resource = await ApiManager.GET<Resource>("/common/resource");
-                var passport = await ApiManager.GET<Passport>("/common/passport");
-                GameManager.Instance.appState.profile = passport.profile;
-                Storage.SetProfile(passport.profile);
-                LocalizationManager.Instance.SetLocale(passport.profile.setting.language == "en" ? 0 : 1);
-                Navigator.Instance.NavigateTo(Navigator.Scene.Home);
+                // TODO: Come to GameScene
                 return;
             }
 
