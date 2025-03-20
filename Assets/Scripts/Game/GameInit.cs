@@ -12,6 +12,7 @@ public class GameInit : MonoBehaviour {
     GameController Controller;
 
     public void InitGame(int size) {
+        if (!Controller) Controller = GetComponent<GameController>();
         InitChessBoard(size);
         InitChoicesBoard(size);
     }
@@ -39,6 +40,7 @@ public class GameInit : MonoBehaviour {
                 float y = startPos.y - row * squareSize - row * gap;
                 square.transform.position = new Vector3(x, y, 0);
                 square.transform.localScale = localScale;
+                square.GetComponent<Square>().Controller = Controller;
                 // sr = square.GetComponent<SpriteRenderer>();
                 // if (sr != null) {
                 //     sr.color = (row + col) % 2 == 0 ? Color.white : Color.black;
@@ -48,7 +50,6 @@ public class GameInit : MonoBehaviour {
     }
 
     void InitChoicesBoard(int size) {
-        if (!Controller) Controller = GetComponent<GameController>();
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }

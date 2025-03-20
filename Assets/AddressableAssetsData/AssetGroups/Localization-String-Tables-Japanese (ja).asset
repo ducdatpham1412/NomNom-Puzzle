@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Localization-String-Tables-Vietnamese (vi)
+  m_Name: Localization-String-Tables-Japanese (ja)
   m_EditorClassIdentifier: 
-  m_GroupName: Localization-String-Tables-Vietnamese (vi)
-  m_GUID: 02c4096d07e1a475897bff4c25fcb9e5
+  m_GroupName: Localization-String-Tables-Japanese (ja)
+  m_GUID: f462e4fa8884e4b2b954ba4e586d8f96
   m_SerializeEntries:
-  - m_GUID: 9548067e430884ec0abb445e0cf27718
-    m_Address: Game_vi
+  - m_GUID: cc7224fdb6c56443e9c06cb1d9e13e1a
+    m_Address: Game_ja
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-vi
+    - Locale-ja
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 88be37cdad1634666a641c12bb519f0a, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d1705b87dca2f4c708f01561d264059f, type: 2}
-    - {fileID: 11400000, guid: 455d7ea592ca94cd980ba667dd247500, type: 2}
+    - {fileID: 11400000, guid: 5ea56d18118f542368928b9993be1d64, type: 2}
+    - {fileID: 11400000, guid: ee31a6002cbea40cd86b12c789a5290f, type: 2}

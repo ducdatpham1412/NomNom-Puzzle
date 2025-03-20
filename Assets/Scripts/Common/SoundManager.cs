@@ -9,6 +9,7 @@ public class SoundManager : Singleton<SoundManager> {
     AudioSource SFAudio;
 
     public event Action<bool> OnMusicPlaying;
+    public bool playSF = true;
 
     void Awake() {
         Music = gameObject.AddComponent<AudioSource>();
@@ -68,7 +69,7 @@ public class SoundManager : Singleton<SoundManager> {
     }
 
     public void PlaySF(SF sf) {
-        if (SFSources.ContainsKey(sf)) {
+        if (playSF && SFSources.ContainsKey(sf)) {
             SFAudio.PlayOneShot(SFSources[sf]);
         }
     }

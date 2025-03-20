@@ -16,6 +16,8 @@ MonoBehaviour:
   m_Tables:
   - {fileID: 11400000, guid: 6b25f2940f64c432fb9d038eae59ad01, type: 2}
   - {fileID: 11400000, guid: 9548067e430884ec0abb445e0cf27718, type: 2}
+  - {fileID: 11400000, guid: cc7224fdb6c56443e9c06cb1d9e13e1a, type: 2}
+  - {fileID: 11400000, guid: 8abe9d30243504afc9b0c17ce31979b6, type: 2}
   m_Extensions: []
   m_Group: String Table
   references:
