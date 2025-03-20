@@ -264,8 +264,8 @@
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Description/GraphItemDescriptor.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Interface/TextureResolution.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Meta/ProjectSettingMetadata.cs" />
-    <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Inspection/Primitives/DiscreteNumberInspector.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Descriptors/Description.cs" />
+    <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Inspection/Primitives/DiscreteNumberInspector.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Plugins/PluginUtility.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Context/GraphContext.cs" />
     <Compile Include="Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Interface/Fonts/FontWeight.cs" />

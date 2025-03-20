@@ -84,11 +84,13 @@
     <Compile Include="Assets/Scripts/Navigation/Navigator.cs" />
     <Compile Include="Assets/Scripts/Utils/Storage.cs" />
     <Compile Include="Assets/Scripts/Game/GameLoadingLogic.cs" />
+    <Compile Include="Assets/Scripts/Game/Setting.cs" />
     <Compile Include="Assets/Scripts/Utils/ApiManager.cs" />
     <Compile Include="Assets/TutorialInfo/Scripts/Readme.cs" />
     <Compile Include="Assets/Scripts/Classes/ScriptableObjects/ItemStats.cs" />
     <Compile Include="Assets/Scripts/Game/ShakeManager.cs" />
     <Compile Include="Assets/Scripts/Classes/Serializable/AppState.cs" />
+    <Compile Include="Assets/Scripts/Utils/Switch.cs" />
     <Compile Include="Assets/Scripts/Classes/Serializable/Profile.cs" />
     <Compile Include="Assets/Scripts/Utils/ErrorBanner.cs" />
     <Compile Include="Assets/Scripts/Game/GameController.cs" />

@@ -128,8 +128,8 @@
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/Tables/AssetTableListView.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/Plugins/Xliff/V1.2/xliff 1.2.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/CharacterSet/ExportCharacterSetWindow.cs" />
-    <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/Addressables/AddressableGroupRulesEditor.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/Tables/ProjectTablesPopup.cs" />
+    <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/Addressables/AddressableGroupRulesEditor.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/AssetNotPersistentException.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/UI/Settings/LocalizationPreferencesProvider.cs" />
     <Compile Include="Library/PackageCache/com.unity.localization/Editor/Plugins/Google/Columns/LocaleMetadataColumn.cs" />
