@@ -137,11 +137,8 @@ public static class Helper {
     }
 
     public enum Tag {
-        Player,
-        VFX,
-        Grass,
-        Obstacle,
+        Square,
         Item,
-        Bullet,
+        ChoicesBoard,
     }
 }

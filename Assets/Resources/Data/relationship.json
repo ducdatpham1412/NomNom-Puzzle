@@ -1,0 +1,70 @@
+{
+  "pig": {
+    "eat": ["corn", "sweet_potato", "lettuce", "peanut"],
+    "eaten": []
+  },
+  "cat": {
+    "eat": ["mouse", "bone", "fish"],
+    "eaten": []
+  },
+  "dog": {
+    "eat": ["bone", "fish"],
+    "eaten": []
+  },
+  "mouse": {
+    "eat": ["corn", "sweet_potato", "cheese", "peanut"],
+    "eaten": ["cat", "eagle", "snake"]
+  },
+  "chicken": {
+    "eat": ["corn", "sweet_potato", "lettuce", "worm", "peanut"],
+    "eaten": ["eagle", "snake"]
+  },
+  "eagle": {
+    "eat": ["mouse", "chicken", "snake", "fish"],
+    "eaten": []
+  },
+  "snake": {
+    "eat": ["mouse", "chicken", "fish"],
+    "eaten": ["eagle"]
+  },
+  "fish": {
+    "eat": ["worm"],
+    "eaten": ["cat", "dog", "eagle", "snake"]
+  },
+  "worm": {
+    "eat": ["apple", "corn", "sweet_potato", "carrot", "lettuce", "peanut"],
+    "eaten": ["chicken", "fish"]
+  },
+  "corn": {
+    "eat": [],
+    "eaten": ["pig", "mouse", "chicken", "worm"]
+  },
+  "sweet_potato": {
+    "eat": [],
+    "eaten": ["pig", "mouse", "chicken", "worm"]
+  },
+  "lettuce": {
+    "eat": [],
+    "eaten": ["pig", "chicken", "worm"]
+  },
+  "peanut": {
+    "eat": [],
+    "eaten": ["pig", "mouse", "chicken", "worm"]
+  },
+  "bone": {
+    "eat": [],
+    "eaten": ["cat", "dog"]
+  },
+  "cheese": {
+    "eat": [],
+    "eaten": ["mouse"]
+  },
+  "apple": {
+    "eat": [],
+    "eaten": ["worm"]
+  },
+  "carrot": {
+    "eat": [],
+    "eaten": ["worm"]
+  }
+}

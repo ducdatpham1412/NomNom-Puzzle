@@ -18,14 +18,14 @@ public class WelcomeLogic : MonoBehaviour {
 
     private void InitApp() {
         try {
-            var storageProfile = Storage.GET<Profile>(Storage.Key.account);
+            // var storageProfile = Storage.GET<>(Storage.Key.account);
 
-            if (storageProfile != null) {
-                // TODO: Come to GameScene
-                return;
-            }
+            // if (storageProfile != null) {
+            //     // TODO: Come to GameScene
+            //     return;
+            // }
 
-            ShowCanvas("SelectLanguage");
+            // ShowCanvas("SelectLanguage");
         }
         catch (Exception ex) {
             Debug.Log($"Error: {ex.Message}");

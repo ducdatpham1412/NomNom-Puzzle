@@ -7,7 +7,7 @@ public class Configs {
     public static _Color Color = new _Color {
         brown = "#4E3200",
         green = "#007427",
-        green01 = "#52E032",
+        green01 = "#0BF500",
         golden = "#FFEEA3",
         silver = "#D1D1D1",
         bronze = "#FFC393",
@@ -40,7 +40,7 @@ public class Configs {
             return value;
         }
         catch (Exception) {
-            UnityEngine.Debug.LogWarning($"No env found: {key}");
+            Debug.LogWarning($"No env found: {key}");
             return null;
         }
     }
@@ -48,7 +48,7 @@ public class Configs {
     static void ReadEnvFile() {
         string basePath = Directory.GetCurrentDirectory();
         if (Application.isEditor) {
-            basePath = basePath.Split("/Eggvenger")[0] + "/Eggvenger";
+            basePath = basePath.Split("/NomNom")[0] + "/NomNom";
         }
 
         string filePath = Path.Combine(basePath, ".env");
@@ -68,7 +68,7 @@ public class Configs {
 
             var key = parts[0].Trim();
             var value = parts[1].Trim();
-            UnityEngine.Debug.Log("Set env: " + key + " - " + value);
+            Debug.Log("Set env: " + key + " - " + value);
             Environment.SetEnvironmentVariable(key, value);
         }
     }

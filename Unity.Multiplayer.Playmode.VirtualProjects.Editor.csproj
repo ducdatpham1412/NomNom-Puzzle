@@ -100,8 +100,8 @@
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Contexts/CloneInternalRuntime.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/EditorSystems/CloneSystems.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/RuntimeSceneSwitchMessage.cs" />
-    <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/StopMessage.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/OpenPlayerWindowMessage.cs" />
+    <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/StopMessage.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/CloneInitializedMessage.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Messaging/Messages/PauseMessage.cs" />
     <Compile Include="Library/PackageCache/com.unity.multiplayer.playmode/VirtualProjects/Editor/Utility/CloneState.cs" />
