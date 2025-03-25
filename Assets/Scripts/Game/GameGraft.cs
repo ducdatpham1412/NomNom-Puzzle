@@ -36,7 +36,7 @@ public class GameGraft : MonoBehaviour {
     public void CheckEndGame() {
         foreach (var row in Controller.GameInit.Squares) {
             foreach (Square s in row) {
-                if (s.ItemController == null) {
+                if (s.GetItemController() == null) {
                     return;
                 }
             }
@@ -105,17 +105,17 @@ public class GameGraft : MonoBehaviour {
         if (eat == true) {
             s = GetSquare(pivot: square, controller.Item.direction);
             if (s == null) return false;
-            if (s.ItemController == null) return true;
-            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.ItemController.Item.creature_id)) return true;
+            if (s.GetItemController() == null) return true;
+            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.GetItemController().Item.creature_id)) return true;
             return false;
         }
 
         // Case 2: Be eaten by others
         bool CanBeEaten(Square sq, Item.Direction dir) {
             return sq != null
-                    && sq.ItemController != null
-                    && sq.ItemController.Item.direction == dir.ToString()
-                    && Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(sq.ItemController.Item.creature_id);
+                    && sq.GetItemController() != null
+                    && sq.GetItemController().Item.direction == dir.ToString()
+                    && Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(sq.GetItemController().Item.creature_id);
         }
 
         Square sUp = GetSquare(square, Item.Direction.up.ToString());
@@ -132,7 +132,7 @@ public class GameGraft : MonoBehaviour {
 
         foreach (var sq in new List<Square> { sUp, sLeft, sDown, sRight }) {
             // Only one of four direction squares is empty => Still be valid
-            if (sq != null && sq.ItemController == null) return true;
+            if (sq != null && sq.GetItemController() == null) return true;
         }
 
         return false;

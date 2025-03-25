@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class Square : MonoBehaviour {
     public GameController Controller;
-    public ItemController ItemController;
     public Vector2 Pos;
     public Vector3 Center;
+
+    ItemController ItemController;
 
     public void AttachItem(ItemController item, bool animatedTo = false, bool checkEndGame = false) {
         ItemController = item;
@@ -23,6 +24,14 @@ public class Square : MonoBehaviour {
 
     public void SetCenter(float squareSize) {
         Center = transform.position + new Vector3(squareSize / 2, -squareSize / 2, 0f);
+    }
+
+    public ItemController GetItemController() {
+        return ItemController;
+    }
+
+    public void RemoveItemController() {
+        ItemController = null;
     }
 
     IEnumerator AnimateToCenter(bool checkEndGame) {

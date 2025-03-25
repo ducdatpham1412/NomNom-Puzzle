@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/levels");
         string json = jsonFile.text;
         Level[] levels = JsonConvert.DeserializeObject<Level[]>(json);
-        GameInit.InitGame(levels[0]);
+        GameInit.InitGame(levels[2]);
     }
 
     void Start() {

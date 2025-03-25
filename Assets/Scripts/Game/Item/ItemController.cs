@@ -53,22 +53,37 @@ public class ItemController : MonoBehaviour {
 
     public void SetItem(Item item) {
         Item = item;
-        GetComponent<SpriteRenderer>().sprite = Controller.GameInit.Creatures.Find(c => c.id == item.creature_id).sprite;
-        transform.rotation = GetRotation(item.direction);
+        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == item.creature_id);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.sprite = creature.sprite;
+        transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
 
-    Quaternion GetRotation(string dir) {
+    void ReplaceItem(ItemController replacedItem) {
+        Square sq = replacedItem.square;
+        replacedItem.square = null;
+        StartCoroutine(replacedItem.BackToOriginal());
+        sq.AttachItem(this, animatedTo: true, checkEndGame: false);
+    }
+
+    Quaternion GetRotation(string dir, float offset, SpriteRenderer sr) {
         if (dir == Item.Direction.up.ToString()) {
-            return Quaternion.Euler(0f, 0f, 180f);
+            return Quaternion.Euler(0f, 0f, 180f + offset);
         }
         if (dir == Item.Direction.left.ToString()) {
-            return Quaternion.Euler(0f, 0f, -90f);
+            if (offset < 0f) {
+                sr.flipY = true;
+            }
+            return Quaternion.Euler(0f, 0f, -90f + offset);
         }
         if (dir == Item.Direction.down.ToString()) {
-            return Quaternion.identity;
+            return Quaternion.Euler(0f, 0f, offset);
         }
         if (dir == Item.Direction.right.ToString()) {
-            return Quaternion.Euler(0f, 0f, 90f);
+            if (offset > 0f) {
+                sr.flipY = true;
+            }
+            return Quaternion.Euler(0f, 0f, 90f + offset);
         }
         return Quaternion.identity;
     }
@@ -80,7 +95,7 @@ public class ItemController : MonoBehaviour {
             if (isPanning) {
                 // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
                 if (square) {
-                    square.ItemController = null;
+                    square.RemoveItemController();
                     originalSquare = square;
                 }
                 pivotPos = transform.position;
@@ -100,13 +115,17 @@ public class ItemController : MonoBehaviour {
                 StartCoroutine(BackToOriginal());
             }
             else if (square) {
-                square.ItemController = this;
-                square.AttachItem(this, animatedTo: true, checkEndGame: true);
+                ItemController currentItem = square.GetItemController();
+                if (currentItem && currentItem != this) {
+                    ReplaceItem(currentItem);
+                }
+                else {
+                    square.AttachItem(this, animatedTo: true, checkEndGame: true);
+                }
                 originalSquare = null;
             }
             else if (originalSquare) {
                 square = originalSquare;
-                square.ItemController = this;
                 square.AttachItem(this, animatedTo: true);
                 originalSquare = null;
             }

@@ -60,11 +60,10 @@ public static class GameHelper {
     }
     public static bool TouchHitGameObject(Vector3 localPos, GameObject gameObject) {
         Vector3 worldPoint = ToWorldPoint(localPos);
-        Collider2D hitCollider = Physics2D.OverlapPoint(worldPoint);
-        if (hitCollider != null && hitCollider.gameObject == gameObject) {
-            return true;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
+        foreach (var h in hits) {
+            if (h.collider.gameObject == gameObject) return true;
         }
-
         return false;
     }
 }

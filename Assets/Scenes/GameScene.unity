@@ -555,6 +555,7 @@ MonoBehaviour:
     - key: vi
       value: "M\xE8o"
     sprite: {fileID: -2116345692, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: chicken
     type: 0
     name:
@@ -567,6 +568,7 @@ MonoBehaviour:
     - key: vi
       value: "G\xE0"
     sprite: {fileID: 496622241, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: dog
     type: 0
     name:
@@ -579,6 +581,7 @@ MonoBehaviour:
     - key: vi
       value: "Ch\xF3"
     sprite: {fileID: -2124095150, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: eagle
     type: 0
     name:
@@ -591,6 +594,7 @@ MonoBehaviour:
     - key: vi
       value: "\u0110\u1EA1i b\xE0ng"
     sprite: {fileID: -1683696245, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: fish
     type: 0
     name:
@@ -603,6 +607,7 @@ MonoBehaviour:
     - key: vi
       value: "C\xE1"
     sprite: {fileID: -736037816, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 90
   - id: mouse
     type: 0
     name:
@@ -615,6 +620,7 @@ MonoBehaviour:
     - key: vi
       value: "Chu\u1ED9t"
     sprite: {fileID: 1223840984, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: pig
     type: 0
     name:
@@ -627,6 +633,7 @@ MonoBehaviour:
     - key: vi
       value: "L\u1EE3n"
     sprite: {fileID: 344714230, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: snake
     type: 0
     name:
@@ -639,6 +646,7 @@ MonoBehaviour:
     - key: vi
       value: "R\u1EAFn"
     sprite: {fileID: 326938703, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 0
   - id: worm
     type: 0
     name:
@@ -651,6 +659,7 @@ MonoBehaviour:
     - key: vi
       value: "S\xE2u"
     sprite: {fileID: 473594060, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    rotationOffset: 90
   - id: apple
     type: 2
     name:
@@ -663,6 +672,7 @@ MonoBehaviour:
     - key: vi
       value: "T\xE1o"
     sprite: {fileID: 1818289580, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: bone
     type: 1
     name:
@@ -675,6 +685,7 @@ MonoBehaviour:
     - key: vi
       value: "X\u01B0\u01A1ng"
     sprite: {fileID: 822514875, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: carrot
     type: 2
     name:
@@ -687,6 +698,7 @@ MonoBehaviour:
     - key: vi
       value: "C\xE0 r\u1ED1t"
     sprite: {fileID: 1792002427, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: cheese
     type: 2
     name:
@@ -699,6 +711,7 @@ MonoBehaviour:
     - key: vi
       value: "Ph\xF4 mai"
     sprite: {fileID: 608162391, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: corn
     type: 2
     name:
@@ -711,6 +724,7 @@ MonoBehaviour:
     - key: vi
       value: "Ng\xF4"
     sprite: {fileID: 461280443, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: lettuce
     type: 2
     name:
@@ -723,6 +737,7 @@ MonoBehaviour:
     - key: vi
       value: "Rau x\xE0 l\xE1ch"
     sprite: {fileID: -882983538, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: peanut
     type: 2
     name:
@@ -735,6 +750,7 @@ MonoBehaviour:
     - key: vi
       value: "\u0110\u1EADu"
     sprite: {fileID: 289134656, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   - id: sweet_potato
     type: 2
     name:
@@ -747,6 +763,7 @@ MonoBehaviour:
     - key: vi
       value: Khoai lang
     sprite: {fileID: 933704205, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
   SquareTag: Square
   ChoicesBoardTag: ChoicesBoard
   level:
@@ -4632,7 +4649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1594194222
 Transform:
   m_ObjectHideFlags: 0
@@ -4733,7 +4750,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
