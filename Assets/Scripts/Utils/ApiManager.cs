@@ -25,10 +25,6 @@ public static class ApiManager {
     static ApiManager() {
         Client.DefaultRequestHeaders.Accept.Clear();
         Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        var account = Storage.GET<Account>(Storage.Key.account);
-        if (account != null) {
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", account.token);
-        }
     }
 
 
@@ -51,11 +47,6 @@ public static class ApiManager {
     public static void SetAccount(JObject resLogin) {
         string token = resLogin["token"].ToString();
         string refresh_token = resLogin["refresh_token"].ToString();
-        Account account = new Account {
-            token = token,
-            refresh_token = refresh_token,
-        };
-        Storage.SetAccount(account);
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
@@ -82,10 +73,6 @@ public static class ApiManager {
                 );
                 string newToken = refreshRes["access"].ToString();
                 Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", newToken);
-
-                Account account = Storage.GET<Account>(Storage.Key.account);
-                account.token = newToken;
-                Storage.SetAccount(account);
 
                 while (!taskQueue.IsEmpty) {
                     if (taskQueue.TryDequeue(out var tcs)) {

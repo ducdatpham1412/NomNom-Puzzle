@@ -26,12 +26,4 @@ public static class Storage {
             return default(T);
         }
     }
-
-    public static void SetAccount(Account account) {
-        SET(Key.account, JsonConvert.SerializeObject(account).ToString());
-    }
-
-    public static void SetProfile(Profile profile) {
-        SET(Key.profile, JsonConvert.SerializeObject(profile).ToString());
-    }
 }
