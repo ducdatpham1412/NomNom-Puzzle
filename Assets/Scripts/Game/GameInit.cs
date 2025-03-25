@@ -103,38 +103,41 @@ public class GameInit : MonoBehaviour {
         float sc = scaleWidth / trueWidth;
         Vector3 scale = new Vector3(sc, sc, 1f);
 
-        int currentIndex = 0;
-        int total = (int)(size.x * size.y);
+        List<Item> itemsList = new List<Item>();
+        foreach (Item[] row in level.data) {
+            foreach (Item item in row) {
+                itemsList.Add(item);
+            }
+        }
 
         System.Random random = new System.Random();
-        int initIndex = random.Next(0, total);
+        int initIndex = random.Next(0, itemsList.Count);
+        Item initItem = itemsList[initIndex];
+        itemsList.RemoveAt(initIndex);
 
-        while (currentIndex < total) {
+        ItemController InitItem(Item item) {
             GameObject NewItem = Instantiate(Item, ChoicesBoard);
             ItemController controller = NewItem.GetComponent<ItemController>();
-            int row = currentIndex / (int)size.x;
-            int col = currentIndex % (int)size.x;
             controller.Controller = Controller;
-            controller.SetItem(level.data[row][col]);
+            controller.SetItem(item);
             NewItem.transform.localScale = scale;
+            return controller;
+        }
 
-            if (currentIndex == initIndex) {
-                Square sq = Squares[row][col];
-                sq.AttachItem(controller);
-                // Disable panning or interact with other panning item
-                controller.GetComponent<CapsuleCollider2D>().enabled = false;
-                sq.GetComponent<BoxCollider2D>().enabled = false;
-                // TODO: Make Square to display this is init square
-            }
-            else {
-                row = currentIndex / cols;
-                col = currentIndex % cols;
-                float xPos = -width / 2 + col * gap + gap / 2;
-                float yPos = height / 2 - row * gap - gap / 2;
-                NewItem.transform.localPosition = new Vector3(xPos, yPos, 0f);
-            }
+        // Instantiate InitItem
+        ItemController initController = InitItem(initItem);
+        Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
+        sq.AttachItem(initController);
+        initController.GetComponent<CapsuleCollider2D>().enabled = false;
+        sq.GetComponent<BoxCollider2D>().enabled = false;
 
-            currentIndex++;
+        for (int i = 0; i < itemsList.Count; i++) {
+            ItemController ct = InitItem(itemsList[i]);
+            int row = i / cols;
+            int col = i % cols;
+            float xPos = -width / 2 + col * gap + gap / 2;
+            float yPos = height / 2 - row * gap - gap / 2;
+            ct.gameObject.transform.localPosition = new Vector3(xPos, yPos, 0f);
         }
     }
 

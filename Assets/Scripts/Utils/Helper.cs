@@ -130,6 +130,15 @@ public static class Helper {
         return objects[UnityEngine.Random.Range(0, objects.Length)];
     }
 
+    public static void Shuffle<T>(List<T> list) {
+        System.Random rng = new System.Random();
+        int n = list.Count;
+        for (int i = n - 1; i > 0; i--) {
+            int j = rng.Next(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
     public enum Layer {
         Environment,
         PlayerBlue,
