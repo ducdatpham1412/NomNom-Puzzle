@@ -10,7 +10,14 @@ public class Square : MonoBehaviour {
     ItemController ItemController;
     Material material;
 
-    public void AttachItem(ItemController item, bool animatedTo = false, bool checkEndGame = false, bool isRoot = false, Color? color = null) {
+    public void AttachItem(
+        ItemController item,
+        Color? color = null,
+        bool animatedTo = false,
+        bool checkEndGame = false,
+        bool isRoot = false,
+        bool checkValidAroundSquares = false
+    ) {
         ItemController = item;
         ItemController.square = this;
         if (animatedTo) {
@@ -24,14 +31,19 @@ public class Square : MonoBehaviour {
         }
 
         if (!material) material = GetComponent<SpriteRenderer>().material;
+
         if (isRoot) {
             material.SetColor("_Color01", Configs.RootSquareColor);
         }
         else if (color != null) {
-            material.SetColor("_Color", (Color)color);
+            SetColor((Color)color);
         }
         else {
             Controller.GameGraft.SetSquareColor(this);
+        }
+
+        if (checkValidAroundSquares) {
+            Controller.GameGraft.CheckValidAroundSquare(this);
         }
     }
 
@@ -59,6 +71,12 @@ public class Square : MonoBehaviour {
 
     public void PlayVFX() {
         // TODO: Add VFX bloom make fresh feel
+    }
+
+    public void PingError() {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
+        sr.material.SetColor("_Color", Color.white);
     }
 
     IEnumerator AnimateToCenter(bool checkEndGame) {

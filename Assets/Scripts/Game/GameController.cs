@@ -21,10 +21,9 @@ public class GameController : MonoBehaviour {
 
     void Start() {
         GameManager.Instance.Initialize(); // TODO: Remove this LifeCycle, do it in WelcomeLogic
-
         Level[] levels = GetLevels();
         currentLevel = Storage.GET<int>(Storage.Key.currentLevel);
-        GameInit.InitGame(levels[currentLevel]);
+        GameInit.InitGame(levels[currentLevel], currentLevel + 1);
     }
 
     Level[] GetLevels() {
@@ -42,6 +41,6 @@ public class GameController : MonoBehaviour {
         currentLevel++;
         Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
         Level[] levels = GetLevels();
-        GameInit.InitGame(levels[currentLevel]);
+        GameInit.InitGame(levels[currentLevel], currentLevel + 1);
     }
 }

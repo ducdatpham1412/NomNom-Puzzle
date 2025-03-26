@@ -10,6 +10,12 @@ public class GameGraft : MonoBehaviour {
     GameController Controller;
     Color nextSquareColor;
     Coroutine openSquare;
+    List<string> directions = new List<string>{
+        Item.Direction.up.ToString(),
+        Item.Direction.left.ToString(),
+        Item.Direction.down.ToString(),
+        Item.Direction.right.ToString(),
+    };
 
     void Start() {
         Controller = GetComponent<GameController>();
@@ -59,27 +65,58 @@ public class GameGraft : MonoBehaviour {
         }
     }
 
+    public void CheckValidAroundSquare(Square square) {
+        foreach (string dir in directions) {
+            Square sq = GetSquare(square, dir);
+            if (sq == null || sq.GetItemController() == null) continue;
+            if (!CheckValidSquare(sq, sq.GetItemController())) {
+                sq.PingError();
+            }
+        }
+    }
+
+    public void CheckEndGame() {
+        foreach (var row in Controller.GameInit.Squares) {
+            foreach (Square s in row) {
+                ItemController c = s.GetItemController();
+                if (c == null || !CheckValidSquare(square: s, controller: c, itemDirNullEnable: false)) return;
+            }
+        }
+
+        EndGame();
+    }
+
     void RecursiveSetSquareColor(Square square, List<Square> squaresChain) {
         ItemController itemController = square.GetItemController();
         if (!itemController) return;
 
+        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == itemController.Item.creature_id);
+        if (creature == null) return;
+
         Color syncColor = Color.white;
 
-        if (itemController.Item.direction != "") {
-            Square sqDir = GetSquare(square, itemController.Item.direction);
-            if (sqDir.GetItemController()) {
+        if (creature.type == Creature.Type.animal) {
+            string dir = GetAvailableDir(itemController.Item.direction, creature);
+            Square sqDir = GetSquare(square, dir);
+            if (sqDir != null && sqDir.GetItemController()) {
                 syncColor = sqDir.GetColor();
                 if (syncColor == Color.white) {
                     // Apply for InitSquare, which doesn't have _Color when attached
                     syncColor = GetSquareColor();
                     sqDir.SetColor(syncColor);
-                    square.SetColor(syncColor);
                 }
-                else {
-                    square.SetColor(syncColor);
-                }
+                square.SetColor(syncColor);
                 squaresChain.Add(sqDir);
             }
+        }
+
+        bool hadSetThisSquare = syncColor != Color.white;
+
+        if (Controller.GameInit.Relationship[itemController.Item.creature_id].eaten.Count == 0) {
+            if (!hadSetThisSquare) {
+                square.SetColor(GetSquareColor());
+            }
+            return;
         }
 
         List<Square> squaresEat = new List<Square>();
@@ -104,8 +141,6 @@ public class GameGraft : MonoBehaviour {
             squaresEat.Add(sRight);
         }
 
-        bool hadSetThisSquare = syncColor != Color.white;
-
         if (squaresEat.Count == 0) {
             if (!hadSetThisSquare) {
                 square.SetColor(GetSquareColor());
@@ -128,67 +163,6 @@ public class GameGraft : MonoBehaviour {
         }
     }
 
-    Color GetSquareColor() {
-        Color c = nextSquareColor;
-        int index = Configs.SquareColors.FindIndex(_c => _c == c);
-        nextSquareColor = Configs.SquareColors[(index + 1) % Configs.SquareColors.Count];
-        return c;
-    }
-
-    public void CheckEndGame() {
-        foreach (var row in Controller.GameInit.Squares) {
-            foreach (Square s in row) {
-                if (s.GetItemController() == null) {
-                    return;
-                }
-            }
-        }
-
-        Level level = Controller.GameInit.level;
-
-        bool[][] check = new bool[(int)level.size.y][];
-        for (int row = 0; row < level.size.y; row++) {
-            check[row] = new bool[(int)level.size.x];
-            for (int col = 0; col < level.size.x; col++) {
-                check[row][col] = false;
-            }
-        }
-
-        bool CheckItem(Item item, bool isFirst) {
-            if (item.direction == "") {
-                if (!isFirst) check[(int)item.pos.y][(int)item.pos.x] = true;
-                return true;
-            }
-
-            Item itemDir = GetItem(pivot: item, dir: item.direction);
-            if (itemDir == null) return false;
-
-            bool canEat = Controller.GameInit.Relationship[item.creature_id].eat.Contains(itemDir.creature_id);
-            if (!canEat) return false;
-            check[(int)item.pos.y][(int)item.pos.x] = true;
-            return CheckItem(itemDir, isFirst: false);
-        }
-
-        foreach (Item[] row in level.data) {
-            foreach (Item item in row) {
-                bool hasChecked = check[(int)item.pos.y][(int)item.pos.x];
-                if (!hasChecked) {
-                    bool isValid = CheckItem(item, isFirst: true);
-                    if (!isValid) return;
-                }
-            }
-        }
-
-        foreach (Item[] row in level.data) {
-            foreach (Item item in row) {
-                bool hasChecked = check[(int)item.pos.y][(int)item.pos.x];
-                if (!hasChecked) return;
-            }
-        }
-
-        EndGame();
-    }
-
     async void EndGame() {
         Debug.Log("End game end game hehe");
         // TODO: Add VFX winner here
@@ -196,47 +170,105 @@ public class GameGraft : MonoBehaviour {
         Controller.NextLevel();
     }
 
+    Color GetSquareColor() {
+        Color c = nextSquareColor;
+        int index = Configs.SquareColors.FindIndex(_c => _c == c);
+        nextSquareColor = Configs.SquareColors[(index + 1) % Configs.SquareColors.Count];
+        return c;
+    }
 
+    bool CheckValidSquare(Square square, ItemController controller, bool? eat = null, bool itemDirNullEnable = true) {
+        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == controller.Item.creature_id);
+        if (creature == null) return false;
 
-    bool CheckValidSquare(Square square, ItemController controller, bool? eat = null) {
         if (eat == null) {
-            if (controller.Item.direction == "") {
-                return CheckValidSquare(square, controller, eat: false);
+            if (creature.type == Creature.Type.animal) {
+                return CheckValidSquare(square, controller, eat: false) || CheckValidSquare(square, controller, eat: true);
             }
-            return CheckValidSquare(square, controller, eat: true);
+            return CheckValidSquare(square, controller, eat: false);
         }
 
         Square s;
 
-        // Case 1: Eat other
+        // Case 1: Eat other (Animal)
         if (eat == true) {
-            s = GetSquare(pivot: square, controller.Item.direction);
+            string dir = GetAvailableDir(controller.Item.direction, creature);
+            s = GetSquare(pivot: square, dir: dir);
             if (s == null) return false;
-            if (s.GetItemController() == null) return true;
-            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.GetItemController().Item.creature_id)) return true;
+            if (s.GetItemController() == null) return itemDirNullEnable;
+            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.GetItemController().Item.creature_id)) {
+                return true;
+            }
+            return false;
+        }
+
+        // Case 2: Be eaten by other (Can be any of Animal, Food or Plant)
+        if (Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Count == 0) return false;
+
+        bool isSquareValid(Square sq, bool beEaten, string dir) {
+            if (sq == null) return true;
+            if (sq.GetItemController() == null) return itemDirNullEnable;
+            ItemController ct = sq.GetItemController();
+            Creature cr = Controller.GameInit.Creatures.Find(c => c.id == ct.Item.creature_id);
+            if (cr == null) return false;
+            if (cr.type != Creature.Type.animal) return true;
+            if (ct.Item.direction != dir) return true;
+            return beEaten;
+        }
+
+        bool canInteract(Square sq, bool beEaten) {
+            if (beEaten) return true;
+            if (sq == null) return false;
+            if (sq.GetItemController() == null) return itemDirNullEnable;
             return false;
         }
 
         Square sUp = GetSquare(square, Item.Direction.up.ToString());
-        if (CanBeEaten(sUp, controller, Item.Direction.down)) return true;
+        bool eatenUp = CanBeEaten(sUp, controller, Item.Direction.down);
+        if (!isSquareValid(sUp, eatenUp, Item.Direction.down.ToString())) return false;
 
         Square sLeft = GetSquare(square, Item.Direction.left.ToString());
-        if (CanBeEaten(sLeft, controller, Item.Direction.right)) return true;
+        bool eatenLeft = CanBeEaten(sLeft, controller, Item.Direction.right);
+        if (!isSquareValid(sLeft, eatenLeft, Item.Direction.right.ToString())) return false;
 
         Square sDown = GetSquare(square, Item.Direction.down.ToString());
-        if (CanBeEaten(sDown, controller, Item.Direction.up)) return true;
+        bool eatenDown = CanBeEaten(sDown, controller, Item.Direction.up);
+        if (!isSquareValid(sDown, eatenDown, Item.Direction.up.ToString())) return false;
 
         Square sRight = GetSquare(square, Item.Direction.right.ToString());
-        if (CanBeEaten(sRight, controller, Item.Direction.left)) return true;
+        bool eatenRight = CanBeEaten(sRight, controller, Item.Direction.left);
+        if (!isSquareValid(sRight, eatenRight, Item.Direction.left.ToString())) return false;
 
-        foreach (var sq in new List<Square> { sUp, sLeft, sDown, sRight }) {
-            // Only one of four direction squares is empty => Still be valid
-            if (sq != null && sq.GetItemController() == null) return true;
+        /*
+        All squares around this square are valid, not mean final result is valid for it.
+        We need at least one of around squares can eat (interact to) this square.
+        */
+        if (!(
+            canInteract(sUp, eatenUp) ||
+            canInteract(sLeft, eatenLeft) ||
+            canInteract(sDown, eatenDown) ||
+            canInteract(sRight, eatenRight)
+        )) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
+    string GetAvailableDir(string dir, Creature creature) {
+        /*
+           With animal having direction == "", we can set it having direction dynamic,
+           For example: Worm with direction == "left" is the same as Worm with direction == "" 
+       */
+        if (dir != "") return dir;
+        if (creature.rotationOffset == 90f) {
+            dir = Item.Direction.left.ToString();
+        }
+        else if (creature.rotationOffset == 0f) {
+            dir = Item.Direction.down.ToString();
+        }
+        return dir;
+    }
 
     bool CanBeEaten(Square sq, ItemController controller, Item.Direction dir) {
         return sq != null
@@ -280,43 +312,6 @@ public class GameGraft : MonoBehaviour {
                 return null;
             }
         }
-        return null;
-    }
-
-    Item GetItem(Item pivot, string dir) {
-        int maxRow = Controller.GameInit.level.data.Length;
-        int maxCol = Controller.GameInit.level.data[0].Length;
-        int pivotX = (int)pivot.pos.x;
-        int pivotY = (int)pivot.pos.y;
-
-        if (dir == Item.Direction.up.ToString()) {
-            if (pivotY - 1 >= 0) {
-                return Controller.GameInit.level.data[pivotY - 1][pivotX];
-            }
-            return null;
-        }
-
-        if (dir == Item.Direction.left.ToString()) {
-            if (pivotX - 1 >= 0) {
-                return Controller.GameInit.level.data[pivotY][pivotX - 1];
-            }
-            return null;
-        }
-
-        if (dir == Item.Direction.down.ToString()) {
-            if (pivotY + 1 < maxRow) {
-                return Controller.GameInit.level.data[pivotY + 1][pivotX];
-            }
-            return null;
-        }
-
-        if (dir == Item.Direction.right.ToString()) {
-            if (pivotX + 1 < maxCol) {
-                return Controller.GameInit.level.data[pivotY][pivotX + 1];
-            }
-            return null;
-        }
-
         return null;
     }
 

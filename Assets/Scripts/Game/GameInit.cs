@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameInit : MonoBehaviour {
     [Header("Prefabs")]
@@ -11,6 +12,7 @@ public class GameInit : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] Transform SquaresBoard;
     [SerializeField] Transform ChoicesBoard;
+    [SerializeField] Text TextLevel;
 
     [Header("Resources")]
     public List<Creature> Creatures = new List<Creature>();
@@ -30,9 +32,10 @@ public class GameInit : MonoBehaviour {
         Relationship = JsonConvert.DeserializeObject<Dictionary<string, Relationship>>(json);
     }
 
-    public void InitGame(Level _level) {
+    public void InitGame(Level _level, int currentLevel) {
         if (!Controller) Controller = GetComponent<GameController>();
         level = _level;
+        TextLevel.text = $"Lv. {currentLevel}";
         InitSquaresBoard();
         InitChoicesBoard();
     }
@@ -104,16 +107,18 @@ public class GameInit : MonoBehaviour {
         Vector3 scale = new Vector3(sc, sc, 1f);
 
         List<Item> itemsList = new List<Item>();
+        List<Item> itemsInit = new List<Item>();
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
-                itemsList.Add(item);
+                int temp = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
+                if (temp >= 0) {
+                    itemsInit.Add(item);
+                }
+                else {
+                    itemsList.Add(item);
+                }
             }
         }
-
-        System.Random random = new System.Random();
-        int initIndex = random.Next(0, itemsList.Count);
-        Item initItem = itemsList[initIndex];
-        itemsList.RemoveAt(initIndex);
 
         ItemController InitItem(Item item) {
             GameObject NewItem = Instantiate(Item, ChoicesBoard);
@@ -125,11 +130,14 @@ public class GameInit : MonoBehaviour {
         }
 
         // Instantiate InitItem
-        ItemController initController = InitItem(initItem);
-        Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
-        sq.AttachItem(initController, isRoot: true);
-        initController.GetComponent<CapsuleCollider2D>().enabled = false;
-        sq.GetComponent<BoxCollider2D>().enabled = false;
+        Helper.Shuffle(itemsList);
+        foreach (Item initItem in itemsInit) {
+            ItemController initController = InitItem(initItem);
+            Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
+            sq.AttachItem(initController, isRoot: true);
+            initController.GetComponent<CapsuleCollider2D>().enabled = false;
+            sq.GetComponent<BoxCollider2D>().enabled = false;
+        }
 
         for (int i = 0; i < itemsList.Count; i++) {
             ItemController ct = InitItem(itemsList[i]);

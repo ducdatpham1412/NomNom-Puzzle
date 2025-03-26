@@ -542,6 +542,7 @@ MonoBehaviour:
   Item: {fileID: 7464147901853142013, guid: 4d168e1afe3654317913d5bf42576731, type: 3}
   SquaresBoard: {fileID: 1185502997}
   ChoicesBoard: {fileID: 1286129319}
+  TextLevel: {fileID: 1938127902}
   Creatures:
   - id: cat
     type: 0
@@ -766,10 +767,9 @@ MonoBehaviour:
     rotationOffset: 0
   SquareTag: Square
   ChoicesBoardTag: ChoicesBoard
-  ItemTag: Item
   level:
     size: {x: 0, y: 0}
-    init_pos: {x: 0, y: 0}
+    init_pos: []
     status: 
 --- !u!114 &77076225
 MonoBehaviour:
@@ -5775,6 +5775,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911369081}
   m_CullTransparentMesh: 1
+--- !u!114 &1938127902 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7232022105234085091, guid: 4424e7a0a39594c618d3b7c1cf27be1b, type: 3}
+  m_PrefabInstance: {fileID: 498929623}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1938376566
 GameObject:
   m_ObjectHideFlags: 0
