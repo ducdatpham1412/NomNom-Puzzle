@@ -5,6 +5,7 @@ public static class Storage {
     public enum Key {
         account, // AppState.Account
         profile, // AppState.Profile
+        currentLevel,
     }
 
     public static void SET(Key key, string value) {

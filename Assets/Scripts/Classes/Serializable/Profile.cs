@@ -76,6 +76,7 @@ public class Item {
 public class Level {
     [JsonConverter(typeof(Vector2Converter))]
     public Vector2 size;
+    public Vector2 init_pos;
     public Item[][] data;
     public string status;
 }

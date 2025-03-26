@@ -13,10 +13,13 @@ public class ItemController : MonoBehaviour {
     Vector3 pivotPos;
     Vector3 touchPos;
     Square originalSquare;
+    Color? originalColor;
+    SpriteRenderer Renderer;
 
     void Start() {
         originalPos = transform.position;
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        Renderer = GetComponent<SpriteRenderer>();
     }
 
     void Update() {
@@ -25,10 +28,10 @@ public class ItemController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col) {
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
-            Square s = col.GetComponent<Square>();
-            if (s != square) {
-                bool isValid = Controller.GameGraft.OpenSquareBorder(s, this);
-                if (isValid) square = s;
+            Square colSquare = col.GetComponent<Square>();
+            if (colSquare != square) {
+                bool isValid = Controller.GameGraft.OpenSquareBorder(colSquare, this);
+                if (isValid) square = colSquare;
             }
         }
         else if (col.gameObject.tag == Controller.GameInit.ChoicesBoardTag && originalSquare) {
@@ -39,8 +42,8 @@ public class ItemController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D col) {
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
-            Square s = col.GetComponent<Square>();
-            if (s == square) {
+            Square colSquare = col.GetComponent<Square>();
+            if (colSquare == square) {
                 Controller.GameGraft.HideSquareBorder();
                 square = null;
             }
@@ -58,6 +61,65 @@ public class ItemController : MonoBehaviour {
         sr.sprite = creature.sprite;
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
+
+    void HandlePan() {
+        if (GameHelper.TouchBegin()) {
+            Vector3 mousePos = Input.mousePosition;
+            isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
+            if (isPanning) {
+                // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
+                if (square) {
+                    originalColor = square.GetColor();
+                    square.TemporarySetItemToNull();
+                    originalSquare = square;
+
+                }
+                pivotPos = transform.position;
+                touchPos = GameHelper.ToWorldPoint(mousePos);
+                Renderer.sortingOrder = 2;
+            }
+        }
+
+        if (!isPanning) return;
+
+        if (GameHelper.TouchReleased()) {
+            Controller.GameGraft.HideSquareBorder();
+            if (shouldBackToChoices) {
+                square = null;
+                originalSquare = null;
+                shouldBackToChoices = false;
+                Controller.ChoicesBoardBorder.enabled = false;
+                StartCoroutine(BackToOriginal());
+            }
+            else if (square && square != originalSquare) {
+                ItemController currentItem = square.GetItemController();
+                if (currentItem && currentItem != this) {
+                    ReplaceItem(replacedItem: currentItem);
+                }
+                else {
+                    square.AttachItem(this, animatedTo: true, checkEndGame: true);
+                }
+                originalSquare = null;
+            }
+            else if (originalSquare) {
+                square = originalSquare;
+                square.AttachItem(this, animatedTo: true, color: originalColor);
+                originalSquare = null;
+                originalColor = null;
+            }
+            else {
+                StartCoroutine(BackToOriginal());
+            }
+
+            Renderer.sortingOrder = 1;
+            isPanning = false;
+            return;
+        }
+
+        Vector3 mouseWorldPos = GameHelper.ToWorldPoint(Input.mousePosition);
+        transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
+    }
+
 
     void ReplaceItem(ItemController replacedItem) {
         Square sq = replacedItem.square;
@@ -88,58 +150,6 @@ public class ItemController : MonoBehaviour {
         return Quaternion.identity;
     }
 
-    void HandlePan() {
-        if (GameHelper.TouchBegin()) {
-            Vector3 mousePos = Input.mousePosition;
-            isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
-            if (isPanning) {
-                // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
-                if (square) {
-                    square.RemoveItemController();
-                    originalSquare = square;
-                }
-                pivotPos = transform.position;
-                touchPos = GameHelper.ToWorldPoint(mousePos);
-            }
-        }
-
-        if (!isPanning) return;
-
-        if (GameHelper.TouchReleased()) {
-            Controller.GameGraft.HideSquareBorder();
-            if (shouldBackToChoices) {
-                square = null;
-                originalSquare = null;
-                shouldBackToChoices = false;
-                Controller.ChoicesBoardBorder.enabled = false;
-                StartCoroutine(BackToOriginal());
-            }
-            else if (square) {
-                ItemController currentItem = square.GetItemController();
-                if (currentItem && currentItem != this) {
-                    ReplaceItem(currentItem);
-                }
-                else {
-                    square.AttachItem(this, animatedTo: true, checkEndGame: true);
-                }
-                originalSquare = null;
-            }
-            else if (originalSquare) {
-                square = originalSquare;
-                square.AttachItem(this, animatedTo: true);
-                originalSquare = null;
-            }
-            else {
-                StartCoroutine(BackToOriginal());
-            }
-
-            isPanning = false;
-            return;
-        }
-
-        Vector3 mouseWorldPos = GameHelper.ToWorldPoint(Input.mousePosition);
-        transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
-    }
 
     IEnumerator BackToOriginal() {
         capsuleCollider.enabled = false;

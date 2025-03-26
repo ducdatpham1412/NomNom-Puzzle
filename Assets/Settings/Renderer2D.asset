@@ -113,7 +113,7 @@ MonoBehaviour:
   - {fileID: -7638790251564815888}
   m_RendererFeatureMap: bc91f85e24d0a1a3f029c3fdbc90fd95
   m_UseNativeRenderPass: 0
-  m_TransparencySortMode: 3
+  m_TransparencySortMode: 0
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}
   m_HDREmulationScale: 1
   m_LightRenderTextureScale: 0.5

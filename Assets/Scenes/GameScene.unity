@@ -554,7 +554,7 @@ MonoBehaviour:
       value: "\uACE0\uC591\uC774"
     - key: vi
       value: "M\xE8o"
-    sprite: {fileID: -2116345692, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: -10524483601426386, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: chicken
     type: 0
@@ -567,7 +567,7 @@ MonoBehaviour:
       value: "\uB2ED"
     - key: vi
       value: "G\xE0"
-    sprite: {fileID: 496622241, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 5758861361426822821, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: dog
     type: 0
@@ -580,7 +580,7 @@ MonoBehaviour:
       value: "\uAC1C"
     - key: vi
       value: "Ch\xF3"
-    sprite: {fileID: -2124095150, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: -1319315252296537693, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: eagle
     type: 0
@@ -593,7 +593,7 @@ MonoBehaviour:
       value: "\uB3C5\uC218\uB9AC"
     - key: vi
       value: "\u0110\u1EA1i b\xE0ng"
-    sprite: {fileID: -1683696245, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 8133266208652056809, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: fish
     type: 0
@@ -606,7 +606,7 @@ MonoBehaviour:
       value: "\uBB3C\uACE0\uAE30"
     - key: vi
       value: "C\xE1"
-    sprite: {fileID: -736037816, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 8297040362687464060, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 90
   - id: mouse
     type: 0
@@ -619,7 +619,7 @@ MonoBehaviour:
       value: "\uC950"
     - key: vi
       value: "Chu\u1ED9t"
-    sprite: {fileID: 1223840984, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 3277387584969892780, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: pig
     type: 0
@@ -632,7 +632,7 @@ MonoBehaviour:
       value: "\uB3FC\uC9C0"
     - key: vi
       value: "L\u1EE3n"
-    sprite: {fileID: 344714230, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 6591381469864738340, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: snake
     type: 0
@@ -645,7 +645,7 @@ MonoBehaviour:
       value: "\uBC40"
     - key: vi
       value: "R\u1EAFn"
-    sprite: {fileID: 326938703, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: 7913660522167358954, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 0
   - id: worm
     type: 0
@@ -658,7 +658,7 @@ MonoBehaviour:
       value: "\uBB34\uD55C \uADA4\uB3C4"
     - key: vi
       value: "S\xE2u"
-    sprite: {fileID: 473594060, guid: 8d0ace388ba4b408c821480a97f34e01, type: 3}
+    sprite: {fileID: -953346549932427826, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
     rotationOffset: 90
   - id: apple
     type: 2
@@ -766,8 +766,10 @@ MonoBehaviour:
     rotationOffset: 0
   SquareTag: Square
   ChoicesBoardTag: ChoicesBoard
+  ItemTag: Item
   level:
     size: {x: 0, y: 0}
+    init_pos: {x: 0, y: 0}
     status: 
 --- !u!114 &77076225
 MonoBehaviour:
@@ -785,7 +787,7 @@ MonoBehaviour:
   ChoicesBoardBorder: {fileID: 1594194223}
   GameInit: {fileID: 0}
   GameGraft: {fileID: 0}
-  size: {x: 3, y: 3}
+  currentLevel: 0
 --- !u!114 &77076226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4649,7 +4651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1594194222
 Transform:
   m_ObjectHideFlags: 0

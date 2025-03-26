@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -12,11 +13,12 @@ public class Configs {
         silver = "#D1D1D1",
         bronze = "#FFC393",
         yellow = "#FFCE45",
-        red = "#DD5F5F",
     };
 
     public static _LocaleID LocaleID = new _LocaleID {
         En = "en",
+        Jp = "jp",
+        Ko = "ko",
         Vi = "vi",
     };
 
@@ -25,6 +27,14 @@ public class Configs {
         match_port = GetEnv("match_port"),
         api_url = GetEnv("API_URL"),
         socket_url = GetEnv("SOCKET_URL"),
+    };
+
+    public static Color RootSquareColor = Helper.ColorFromHex("#B5B5B5");
+    public static List<Color> SquareColors = new List<Color>{
+        Helper.ColorFromHex("#78EE4B"),
+        Helper.ColorFromHex("#E77735"),
+        Helper.ColorFromHex("#2EC30E"),
+        Helper.ColorFromHex("#B735E7"),
     };
 
     static bool hasReadEnv = false;
@@ -84,12 +94,13 @@ public class Configs {
         public string silver;
         public string bronze;
         public string yellow;
-        public string red;
     }
 
     [Serializable]
     public class _LocaleID {
         public string En;
+        public string Jp;
+        public string Ko;
         public string Vi;
     }
 

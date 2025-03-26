@@ -1,17 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameGraft : MonoBehaviour {
     [SerializeField] GameObject SquareBorder;
     SpriteRenderer SquareRenderer;
-
     GameController Controller;
+    Color nextSquareColor;
+    Coroutine openSquare;
 
     void Start() {
         Controller = GetComponent<GameController>();
         SquareRenderer = SquareBorder.GetComponent<SpriteRenderer>();
+        nextSquareColor = Configs.SquareColors[0];
     }
 
     public bool OpenSquareBorder(Square square, ItemController item) {
@@ -19,18 +22,117 @@ public class GameGraft : MonoBehaviour {
         SquareBorder.transform.position = square.transform.position;
         SquareRenderer.material.SetColor("_Color", isValid ? Helper.ColorFromHex(Configs.Color.green01) : Color.red);
         SquareBorder.SetActive(true);
-        StartCoroutine(OpenSquareCoroutine(from: 0, to: 1));
+        if (openSquare != null) {
+            StopCoroutine(openSquare);
+            openSquare = null;
+        }
+        openSquare = StartCoroutine(OpenSquareCoroutine(from: 0, to: 1));
         return isValid;
     }
 
     public void HideSquareBorder() {
-        StartCoroutine(OpenSquareCoroutine(from: 1, to: 0, () => {
+        openSquare = StartCoroutine(OpenSquareCoroutine(from: 1, to: 0, () => {
             SquareBorder.SetActive(false);
         }));
     }
 
     public void SetSquareBorderScale(Vector3 value) {
         SquareBorder.transform.localScale = value;
+    }
+
+    public void SetSquareColor(Square square) {
+        List<Square> squaresChain = new List<Square> { square };
+        RecursiveSetSquareColor(square, squaresChain);
+
+        if (squaresChain.Count <= 2) {
+            // TODO: Player sound Impressive = 1
+        }
+        else if (squaresChain.Count == 3) {
+            // TODO: Player sound Impressive = 2
+        }
+        else if (squaresChain.Count > 3) {
+            // TODO: Player sound Impressive = 3
+        }
+
+        foreach (Square s in squaresChain) {
+            s.PlayVFX();
+        }
+    }
+
+    void RecursiveSetSquareColor(Square square, List<Square> squaresChain) {
+        ItemController itemController = square.GetItemController();
+        if (!itemController) return;
+
+        Color syncColor = Color.white;
+
+        if (itemController.Item.direction != "") {
+            Square sqDir = GetSquare(square, itemController.Item.direction);
+            if (sqDir.GetItemController()) {
+                syncColor = sqDir.GetColor();
+                if (syncColor == Color.white) {
+                    // Apply for InitSquare, which doesn't have _Color when attached
+                    syncColor = GetSquareColor();
+                    sqDir.SetColor(syncColor);
+                    square.SetColor(syncColor);
+                }
+                else {
+                    square.SetColor(syncColor);
+                }
+                squaresChain.Add(sqDir);
+            }
+        }
+
+        List<Square> squaresEat = new List<Square>();
+
+        Square sUp = GetSquare(square, Item.Direction.up.ToString());
+        if (CanBeEaten(sUp, itemController, Item.Direction.down)) {
+            squaresEat.Add(sUp);
+        }
+
+        Square sLeft = GetSquare(square, Item.Direction.left.ToString());
+        if (CanBeEaten(sLeft, itemController, Item.Direction.right)) {
+            squaresEat.Add(sLeft);
+        }
+
+        Square sDown = GetSquare(square, Item.Direction.down.ToString());
+        if (CanBeEaten(sDown, itemController, Item.Direction.up)) {
+            squaresEat.Add(sDown);
+        }
+
+        Square sRight = GetSquare(square, Item.Direction.right.ToString());
+        if (CanBeEaten(sRight, itemController, Item.Direction.left)) {
+            squaresEat.Add(sRight);
+        }
+
+        bool hadSetThisSquare = syncColor != Color.white;
+
+        if (squaresEat.Count == 0) {
+            if (!hadSetThisSquare) {
+                square.SetColor(GetSquareColor());
+            }
+            return;
+        }
+
+        if (!hadSetThisSquare) {
+            Square sqTakeColor = squaresEat.Find(s => s.GetColor() != Color.white);
+            syncColor = sqTakeColor != null ? sqTakeColor.GetColor() : GetSquareColor();
+            if (syncColor == Color.white) {
+                syncColor = GetSquareColor();
+            }
+            square.SetColor(syncColor);
+        }
+
+        foreach (Square s in squaresEat) {
+            squaresChain.Add(s);
+            RecursiveSetSquareColor(s, squaresChain);
+        }
+    }
+
+    Color GetSquareColor() {
+        Color c = nextSquareColor;
+        int index = Configs.SquareColors.FindIndex(_c => _c == c);
+        nextSquareColor = Configs.SquareColors[(index + 1) % Configs.SquareColors.Count];
+        return c;
     }
 
     public void CheckEndGame() {
@@ -87,9 +189,14 @@ public class GameGraft : MonoBehaviour {
         EndGame();
     }
 
-    void EndGame() {
+    async void EndGame() {
         Debug.Log("End game end game hehe");
+        // TODO: Add VFX winner here
+        await Task.Delay(2000);
+        Controller.NextLevel();
     }
+
+
 
     bool CheckValidSquare(Square square, ItemController controller, bool? eat = null) {
         if (eat == null) {
@@ -110,25 +217,17 @@ public class GameGraft : MonoBehaviour {
             return false;
         }
 
-        // Case 2: Be eaten by others
-        bool CanBeEaten(Square sq, Item.Direction dir) {
-            return sq != null
-                    && sq.GetItemController() != null
-                    && sq.GetItemController().Item.direction == dir.ToString()
-                    && Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(sq.GetItemController().Item.creature_id);
-        }
-
         Square sUp = GetSquare(square, Item.Direction.up.ToString());
-        if (CanBeEaten(sUp, Item.Direction.down)) return true;
+        if (CanBeEaten(sUp, controller, Item.Direction.down)) return true;
 
         Square sLeft = GetSquare(square, Item.Direction.left.ToString());
-        if (CanBeEaten(sLeft, Item.Direction.right)) return true;
+        if (CanBeEaten(sLeft, controller, Item.Direction.right)) return true;
 
         Square sDown = GetSquare(square, Item.Direction.down.ToString());
-        if (CanBeEaten(sDown, Item.Direction.up)) return true;
+        if (CanBeEaten(sDown, controller, Item.Direction.up)) return true;
 
         Square sRight = GetSquare(square, Item.Direction.right.ToString());
-        if (CanBeEaten(sRight, Item.Direction.left)) return true;
+        if (CanBeEaten(sRight, controller, Item.Direction.left)) return true;
 
         foreach (var sq in new List<Square> { sUp, sLeft, sDown, sRight }) {
             // Only one of four direction squares is empty => Still be valid
@@ -136,6 +235,14 @@ public class GameGraft : MonoBehaviour {
         }
 
         return false;
+    }
+
+
+    bool CanBeEaten(Square sq, ItemController controller, Item.Direction dir) {
+        return sq != null
+                && sq.GetItemController() != null
+                && sq.GetItemController().Item.direction == dir.ToString()
+                && Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(sq.GetItemController().Item.creature_id);
     }
 
     Square GetSquare(Square pivot, string dir) {

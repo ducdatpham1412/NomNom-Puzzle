@@ -9,7 +9,7 @@ using UnityEngine.Localization.Settings;
 
 
 public static class Helper {
-    public static string DeviceID = SystemInfo.deviceUniqueIdentifier;
+    // public static string DeviceID = SystemInfo.deviceUniqueIdentifier;
 
     public static Transform FindChildRecursive(Transform parent, string childName) {
         foreach (Transform child in parent) {

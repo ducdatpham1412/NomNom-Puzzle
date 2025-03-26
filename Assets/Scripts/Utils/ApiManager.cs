@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 
 public static class ApiManager {
@@ -86,7 +87,7 @@ public static class ApiManager {
                 if (ex.Message == ERROR_MSG.token_blacklisted.ToString()) {
                     JObject resLogin = await POST<JObject>(
                         "/auth/login",
-                        data: new Dictionary<string, object> { { "device_id", Helper.DeviceID } },
+                        data: new Dictionary<string, object> { { "device_id", SystemInfo.deviceUniqueIdentifier } },
                         parameters: new Dictionary<string, string> {
                             {"type", "device_id"},
                         }

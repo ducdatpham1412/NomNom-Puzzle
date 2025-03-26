@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
     public GameGraft GameGraft;
 
     [Header("Stats")]
-    [SerializeField] Vector2 size = new Vector2(3, 3);
+    [SerializeField] int currentLevel;
 
 
     void Awake() {
@@ -19,20 +19,29 @@ public class GameController : MonoBehaviour {
         GameGraft = GetComponent<GameGraft>();
     }
 
-    void OnEnable() {
+    void Start() {
+        GameManager.Instance.Initialize(); // TODO: Remove this LifeCycle, do it in WelcomeLogic
+
+        Level[] levels = GetLevels();
+        currentLevel = Storage.GET<int>(Storage.Key.currentLevel);
+        GameInit.InitGame(levels[currentLevel]);
+    }
+
+    Level[] GetLevels() {
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/levels");
         string json = jsonFile.text;
         Level[] levels = JsonConvert.DeserializeObject<Level[]>(json);
-        GameInit.InitGame(levels[2]);
-    }
-
-    void Start() {
-        // TODO: Remove this LifeCycle, do it in WelcomeLogic
-        GameManager.Instance.Initialize();
-        // SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
+        return levels;
     }
 
     public void ShowHideSettingDialog() {
         SettingDialog.SetActive(!SettingDialog.activeInHierarchy);
+    }
+
+    public void NextLevel() {
+        currentLevel++;
+        Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
+        Level[] levels = GetLevels();
+        GameInit.InitGame(levels[currentLevel]);
     }
 }
