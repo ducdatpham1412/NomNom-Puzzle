@@ -127,7 +127,7 @@ public class GameInit : MonoBehaviour {
         // Instantiate InitItem
         ItemController initController = InitItem(initItem);
         Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
-        sq.AttachItem(initController);
+        sq.AttachItem(initController, isRoot: true);
         initController.GetComponent<CapsuleCollider2D>().enabled = false;
         sq.GetComponent<BoxCollider2D>().enabled = false;
 
