@@ -62,6 +62,45 @@ public class ItemController : MonoBehaviour {
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
 
+    public IEnumerator ScaleUpAndDownCoroutine() {
+        float duration = 0.15f;
+        float elapsedTime = 0f;
+        Vector3 currentScale = transform.localScale;
+        Vector3 targetScale = currentScale * 2f;
+
+        // Step 01: Scale up
+        while (elapsedTime < duration) {
+            transform.localScale = Vector3.Lerp(currentScale, targetScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Step 02: Shake
+        duration = 0.5f;
+        elapsedTime = 0f;
+        float shakeAmplitude = 0.03f;
+        Vector3 originalPos = transform.localPosition;
+        while (elapsedTime < duration) {
+            float shakeAmountX = Mathf.Sin(Time.time * 70f) * shakeAmplitude;
+            float shakeAmountY = Mathf.Cos(Time.time * 70f) * shakeAmplitude;
+            transform.localPosition = originalPos + new Vector3(shakeAmountX, shakeAmountY, 0);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Step 03: Scale down
+        duration = 0.15f;
+        elapsedTime = 0f;
+        while (elapsedTime < duration) {
+            transform.localScale = Vector3.Lerp(targetScale, currentScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = currentScale;
+        transform.localPosition = originalPos;
+    }
+
     void HandlePan() {
         if (GameHelper.TouchBegin()) {
             Vector3 mousePos = Input.mousePosition;
@@ -72,7 +111,7 @@ public class ItemController : MonoBehaviour {
                     originalColor = square.GetColor();
                     square.TemporarySetItemToNull();
                     originalSquare = square;
-
+                    square = null;
                 }
                 pivotPos = transform.position;
                 touchPos = GameHelper.ToWorldPoint(mousePos);
@@ -97,7 +136,7 @@ public class ItemController : MonoBehaviour {
                     ReplaceItem(replacedItem: currentItem);
                 }
                 else {
-                    square.AttachItem(this, animatedTo: true, checkEndGame: true);
+                    square.AttachItem(this, animatedTo: true, checkEndGame: true, checkValidAroundSquares: true);
                 }
                 originalSquare = null;
             }
@@ -120,12 +159,11 @@ public class ItemController : MonoBehaviour {
         transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
     }
 
-
     void ReplaceItem(ItemController replacedItem) {
         Square sq = replacedItem.square;
         replacedItem.square = null;
         StartCoroutine(replacedItem.BackToOriginal());
-        sq.AttachItem(this, animatedTo: true, checkEndGame: false);
+        sq.AttachItem(this, animatedTo: true, checkEndGame: false, checkValidAroundSquares: true);
     }
 
     Quaternion GetRotation(string dir, float offset, SpriteRenderer sr) {
@@ -133,16 +171,13 @@ public class ItemController : MonoBehaviour {
             return Quaternion.Euler(0f, 0f, 180f + offset);
         }
         if (dir == Item.Direction.left.ToString()) {
-            if (offset < 0f) {
-                sr.flipY = true;
-            }
             return Quaternion.Euler(0f, 0f, -90f + offset);
         }
         if (dir == Item.Direction.down.ToString()) {
             return Quaternion.Euler(0f, 0f, offset);
         }
         if (dir == Item.Direction.right.ToString()) {
-            if (offset > 0f) {
+            if (offset == 90f) {
                 sr.flipY = true;
             }
             return Quaternion.Euler(0f, 0f, 90f + offset);

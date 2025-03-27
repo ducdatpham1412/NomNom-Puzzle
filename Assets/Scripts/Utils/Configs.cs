@@ -33,8 +33,8 @@ public class Configs {
     public static List<Color> SquareColors = new List<Color>{
         Helper.ColorFromHex("#78EE4B"),
         Helper.ColorFromHex("#E77735"),
-        Helper.ColorFromHex("#2EC30E"),
-        Helper.ColorFromHex("#B735E7"),
+        Helper.ColorFromHex("#005BB4"),
+        Helper.ColorFromHex("#770BEF"),
     };
 
     static bool hasReadEnv = false;
