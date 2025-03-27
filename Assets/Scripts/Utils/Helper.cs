@@ -70,9 +70,9 @@ public static class Helper {
         return temp;
     }
 
-    public static string GetLocalizedValue(LocalizationManager.Table table, string key, object[] args = null) {
+    public static string GetLocalizedValue(string key, object[] args = null) {
         LocalizedString localized = new LocalizedString();
-        localized.TableReference = table.ToString();
+        localized.TableReference = "Game";
         localized.TableEntryReference = key;
         if (args != null) {
             localized.Arguments = args;

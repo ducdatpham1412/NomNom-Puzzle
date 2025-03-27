@@ -4,11 +4,11 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject SettingDialog;
+    [SerializeField] GameObject LevelsDialog;
     public SpriteRenderer ChoicesBoardBorder;
 
-    [Header("Components")]
-    public GameInit GameInit;
-    public GameGraft GameGraft;
+    [HideInInspector] public GameInit GameInit;
+    [HideInInspector] public GameGraft GameGraft;
 
     [Header("Stats")]
     [SerializeField] int currentLevel;
@@ -35,6 +35,10 @@ public class GameController : MonoBehaviour {
 
     public void ShowHideSettingDialog() {
         SettingDialog.SetActive(!SettingDialog.activeInHierarchy);
+    }
+
+    public void ShowHideLevelsDialog() {
+        LevelsDialog.SetActive(!LevelsDialog.activeInHierarchy);
     }
 
     public void NextLevel() {
