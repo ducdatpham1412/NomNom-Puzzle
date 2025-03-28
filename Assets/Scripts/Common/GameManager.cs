@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager> {
 
     public GameState gameState = new GameState();
     public event Action<GameState> OnGameStateChanged;
+    public GameController Controller;
 
     public void Initialize() { }
 

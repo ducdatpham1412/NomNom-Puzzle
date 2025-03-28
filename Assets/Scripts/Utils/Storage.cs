@@ -13,18 +13,18 @@ public static class Storage {
         PlayerPrefs.Save();
     }
 
-    public static T GET<T>(Key key) {
+    public static T? GET<T>(Key key) where T : struct {
         string res = PlayerPrefs.GetString(key.ToString());
 
         if (string.IsNullOrEmpty(res)) {
-            return default(T);
+            return null;
         }
         try {
             return JsonConvert.DeserializeObject<T>(res);
         }
         catch (JsonException jsonEx) {
             Debug.LogWarning($"Deserialization failed: {jsonEx.Message}");
-            return default(T);
+            return null;
         }
     }
 }

@@ -7,8 +7,6 @@ public class LevelScrollDialog : MonoBehaviour {
     public GameObject LevelPrefab;
     public RectTransform Content;
     public ScrollRect ScrollRect;
-    public int totalLevels = 100;
-    public int startLevel = 20;
 
     float itemHeight;
     float viewPortHeight;
@@ -17,16 +15,37 @@ public class LevelScrollDialog : MonoBehaviour {
     int batchSize;
     int poolSize;
     int firstLevel;
-    readonly int spacing = 20;
-    Vector3 oldVelocity = Vector3.zero;
+    readonly int spacingX = 10;
+    readonly int spacingY = 16;
+    readonly int cols = 3;
     bool isUpdated = false;
+    bool isInit = false;
+    Vector3 oldVelocity = Vector3.zero;
     List<ItemLevel> itemsPool = new List<ItemLevel>();
     DragTracker dragTracker;
+    GameController Controller;
 
 
     void Start() {
-        InitScrollRect();
+        Controller = GameManager.Instance.Controller;
         dragTracker = GetComponent<DragTracker>();
+        InitScrollRect();
+        isInit = true;
+    }
+
+    void OnEnable() {
+        if (isInit) {
+            SetFirstLevel();
+            int initIndex = 0;
+            for (int i = 0; i < poolSize; i++) {
+                int lv = firstLevel + i;
+                itemsPool[i].SetLevel(lv);
+                if (lv == Controller.currentLevel) {
+                    initIndex = i;
+                }
+            }
+            MoveToIndex(initIndex);
+        }
     }
 
     void LateUpdate() {
@@ -34,32 +53,50 @@ public class LevelScrollDialog : MonoBehaviour {
     }
 
     void InitScrollRect() {
-        int initIndex = 0;
-
-        VerticalLayoutGroup layoutGroup = Content.GetComponent<VerticalLayoutGroup>();
-        layoutGroup.spacing = spacing;
-        layoutGroup.padding.bottom = spacing;
-
-        itemHeight = LevelPrefab.GetComponent<RectTransform>().rect.height + spacing;
+        /*
+        Init bounds
+        */
         viewPortHeight = ScrollRect.viewport.rect.height;
-        batchSize = (int)Mathf.Ceil(viewPortHeight / itemHeight);
-        firstLevel = Mathf.Clamp(startLevel - batchSize, 1, totalLevels);
+
+        GridLayoutGroup layoutGroup = Content.GetComponent<GridLayoutGroup>();
+        layoutGroup.constraintCount = cols;
+        layoutGroup.padding.bottom = spacingY;
+        layoutGroup.spacing = new Vector2(spacingX, spacingY);
+
+        // Set item size base on layout
+        float contentWidth = Content.rect.width;
+        float itemWidth = (contentWidth - (spacingX * (cols - 1))) / cols;
+        RectTransform rt = LevelPrefab.GetComponent<RectTransform>();
+        float ratio = rt.rect.height / rt.rect.width;
+        float itemRawHeight = itemWidth * ratio;
+        itemHeight = itemRawHeight + spacingY;
+
+        layoutGroup.cellSize = new Vector2(itemWidth, itemRawHeight);
+
+        batchSize = Mathf.CeilToInt(viewPortHeight / itemHeight) * cols;
         poolSize = batchSize * 3;
-        contentHeight = itemHeight * poolSize;
+        contentHeight = itemHeight * (batchSize / cols) * 3;
         endReachOffset = contentHeight - viewPortHeight;
+
+        SetFirstLevel();
+
+        /*
+        Init ItemLevel and Move to initIndex
+        */
+        int initIndex = 0;
 
         for (int i = 0; i < poolSize; i++) {
             GameObject level = Instantiate(LevelPrefab, Content);
             ItemLevel itemLevel = level.GetComponent<ItemLevel>();
             int lv = firstLevel + i;
             itemLevel.SetLevel(lv);
-            if (lv == startLevel) {
+            if (lv == Controller.currentLevel) {
                 initIndex = i;
             }
             itemsPool.Add(itemLevel);
         }
 
-        Content.localPosition = new Vector3(Content.localPosition.x, itemHeight * initIndex, Content.localPosition.z);
+        MoveToIndex(initIndex);
     }
 
     void CheckScrollRect() {
@@ -70,7 +107,8 @@ public class LevelScrollDialog : MonoBehaviour {
 
         if (Content.localPosition.y <= 0 && firstLevel > 1) {
             int currentLevel = firstLevel;
-            firstLevel = Mathf.Clamp(currentLevel - batchSize, 1, totalLevels);
+            firstLevel = firstLevel - (firstLevel % cols) - batchSize + 1;
+            firstLevel = Mathf.Clamp(currentLevel - batchSize, 1, Controller.totalLevels);
 
             int initIndex = 0;
             for (int i = 0; i < poolSize; i++) {
@@ -80,12 +118,11 @@ public class LevelScrollDialog : MonoBehaviour {
                     initIndex = i;
                 }
             }
-            float initY = itemHeight * initIndex;
 
             Canvas.ForceUpdateCanvases();
             oldVelocity = ScrollRect.velocity;
             isUpdated = true;
-            Content.localPosition = new Vector3(Content.localPosition.x, initY, Content.localPosition.z);
+            MoveToIndex(initIndex);
 
             if (dragTracker.isDragging) {
                 // Recalculate m_ContentStartPosition and drag pivot
@@ -96,9 +133,18 @@ public class LevelScrollDialog : MonoBehaviour {
                 ScrollRect.OnDrag(ev);
             }
         }
-        else if (Content.localPosition.y >= endReachOffset && (firstLevel + poolSize) < totalLevels) {
+        else if (Content.localPosition.y >= endReachOffset && (firstLevel + poolSize) < Controller.totalLevels) {
             int currentLevel = firstLevel + poolSize - 1;
-            int lastLevel = Mathf.Clamp(currentLevel + batchSize, 1, totalLevels);
+
+            bool isFirstCol(int lv) {
+                return (lv - 1) % cols == 0;
+            }
+
+            while (!isFirstCol(currentLevel)) {
+                currentLevel--;
+            }
+
+            int lastLevel = Mathf.Clamp(currentLevel + batchSize, 1, Controller.totalLevels);
             firstLevel = lastLevel - poolSize;
 
             int initIndex = 0;
@@ -109,7 +155,7 @@ public class LevelScrollDialog : MonoBehaviour {
                     initIndex = i;
                 }
             }
-            float initY = contentHeight - (poolSize - 1 - initIndex) * itemHeight - viewPortHeight;
+            float initY = contentHeight - Mathf.CeilToInt((poolSize - 1 - initIndex) / cols) * itemHeight - viewPortHeight;
 
             Canvas.ForceUpdateCanvases();
             oldVelocity = ScrollRect.velocity;
@@ -125,5 +171,15 @@ public class LevelScrollDialog : MonoBehaviour {
                 ScrollRect.OnDrag(ev);
             }
         }
+    }
+
+    void MoveToIndex(int index) {
+        float initY = Mathf.FloorToInt(index / cols) * itemHeight;
+        Content.localPosition = new Vector3(Content.localPosition.x, initY, Content.localPosition.z);
+    }
+
+    void SetFirstLevel() {
+        firstLevel = Controller.currentLevel - (Controller.currentLevel % cols) - batchSize + 1;
+        firstLevel = Mathf.Clamp(firstLevel, 1, Controller.totalLevels);
     }
 }
