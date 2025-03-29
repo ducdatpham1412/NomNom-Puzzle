@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: "Ng\xF4n ng\u1EEF"
     m_Metadata:
       m_Items: []
+  - m_Id: 31504603710218240
+    m_Localized: "C\u1EA5p \u0111\u1ED9"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

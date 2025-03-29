@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: "\u8A00\u8A9E"
     m_Metadata:
       m_Items: []
+  - m_Id: 31504603710218240
+    m_Localized: "\u30EC\u30D9\u30EB"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

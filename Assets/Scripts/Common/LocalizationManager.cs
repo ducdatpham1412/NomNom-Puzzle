@@ -7,10 +7,7 @@ public class LocalizationManager : Singleton<LocalizationManager> {
     protected LocalizationManager() { }
 
     public enum Table {
-        Home,
-        Welcome,
         Game,
-        Error,
     }
 
     private bool active = false;
