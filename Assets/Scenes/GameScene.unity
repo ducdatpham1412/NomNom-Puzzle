@@ -3765,7 +3765,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89690262d8af948b6a25f82da148ea34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 77076225}
   LevelPrefab: {fileID: 1984441462442308590, guid: 1b825f18e056943cf9f653fcb3d272d1, type: 3}
   Content: {fileID: 4784695357793249506}
   ScrollRect: {fileID: 66554633114895168}

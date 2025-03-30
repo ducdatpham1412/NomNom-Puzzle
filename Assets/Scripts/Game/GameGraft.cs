@@ -8,7 +8,6 @@ public class GameGraft : MonoBehaviour {
     [SerializeField] GameObject SquareBorder;
     SpriteRenderer SquareRenderer;
     GameController Controller;
-    Color nextSquareColor;
     Coroutine openSquare;
     List<string> directions = new List<string>{
         Item.Direction.up.ToString(),
@@ -20,7 +19,6 @@ public class GameGraft : MonoBehaviour {
     void Start() {
         Controller = GetComponent<GameController>();
         SquareRenderer = SquareBorder.GetComponent<SpriteRenderer>();
-        nextSquareColor = Configs.SquareColors[0];
     }
 
     public bool OpenSquareBorder(Square square, ItemController item) {
@@ -66,8 +64,7 @@ public class GameGraft : MonoBehaviour {
     }
 
     public void CheckValidAroundSquare(Square square) {
-        foreach (string dir in directions) {
-            Square sq = GetSquare(square, dir);
+        foreach (Square sq in GetAroundSquares(square)) {
             if (sq == null || sq.GetItemController() == null) continue;
             if (!CheckValidSquare(sq, sq.GetItemController())) {
                 sq.PingError();
@@ -93,28 +90,36 @@ public class GameGraft : MonoBehaviour {
         Creature creature = Controller.GameInit.Creatures.Find(c => c.id == itemController.Item.creature_id);
         if (creature == null) return;
 
-        Color syncColor = Color.white;
+        Color syncColor = Configs.DefaultSquareColor;
 
         if (creature.type == Creature.Type.animal) {
             string dir = GetAvailableDir(itemController.Item.direction, creature);
             Square sqDir = GetSquare(square, dir);
-            if (sqDir != null && sqDir.GetItemController()) {
+
+            void SetColorBaseOnSqDir() {
+                if (sqDir == null) return;
+                if (sqDir.GetItemController() == null) return;
+                Item.Direction? temp = Helper.StringToEnum<Item.Direction>(dir);
+                if (temp == null) return;
+                if (!CanBeEaten(square, sqDir.GetItemController(), (Item.Direction)temp)) return;
+
                 syncColor = sqDir.GetColor();
-                if (syncColor == Color.white) {
-                    // Apply for InitSquare, which doesn't have _Color when attached
-                    syncColor = GetSquareColor();
+                if (syncColor == Configs.DefaultSquareColor || syncColor == Configs.ErrorSquareColor) {
+                    syncColor = GetSquareColor(square);
                     sqDir.SetColor(syncColor);
                 }
                 square.SetColor(syncColor);
                 squaresChain.Add(sqDir);
             }
+
+            SetColorBaseOnSqDir();
         }
 
-        bool hadSetThisSquare = syncColor != Color.white;
+        bool hadSetThisSquare = syncColor != Configs.DefaultSquareColor;
 
         if (Controller.GameInit.Relationship[itemController.Item.creature_id].eaten.Count == 0) {
             if (!hadSetThisSquare) {
-                square.SetColor(GetSquareColor());
+                square.SetColor(GetSquareColor(square));
             }
             return;
         }
@@ -143,17 +148,21 @@ public class GameGraft : MonoBehaviour {
 
         if (squaresEat.Count == 0) {
             if (!hadSetThisSquare) {
-                square.SetColor(GetSquareColor());
+                syncColor = GetSquareColor(square);
+                square.SetColor(syncColor);
             }
             return;
         }
 
         if (!hadSetThisSquare) {
-            Square sqTakeColor = squaresEat.Find(s => s.GetColor() != Color.white);
-            syncColor = sqTakeColor != null ? sqTakeColor.GetColor() : GetSquareColor();
-            if (syncColor == Color.white) {
-                syncColor = GetSquareColor();
-            }
+            Square sqTakeColor = squaresEat.Find(s => {
+                Color sqColor = s.GetColor();
+                return sqColor != Configs.DefaultSquareColor && sqColor != Configs.ErrorSquareColor;
+            });
+            syncColor = sqTakeColor != null ? sqTakeColor.GetColor() : GetSquareColor(square);
+            // if (syncColor == Configs.DefaultSquareColor) {
+            //     syncColor = GetSquareColor(square);
+            // }
             square.SetColor(syncColor);
         }
 
@@ -170,10 +179,16 @@ public class GameGraft : MonoBehaviour {
         Controller.NextLevel();
     }
 
-    Color GetSquareColor() {
-        Color c = nextSquareColor;
-        int index = Configs.SquareColors.FindIndex(_c => _c == c);
-        nextSquareColor = Configs.SquareColors[(index + 1) % Configs.SquareColors.Count];
+    Color GetSquareColor(Square square) {
+        List<Square> aroundSquares = GetAroundSquares(square);
+        Color c = Configs.ErrorSquareColor;
+        int index = Configs.SquareColors.FindIndex(_c => {
+            Square temp = aroundSquares.Find(s => s != null && s.GetColor() == _c);
+            return temp == null;
+        });
+        if (index >= 0) {
+            return Configs.SquareColors[index];
+        }
         return c;
     }
 
@@ -193,7 +208,7 @@ public class GameGraft : MonoBehaviour {
         // Case 1: Eat other (Animal)
         if (eat == true) {
             string dir = GetAvailableDir(controller.Item.direction, creature);
-            s = GetSquare(pivot: square, dir: dir);
+            s = GetSquare(square, dir);
             if (s == null) return false;
             if (s.GetItemController() == null) return itemDirNullEnable;
             if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.GetItemController().Item.creature_id)) {
@@ -207,12 +222,13 @@ public class GameGraft : MonoBehaviour {
 
         bool isSquareValid(Square sq, bool beEaten, string dir) {
             if (sq == null) return true;
-            if (sq.GetItemController() == null) return itemDirNullEnable;
             ItemController ct = sq.GetItemController();
+            if (ct == null) return itemDirNullEnable;
             Creature cr = Controller.GameInit.Creatures.Find(c => c.id == ct.Item.creature_id);
             if (cr == null) return false;
             if (cr.type != Creature.Type.animal) return true;
             if (ct.Item.direction != dir) return true;
+            if (DirCanBeEmpty(ct.Item.direction, cr)) return true;
             return beEaten;
         }
 
@@ -255,6 +271,15 @@ public class GameGraft : MonoBehaviour {
         return true;
     }
 
+    List<Square> GetAroundSquares(Square square) {
+        List<Square> res = new List<Square>();
+        foreach (string dir in directions) {
+            Square sq = GetSquare(square, dir);
+            res.Add(sq);
+        }
+        return res;
+    }
+
     string GetAvailableDir(string dir, Creature creature) {
         /*
            With animal having direction == "", we can set it having direction dynamic,
@@ -270,11 +295,26 @@ public class GameGraft : MonoBehaviour {
         return dir;
     }
 
+    bool DirCanBeEmpty(string dir, Creature creature) {
+        if (dir == "") return true;
+        if (creature.rotationOffset == 90f && dir == Item.Direction.left.ToString()) {
+            return true;
+        }
+        if (creature.rotationOffset == 0f && dir == Item.Direction.down.ToString()) {
+            return true;
+        }
+        return false;
+    }
+
     bool CanBeEaten(Square sq, ItemController controller, Item.Direction dir) {
-        return sq != null
-                && sq.GetItemController() != null
-                && sq.GetItemController().Item.direction == dir.ToString()
-                && Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(sq.GetItemController().Item.creature_id);
+        if (sq == null) return false;
+        ItemController ct = sq.GetItemController();
+        if (ct == null) return false;
+        Creature cr = Controller.GameInit.Creatures.Find(c => c.id == ct.Item.creature_id);
+        if (cr == null) return false;
+        string availableDir = GetAvailableDir(ct.Item.direction, cr);
+        if (availableDir != dir.ToString()) return false;
+        return Controller.GameInit.Relationship[controller.Item.creature_id].eaten.Contains(ct.Item.creature_id);
     }
 
     Square GetSquare(Square pivot, string dir) {

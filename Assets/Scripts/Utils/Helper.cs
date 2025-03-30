@@ -130,6 +130,14 @@ public static class Helper {
         return objects[UnityEngine.Random.Range(0, objects.Length)];
     }
 
+    public static T? StringToEnum<T>(string value) where T : struct, Enum {
+        if (Enum.TryParse(value, true, out T result)) {
+            return result;
+        }
+        return null;
+    }
+
+
     public static void Shuffle<T>(List<T> list) {
         System.Random rng = new System.Random();
         int n = list.Count;
