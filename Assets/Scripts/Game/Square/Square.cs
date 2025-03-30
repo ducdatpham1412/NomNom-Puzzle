@@ -5,7 +5,8 @@ public class Square : MonoBehaviour {
     public GameController Controller;
     public Vector2 Pos;
     public Vector3 Center;
-    Color Color = Color.white;
+    public bool havingAnyCoroutines = false;
+    Color Color = Configs.DefaultSquareColor;
 
     ItemController ItemController;
     Material material;
@@ -57,7 +58,7 @@ public class Square : MonoBehaviour {
 
     public void TemporarySetItemToNull() {
         ItemController = null;
-        SetColor(Color.white);
+        SetColor(Configs.DefaultSquareColor);
     }
 
     public Color GetColor() {
@@ -76,10 +77,11 @@ public class Square : MonoBehaviour {
     public void PingError() {
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
-        sr.material.SetColor("_Color", Color.white);
+        SetColor(Configs.ErrorSquareColor);
     }
 
     IEnumerator AnimateToCenter(bool checkEndGame) {
+        havingAnyCoroutines = true;
         float duration = 0.1f;
         float elapsedTime = 0f;
         Vector3 currentPos = ItemController.transform.position;
@@ -90,5 +92,6 @@ public class Square : MonoBehaviour {
         }
         ItemController.gameObject.transform.position = Center;
         if (checkEndGame) Controller.GameGraft.CheckEndGame();
+        havingAnyCoroutines = false;
     }
 }

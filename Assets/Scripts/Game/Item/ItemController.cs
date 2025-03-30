@@ -106,8 +106,15 @@ public class ItemController : MonoBehaviour {
             Vector3 mousePos = Input.mousePosition;
             isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
             if (isPanning) {
-                // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
+
                 if (square) {
+                    // Is square having any coroutines (AnimateToCenter,...), do nothing, because SetItemToNull can cause error
+                    if (square.havingAnyCoroutines) {
+                        isPanning = false;
+                        return;
+                    }
+
+                    // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
                     originalColor = square.GetColor();
                     square.TemporarySetItemToNull();
                     originalSquare = square;

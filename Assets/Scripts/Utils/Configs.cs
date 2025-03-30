@@ -30,11 +30,13 @@ public class Configs {
     };
 
     public static Color RootSquareColor = Helper.ColorFromHex("#B5B5B5");
+    public static Color DefaultSquareColor = Helper.ColorFromHex("#AC680F");
+    public static Color ErrorSquareColor = Helper.ColorFromHex("#FF0000");
     public static List<Color> SquareColors = new List<Color>{
-        Helper.ColorFromHex("#78EE4B"),
-        Helper.ColorFromHex("#E77735"),
-        Helper.ColorFromHex("#005BB4"),
-        Helper.ColorFromHex("#770BEF"),
+        Helper.ColorFromHex("#2D9502"),
+        Helper.ColorFromHex("#70EA25"),
+        Helper.ColorFromHex("#05C5C8"),
+        Helper.ColorFromHex("#164EF1"),
     };
 
     static bool hasReadEnv = false;
