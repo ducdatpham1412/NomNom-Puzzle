@@ -59,9 +59,6 @@ public class GameManager : Singleton<GameManager> {
         if (pauseStatus) {
             Debug.Log("App is paused (background mode)");
         }
-        else {
-            Debug.Log("App is resumed");
-        }
     }
 
 

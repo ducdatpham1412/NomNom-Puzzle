@@ -10,6 +10,7 @@ public class ItemController : MonoBehaviour {
     bool isPanning = false;
     bool shouldBackToChoices = false;
     float lastClickTime = 0f;
+    int originalSortingOrder;
     Vector3 originalPos;
     Vector3 pivotPos;
     Vector3 touchPos;
@@ -22,6 +23,7 @@ public class ItemController : MonoBehaviour {
         originalPos = transform.position;
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         Renderer = GetComponent<SpriteRenderer>();
+        originalSortingOrder = Renderer.sortingOrder;
     }
 
     void Update() {
@@ -64,11 +66,11 @@ public class ItemController : MonoBehaviour {
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
 
-    public IEnumerator ScaleUpAndDownCoroutine() {
+    public IEnumerator ScaleUpAndDownCoroutine(float shakeSpeed = 70f, float scale = 2f) {
         float duration = 0.15f;
         float elapsedTime = 0f;
         Vector3 currentScale = transform.localScale;
-        Vector3 targetScale = currentScale * 2f;
+        Vector3 targetScale = currentScale * scale;
 
         // Step 01: Scale up
         while (elapsedTime < duration) {
@@ -83,8 +85,8 @@ public class ItemController : MonoBehaviour {
         float shakeAmplitude = 0.03f;
         Vector3 originalPos = transform.localPosition;
         while (elapsedTime < duration) {
-            float shakeAmountX = Mathf.Sin(Time.time * 70f) * shakeAmplitude;
-            float shakeAmountY = Mathf.Cos(Time.time * 70f) * shakeAmplitude;
+            float shakeAmountX = Mathf.Sin(Time.time * shakeSpeed) * shakeAmplitude;
+            float shakeAmountY = Mathf.Cos(Time.time * shakeSpeed) * shakeAmplitude;
             transform.localPosition = originalPos + new Vector3(shakeAmountX, shakeAmountY, 0);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -109,11 +111,15 @@ public class ItemController : MonoBehaviour {
             isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
 
             if (isPanning) {
+                if (!Controller.ShouldHandlePan()) {
+                    isPanning = false;
+                    return;
+                }
+
                 if (square) {
                     if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
-                        if (square.havingAnyCoroutines) {
-                            square.havingAnyCoroutines = false;
-                            square.StopAllCoroutines();
+                        if (square.HasAnyCoroutines()) {
+                            square.StopCoroutines();
                         }
                         square.TemporarySetItemToNull();
                         StartCoroutine(BackToOriginal());
@@ -131,7 +137,7 @@ public class ItemController : MonoBehaviour {
                     lastClickTime = Time.time;
 
                     // Is square having any coroutines (AnimateToCenter,...), do nothing, because SetItemToNull can cause error
-                    if (square.havingAnyCoroutines) {
+                    if (square.HasAnyCoroutines()) {
                         isPanning = false;
                         return;
                     }
@@ -145,7 +151,7 @@ public class ItemController : MonoBehaviour {
 
                 pivotPos = transform.position;
                 touchPos = GameHelper.ToWorldPoint(mousePos);
-                Renderer.sortingOrder = 2;
+                Renderer.sortingOrder = originalSortingOrder + 1;
             }
         }
 
@@ -180,7 +186,7 @@ public class ItemController : MonoBehaviour {
                 StartCoroutine(BackToOriginal());
             }
 
-            Renderer.sortingOrder = 1;
+            Renderer.sortingOrder = originalSortingOrder;
             isPanning = false;
             return;
         }

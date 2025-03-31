@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 public class Configs {
-    public static _Color Color = new _Color {
+    public static readonly _Color Color = new _Color {
         brown = "#4E3200",
         green = "#007427",
         green01 = "#0BF500",
@@ -15,26 +15,26 @@ public class Configs {
         yellow = "#FFCE45",
     };
 
-    public static _LocaleID LocaleID = new _LocaleID {
+    public static readonly _LocaleID LocaleID = new _LocaleID {
         En = "en",
         Jp = "jp",
         Ko = "ko",
         Vi = "vi",
     };
 
-    public static _Env Env = new _Env {
+    public static readonly _Env Env = new _Env {
         match_id = GetEnv("match_id"),
         match_port = GetEnv("match_port"),
         api_url = GetEnv("API_URL"),
         socket_url = GetEnv("SOCKET_URL"),
     };
 
-    public static Color RootSquareColor = Helper.ColorFromHex("#B5B5B5");
-    public static Color DefaultSquareColor = Helper.ColorFromHex("#AC680F");
-    public static Color ErrorSquareColor = Helper.ColorFromHex("#FF0000");
-    public static List<Color> SquareColors = new List<Color>{
+    public static readonly Color RootSquareColor = Helper.ColorFromHex("#B5B5B5");
+    public static readonly Color DefaultSquareColor = Helper.ColorFromHex("#AC680F");
+    public static readonly Color ErrorSquareColor = Helper.ColorFromHex("#FF0000");
+    public static readonly List<Color> SquareColors = new List<Color>{
         Helper.ColorFromHex("#2D9502"),
-        Helper.ColorFromHex("#70EA25"),
+        Helper.ColorFromHex("#EAD425"),
         Helper.ColorFromHex("#05C5C8"),
         Helper.ColorFromHex("#164EF1"),
     };

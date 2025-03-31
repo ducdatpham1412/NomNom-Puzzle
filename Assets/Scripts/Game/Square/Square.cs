@@ -5,11 +5,11 @@ public class Square : MonoBehaviour {
     public GameController Controller;
     public Vector2 Pos;
     public Vector3 Center;
-    public bool havingAnyCoroutines = false;
     Color Color = Configs.DefaultSquareColor;
 
     ItemController ItemController;
     Material material;
+    Coroutine animatedCenter;
 
     public void AttachItem(
         ItemController item,
@@ -22,7 +22,7 @@ public class Square : MonoBehaviour {
         ItemController = item;
         ItemController.square = this;
         if (animatedTo) {
-            StartCoroutine(AnimateToCenter(checkEndGame));
+            animatedCenter = StartCoroutine(AnimateToCenter(checkEndGame));
         }
         else {
             ItemController.gameObject.transform.position = Center;
@@ -33,6 +33,8 @@ public class Square : MonoBehaviour {
 
         if (!material) material = GetComponent<SpriteRenderer>().material;
 
+        bool hasMatched = false;
+
         if (isRoot) {
             material.SetColor("_Color01", Configs.RootSquareColor);
         }
@@ -40,11 +42,11 @@ public class Square : MonoBehaviour {
             SetColor((Color)color);
         }
         else {
-            Controller.GameGraft.SetSquareColor(this);
+            hasMatched = Controller.GameGraft.SetSquareColor(this);
         }
 
         if (checkValidAroundSquares) {
-            Controller.GameGraft.CheckValidAroundSquare(this);
+            Controller.GameGraft.CheckValidAroundSquare(this, hasMatched);
         }
     }
 
@@ -70,18 +72,29 @@ public class Square : MonoBehaviour {
         material.SetColor("_Color", color);
     }
 
-    public void PlayVFX() {
-        // TODO: Add VFX bloom make fresh feel
+    public void PlayMatchedVFX() {
+        // scaleCoroutine = StartCoroutine(ScaleUpAndDown());
+        StartCoroutine(ItemController.ScaleUpAndDownCoroutine(shakeSpeed: 45f, scale: 1.5f));
+        Controller.PlayVFXLeaf(Center);
     }
 
-    public void PingError() {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
+    public void PingError(bool shouldScale) {
+        if (shouldScale) {
+            StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
+        }
         SetColor(Configs.ErrorSquareColor);
     }
 
+    public void StopCoroutines() {
+        StopAllCoroutines();
+        animatedCenter = null;
+    }
+
+    public bool HasAnyCoroutines() {
+        return animatedCenter != null;
+    }
+
     IEnumerator AnimateToCenter(bool checkEndGame) {
-        havingAnyCoroutines = true;
         float duration = 0.1f;
         float elapsedTime = 0f;
         Vector3 currentPos = ItemController.transform.position;
@@ -92,6 +105,6 @@ public class Square : MonoBehaviour {
         }
         ItemController.gameObject.transform.position = Center;
         if (checkEndGame) Controller.GameGraft.CheckEndGame();
-        havingAnyCoroutines = false;
+        animatedCenter = null;
     }
 }

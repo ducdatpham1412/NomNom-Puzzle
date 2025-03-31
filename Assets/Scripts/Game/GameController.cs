@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -6,7 +8,12 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject SettingDialog;
     [SerializeField] GameObject LevelsDialog;
     [SerializeField] GameObject GoToLevelDialog;
+    [SerializeField] GameObject NextLevelDialog;
     public SpriteRenderer ChoicesBoardBorder;
+
+    [Header("Prefabs")]
+    [SerializeField] GameObject VFXLeaf;
+    [SerializeField] Texture2D[] LeafTextures;
 
     [HideInInspector] public GameInit GameInit;
     [HideInInspector] public GameGraft GameGraft;
@@ -16,6 +23,9 @@ public class GameController : MonoBehaviour {
     public int totalLevels;
     public readonly float doubleClickThreshold = 0.3f;
 
+    bool ended = false;
+    List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
+    Transform VFXsContainer;
 
     void Awake() {
         GameManager.Instance.Controller = this;
@@ -34,6 +44,12 @@ public class GameController : MonoBehaviour {
             currentLevel = (int)lv;
         }
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
+
+        InitVFXs();
+    }
+
+    void InitVFXs() {
+        VFXsContainer = new GameObject("VFXs").transform;
     }
 
     Level[] GetLevels() {
@@ -52,14 +68,51 @@ public class GameController : MonoBehaviour {
         LevelsDialog.SetActive(!LevelsDialog.activeInHierarchy);
     }
 
-    public void NextLevel() {
+    public void EndGame() {
+        ended = true;
         currentLevel++;
         Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
-        Level[] levels = GetLevels();
-        GameInit.InitGame(levels[currentLevel - 1], currentLevel);
+        StartCoroutine(EndGameCoroutine());
     }
 
     public void GoToLevel(int level) {
         Debug.Log("Go to level" + level);
+    }
+
+    public bool ShouldHandlePan() {
+        return !LevelsDialog.activeInHierarchy && !ended && !SettingDialog.activeInHierarchy && !GoToLevelDialog.activeInHierarchy;
+    }
+
+    public void PlayVFXLeaf(Vector3 pos) {
+        List<ParticleSystem> readyVFXs = VFXsLeafPool.FindAll(v => v.isStopped);
+        if (readyVFXs.Count == 0) {
+            GameObject newVFX = Instantiate(VFXLeaf, pos, Quaternion.identity, VFXsContainer);
+            ParticleSystem Ps = newVFX.GetComponent<ParticleSystem>();
+            ParticleSystemRenderer PsRenderer = Ps.GetComponent<ParticleSystemRenderer>();
+            PsRenderer.material.SetTexture("_MainTex", Helper.GetRandomInArr(LeafTextures));
+            VFXsLeafPool.Add(Ps);
+            Ps.Play();
+        }
+        else {
+            ParticleSystem Ps = Helper.GetRandomInArr(readyVFXs.ToArray());
+            Ps.gameObject.transform.position = pos;
+            Ps.Play();
+        }
+        // TODO: Adding sound
+    }
+
+    IEnumerator EndGameCoroutine() {
+        // TODO: VFX Winner
+        Debug.Log("Eng game hehe");
+        yield return new WaitForSeconds(2f);
+
+        ended = false;
+        Level[] levels = GetLevels();
+        if (currentLevel == levels.Length) {
+            // TODO: Congratulation
+        }
+        else {
+            GameInit.InitGame(levels[currentLevel - 1], currentLevel);
+        }
     }
 }
