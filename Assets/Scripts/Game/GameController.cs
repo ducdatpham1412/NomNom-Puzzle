@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
     [Header("Stats")]
     public int currentLevel;
     public int totalLevels;
+    public readonly float doubleClickThreshold = 0.3f;
 
 
     void Awake() {

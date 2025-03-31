@@ -9,12 +9,14 @@ public class ItemController : MonoBehaviour {
 
     bool isPanning = false;
     bool shouldBackToChoices = false;
+    float lastClickTime = 0f;
     Vector3 originalPos;
     Vector3 pivotPos;
     Vector3 touchPos;
     Square originalSquare;
     Color? originalColor;
     SpriteRenderer Renderer;
+
 
     void Start() {
         originalPos = transform.position;
@@ -105,9 +107,29 @@ public class ItemController : MonoBehaviour {
         if (GameHelper.TouchBegin()) {
             Vector3 mousePos = Input.mousePosition;
             isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
-            if (isPanning) {
 
+            if (isPanning) {
                 if (square) {
+                    if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
+                        if (square.havingAnyCoroutines) {
+                            square.havingAnyCoroutines = false;
+                            square.StopAllCoroutines();
+                        }
+                        square.TemporarySetItemToNull();
+                        StartCoroutine(BackToOriginal());
+                        square = null;
+                        originalColor = null;
+                        originalSquare = null;
+                        lastClickTime = 0f;
+                        isPanning = false;
+
+                        // TODO: Playing sound
+
+                        return;
+                    }
+
+                    lastClickTime = Time.time;
+
                     // Is square having any coroutines (AnimateToCenter,...), do nothing, because SetItemToNull can cause error
                     if (square.havingAnyCoroutines) {
                         isPanning = false;
@@ -120,6 +142,7 @@ public class ItemController : MonoBehaviour {
                     originalSquare = square;
                     square = null;
                 }
+
                 pivotPos = transform.position;
                 touchPos = GameHelper.ToWorldPoint(mousePos);
                 Renderer.sortingOrder = 2;
