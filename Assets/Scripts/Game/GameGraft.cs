@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 
 public class GameGraft : MonoBehaviour {
@@ -44,9 +44,9 @@ public class GameGraft : MonoBehaviour {
         SquareBorder.transform.localScale = value;
     }
 
-    public void SetSquareColor(Square square) {
+    public bool SetSquareColor(Square square) {
         List<Square> squaresChain = new List<Square> { square };
-        RecursiveSetSquareColor(square, squaresChain);
+        RecursiveSquaresChain(square, squaresChain);
 
         if (squaresChain.Count <= 2) {
             // TODO: Player sound Impressive = 1
@@ -58,16 +58,50 @@ public class GameGraft : MonoBehaviour {
             // TODO: Player sound Impressive = 3
         }
 
-        foreach (Square s in squaresChain) {
-            s.PlayVFX();
+        /*
+        Get color which is not the same to item around squaresChain
+        */
+        List<AroundColorCounting> availableColors = new List<AroundColorCounting>();
+        foreach (Color c in Configs.SquareColors) {
+            availableColors.Add(new AroundColorCounting {
+                color = c,
+                count = 0,
+            });
         }
+        foreach (Square s in squaresChain) {
+            List<Square> aroundSquares = GetAroundSquares(s);
+            foreach (Square asq in aroundSquares) {
+                if (asq != null && asq.GetItemController() != null && !squaresChain.Contains(asq)) {
+                    AroundColorCounting ac = availableColors.Find(_ac => _ac.color.Equals(asq.GetColor()));
+                    if (ac != null) {
+                        ac.count++;
+                    }
+                }
+            }
+        }
+        AroundColorCounting uniqueColor = availableColors.OrderBy(ac => ac.count).ToList()[0];
+        foreach (Square s in squaresChain) {
+            s.SetColor(uniqueColor.color);
+        }
+
+        /*
+        Check created a chain or not
+        */
+        bool hasMatched = false;
+        if (squaresChain.Count >= 2) {
+            foreach (Square s in squaresChain) {
+                s.PlayMatchedVFX();
+            }
+            hasMatched = true;
+        }
+        return hasMatched;
     }
 
-    public void CheckValidAroundSquare(Square square) {
+    public void CheckValidAroundSquare(Square square, bool hasMatched) {
         foreach (Square sq in GetAroundSquares(square)) {
             if (sq == null || sq.GetItemController() == null) continue;
             if (!CheckValidSquare(sq, sq.GetItemController())) {
-                sq.PingError();
+                sq.PingError(shouldScale: !hasMatched);
             }
         }
     }
@@ -80,46 +114,39 @@ public class GameGraft : MonoBehaviour {
             }
         }
 
-        EndGame();
+        Controller.EndGame();
     }
 
-    void RecursiveSetSquareColor(Square square, List<Square> squaresChain) {
+    void RecursiveSquaresChain(Square square, List<Square> squaresChain) {
         ItemController itemController = square.GetItemController();
         if (!itemController) return;
 
         Creature creature = Controller.GameInit.Creatures.Find(c => c.id == itemController.Item.creature_id);
         if (creature == null) return;
 
-        Color syncColor = Configs.DefaultSquareColor;
+        List<Square> nextSquares = new List<Square>();
 
         if (creature.type == Creature.Type.animal) {
             string dir = GetAvailableDir(itemController.Item.direction, creature);
             Square sqDir = GetSquare(square, dir);
 
-            void SetColorBaseOnSqDir() {
+            void CheckSqDir() {
                 if (sqDir == null) return;
                 if (sqDir.GetItemController() == null) return;
+                if (squaresChain.Contains(sqDir)) return;
                 Item.Direction? temp = Helper.StringToEnum<Item.Direction>(dir);
                 if (temp == null) return;
                 if (!CanBeEaten(square, sqDir.GetItemController(), (Item.Direction)temp)) return;
-
-                syncColor = sqDir.GetColor();
-                if (syncColor == Configs.DefaultSquareColor || syncColor == Configs.ErrorSquareColor) {
-                    syncColor = GetSquareColor(square);
-                    sqDir.SetColor(syncColor);
-                }
-                square.SetColor(syncColor);
                 squaresChain.Add(sqDir);
+                nextSquares.Add(sqDir);
             }
 
-            SetColorBaseOnSqDir();
+            CheckSqDir();
         }
 
-        bool hadSetThisSquare = syncColor != Configs.DefaultSquareColor;
-
         if (Controller.GameInit.Relationship[itemController.Item.creature_id].eaten.Count == 0) {
-            if (!hadSetThisSquare) {
-                square.SetColor(GetSquareColor(square));
+            foreach (Square s in nextSquares) {
+                RecursiveSquaresChain(s, squaresChain);
             }
             return;
         }
@@ -146,37 +173,14 @@ public class GameGraft : MonoBehaviour {
             squaresEat.Add(sRight);
         }
 
-        if (squaresEat.Count == 0) {
-            if (!hadSetThisSquare) {
-                syncColor = GetSquareColor(square);
-                square.SetColor(syncColor);
-            }
-            return;
-        }
-
-        if (!hadSetThisSquare) {
-            Square sqTakeColor = squaresEat.Find(s => {
-                Color sqColor = s.GetColor();
-                return sqColor != Configs.DefaultSquareColor && sqColor != Configs.ErrorSquareColor;
-            });
-            syncColor = sqTakeColor != null ? sqTakeColor.GetColor() : GetSquareColor(square);
-            // if (syncColor == Configs.DefaultSquareColor) {
-            //     syncColor = GetSquareColor(square);
-            // }
-            square.SetColor(syncColor);
-        }
-
         foreach (Square s in squaresEat) {
             squaresChain.Add(s);
-            RecursiveSetSquareColor(s, squaresChain);
+            nextSquares.Add(s);
         }
-    }
 
-    async void EndGame() {
-        Debug.Log("End game end game hehe");
-        // TODO: Add VFX winner here
-        await Task.Delay(2000);
-        Controller.NextLevel();
+        foreach (Square s in nextSquares) {
+            RecursiveSquaresChain(s, squaresChain);
+        }
     }
 
     Color GetSquareColor(Square square) {
@@ -368,5 +372,12 @@ public class GameGraft : MonoBehaviour {
         }
         SquareRenderer.material.SetColor("_Color", new Color(c.r, c.g, c.b, to));
         callback?.Invoke();
+    }
+
+
+    [SerializeField]
+    class AroundColorCounting {
+        public Color color;
+        public int count;
     }
 }

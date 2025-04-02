@@ -106,16 +106,16 @@ public class GameInit : MonoBehaviour {
         float sc = scaleWidth / trueWidth;
         Vector3 scale = new Vector3(sc, sc, 1f);
 
-        List<Item> itemsList = new List<Item>();
-        List<Item> itemsInit = new List<Item>();
+        List<Item> itemsInChoicesBoard = new List<Item>();
+        List<Item> itemsRecommended = new List<Item>();
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
                 int temp = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
                 if (temp >= 0) {
-                    itemsInit.Add(item);
+                    itemsRecommended.Add(item);
                 }
                 else {
-                    itemsList.Add(item);
+                    itemsInChoicesBoard.Add(item);
                 }
             }
         }
@@ -130,8 +130,8 @@ public class GameInit : MonoBehaviour {
         }
 
         // Instantiate InitItem
-        Helper.Shuffle(itemsList);
-        foreach (Item initItem in itemsInit) {
+        Helper.Shuffle(itemsInChoicesBoard);
+        foreach (Item initItem in itemsRecommended) {
             ItemController initController = InitItem(initItem);
             Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
             sq.AttachItem(initController, isRoot: true);
@@ -139,8 +139,8 @@ public class GameInit : MonoBehaviour {
             sq.GetComponent<BoxCollider2D>().enabled = false;
         }
 
-        for (int i = 0; i < itemsList.Count; i++) {
-            ItemController ct = InitItem(itemsList[i]);
+        for (int i = 0; i < itemsInChoicesBoard.Count; i++) {
+            ItemController ct = InitItem(itemsInChoicesBoard[i]);
             int row = i / cols;
             int col = i % cols;
             float xPos = -width / 2 + col * gap + gap / 2;
