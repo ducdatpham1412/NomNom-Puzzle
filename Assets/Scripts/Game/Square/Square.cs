@@ -79,9 +79,7 @@ public class Square : MonoBehaviour {
     }
 
     public void PingError(bool shouldScale) {
-        if (shouldScale) {
-            StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
-        }
+        StartCoroutine(ItemController.PingErrorInterval(shouldScale));
         SetColor(Configs.ErrorSquareColor);
     }
 
