@@ -9,11 +9,13 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject LevelsDialog;
     [SerializeField] GameObject GoToLevelDialog;
     [SerializeField] GameObject NextLevelDialog;
+    [SerializeField] Transform VFXsContainer;
     public SpriteRenderer ChoicesBoardBorder;
 
     [Header("Prefabs")]
     [SerializeField] GameObject VFXLeaf;
     [SerializeField] Texture2D[] LeafTextures;
+    [SerializeField] GameObject VFXsWinner;
 
     [HideInInspector] public GameInit GameInit;
     [HideInInspector] public GameGraft GameGraft;
@@ -22,10 +24,10 @@ public class GameController : MonoBehaviour {
     public int currentLevel;
     public int totalLevels;
     public readonly float doubleClickThreshold = 0.3f;
+    GameObject Vfx;
 
     bool ended = false;
     List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
-    Transform VFXsContainer;
 
     void Awake() {
         GameManager.Instance.Controller = this;
@@ -35,6 +37,7 @@ public class GameController : MonoBehaviour {
 
     void Start() {
         Level[] levels = GetLevels();
+        Storage.SET(Storage.Key.currentLevel, "1");
         int? lv = Storage.GET<int>(Storage.Key.currentLevel);
         if (lv == null) {
             Storage.SET(Storage.Key.currentLevel, "1");
@@ -44,13 +47,8 @@ public class GameController : MonoBehaviour {
             currentLevel = (int)lv;
         }
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
-
-        InitVFXs();
     }
 
-    void InitVFXs() {
-        VFXsContainer = new GameObject("VFXs").transform;
-    }
 
     Level[] GetLevels() {
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/levels");
@@ -101,18 +99,26 @@ public class GameController : MonoBehaviour {
         // TODO: Adding sound
     }
 
-    IEnumerator EndGameCoroutine() {
-        // TODO: VFX Winner
-        Debug.Log("Eng game hehe");
-        yield return new WaitForSeconds(2f);
-
+    public void NextLevel() {
         ended = false;
         Level[] levels = GetLevels();
+        NextLevelDialog.SetActive(false);
         if (currentLevel == levels.Length) {
             // TODO: Congratulation
         }
         else {
+            if (Vfx != null) {
+                Destroy(Vfx);
+                Vfx = null;
+            }
             GameInit.InitGame(levels[currentLevel - 1], currentLevel);
         }
+    }
+
+    IEnumerator EndGameCoroutine() {
+        Vfx = Instantiate(VFXsWinner, VFXsContainer);
+        // TODO: Playing sound winner
+        yield return new WaitForSeconds(2f);
+        NextLevelDialog.SetActive(true);
     }
 }
