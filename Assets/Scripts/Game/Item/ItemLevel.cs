@@ -13,7 +13,8 @@ public class ItemLevel : MonoBehaviour {
         Btn = GetComponent<Button>();
         Image img = GetComponent<Image>();
 
-        bool canPlay = level <= GameManager.Instance.Controller.currentLevel;
+        bool canPlay = level <= GameManager.Instance.Controller.levelStorage;
+        bool isCurrentLevel = level == GameManager.Instance.Controller.currentLevel;
 
         if (!canPlay) {
             isSet = false;
@@ -21,6 +22,13 @@ public class ItemLevel : MonoBehaviour {
             Btn.enabled = false;
             img.color = Helper.ColorFromHex("#656565");
             text.color = Color.white;
+        }
+        else if (isCurrentLevel) {
+            isSet = false;
+            Btn.onClick.RemoveAllListeners();
+            Btn.enabled = false;
+            img.color = Helper.ColorFromHex("#41FD38");
+            text.color = Helper.ColorFromHex("#FFE200");
         }
         else {
             Btn.enabled = true;
@@ -34,6 +42,6 @@ public class ItemLevel : MonoBehaviour {
     }
 
     void GoToLevel() {
-        GameManager.Instance.Controller.GoToLevel(level);
+        GameManager.Instance.Controller.OpenGoToLevelDialog(level);
     }
 }

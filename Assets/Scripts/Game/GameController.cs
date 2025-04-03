@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
     [Header("GameObjects")]
@@ -11,6 +12,8 @@ public class GameController : MonoBehaviour {
     [SerializeField] GameObject NextLevelDialog;
     [SerializeField] Transform VFXsContainer;
     public SpriteRenderer ChoicesBoardBorder;
+    [SerializeField] Text TextNextLevel;
+    [SerializeField] Text TextGoToLevel;
 
     [Header("Prefabs")]
     [SerializeField] GameObject VFXLeaf;
@@ -22,11 +25,13 @@ public class GameController : MonoBehaviour {
 
     [Header("Stats")]
     public int currentLevel;
+    public int levelStorage;
     public int totalLevels;
     public readonly float doubleClickThreshold = 0.3f;
     GameObject Vfx;
 
     bool ended = false;
+    int levelGoTo = -1;
     List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
 
     void Awake() {
@@ -45,6 +50,8 @@ public class GameController : MonoBehaviour {
         else {
             currentLevel = (int)lv;
         }
+        levelStorage = currentLevel;
+        TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
 
@@ -68,12 +75,30 @@ public class GameController : MonoBehaviour {
     public void EndGame() {
         ended = true;
         currentLevel++;
-        Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
+        if (currentLevel > levelStorage) {
+            levelStorage = currentLevel;
+            Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
+        }
         StartCoroutine(EndGameCoroutine());
     }
 
-    public void GoToLevel(int level) {
-        Debug.Log("Go to level" + level);
+    public void OpenGoToLevelDialog(int level) {
+        levelGoTo = level;
+        TextGoToLevel.text = Helper.GetLocalizedValue("goToLevel", new string[] { level.ToString() });
+        GoToLevelDialog.SetActive(true);
+    }
+
+    public void CloseGoToLevelDialog() {
+        GoToLevelDialog.SetActive(false);
+    }
+
+    public void GoToLevel() {
+        currentLevel = levelGoTo;
+        LevelsDialog.SetActive(false);
+        GoToLevelDialog.SetActive(false);
+        ended = false;
+        Level[] levels = GetLevels();
+        GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
 
     public bool ShouldHandlePan() {
@@ -117,6 +142,7 @@ public class GameController : MonoBehaviour {
     IEnumerator EndGameCoroutine() {
         Vfx = Instantiate(VFXsWinner, VFXsContainer);
         // TODO: Playing sound winner
+        TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
         yield return new WaitForSeconds(2f);
         NextLevelDialog.SetActive(true);
     }
