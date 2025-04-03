@@ -45,6 +45,11 @@ public class GameGraft : MonoBehaviour {
     }
 
     public bool SetSquareColor(Square square) {
+        if (square.GetItemController() == null) {
+            square.SetColor(Configs.DefaultSquareColor);
+            return false;
+        }
+
         List<Square> squaresChain = new List<Square> { square };
         RecursiveSquaresChain(square, squaresChain);
 
@@ -103,6 +108,9 @@ public class GameGraft : MonoBehaviour {
             if (!CheckValidSquare(sq, sq.GetItemController())) {
                 sq.PingError(shouldScale: !hasMatched);
             }
+            else if (sq.isError) {
+                sq.ResetError();
+            }
         }
     }
 
@@ -113,7 +121,6 @@ public class GameGraft : MonoBehaviour {
                 if (c == null || !CheckValidSquare(square: s, controller: c, itemDirNullEnable: false)) return;
             }
         }
-
         Controller.EndGame();
     }
 
@@ -183,20 +190,12 @@ public class GameGraft : MonoBehaviour {
         }
     }
 
-    Color GetSquareColor(Square square) {
-        List<Square> aroundSquares = GetAroundSquares(square);
-        Color c = Configs.ErrorSquareColor;
-        int index = Configs.SquareColors.FindIndex(_c => {
-            Square temp = aroundSquares.Find(s => s != null && s.GetColor() == _c);
-            return temp == null;
-        });
-        if (index >= 0) {
-            return Configs.SquareColors[index];
-        }
-        return c;
-    }
-
-    bool CheckValidSquare(Square square, ItemController controller, bool? eat = null, bool itemDirNullEnable = true) {
+    bool CheckValidSquare(
+        Square square,
+        ItemController controller,
+        bool? eat = null,
+        bool itemDirNullEnable = true
+    ) {
         Creature creature = Controller.GameInit.Creatures.Find(c => c.id == controller.Item.creature_id);
         if (creature == null) return false;
 
