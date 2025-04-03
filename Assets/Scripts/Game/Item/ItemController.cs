@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ItemController : MonoBehaviour {
@@ -9,18 +10,22 @@ public class ItemController : MonoBehaviour {
 
     bool isPanning = false;
     bool shouldBackToChoices = false;
+    bool animatingToSquare = false;
     float lastClickTime = 0f;
     int originalSortingOrder;
     Vector3 originalPos;
+    Vector3 originalScale;
     Vector3 pivotPos;
     Vector3 touchPos;
     Square originalSquare;
     Color? originalColor;
     SpriteRenderer Renderer;
+    LTDescr lTDescr;
 
 
     void Start() {
         originalPos = transform.position;
+        originalScale = transform.localScale;
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         Renderer = GetComponent<SpriteRenderer>();
         originalSortingOrder = Renderer.sortingOrder;
@@ -69,12 +74,11 @@ public class ItemController : MonoBehaviour {
     public IEnumerator ScaleAndShake(float shakeSpeed = 70f, float scale = 2f) {
         float duration = 0.15f;
         float elapsedTime = 0f;
-        Vector3 currentScale = transform.localScale;
-        Vector3 targetScale = currentScale * scale;
+        Vector3 targetScale = originalScale * scale;
 
         // Step 01: Scale up
         while (elapsedTime < duration) {
-            transform.localScale = Vector3.Lerp(currentScale, targetScale, elapsedTime / duration);
+            transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -96,28 +100,29 @@ public class ItemController : MonoBehaviour {
         duration = 0.15f;
         elapsedTime = 0f;
         while (elapsedTime < duration) {
-            transform.localScale = Vector3.Lerp(targetScale, currentScale, elapsedTime / duration);
+            transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        transform.localScale = currentScale;
+        transform.localScale = originalScale;
         transform.localPosition = originalPos;
     }
 
-    public IEnumerator PingErrorInterval(bool shouldScale) {
+    public void PingErrorInterval(bool shouldScale) {
         if (shouldScale) {
-            yield return StartCoroutine(ScaleAndShake());
+            StartCoroutine(ScaleAndShake());
         }
-        yield return new WaitForSeconds(shouldScale ? 4f : 2f);
-        Vector3 currentScale = transform.localScale;
-        while (true) {
-            LeanTween.scale(gameObject, currentScale * 1.5f, 1f).setEase(LeanTweenType.punch)
-               .setOnComplete(() => {
-                   LeanTween.scale(gameObject, currentScale, 1f).setEase(LeanTweenType.punch);
-               });
-            yield return new WaitForSeconds(4f);
+        LeanTween.cancel(gameObject);
+        ResetLtDescr();
+        void ScalePingPong() {
+            LeanTween.scale(gameObject, originalScale * 1.7f, 1f).setEase(LeanTweenType.punch).setOnComplete(() => {
+                LeanTween.scale(gameObject, originalScale, 1f).setEase(LeanTweenType.punch).setOnComplete(() => {
+                    lTDescr = LeanTween.delayedCall(3.5f, ScalePingPong);
+                });
+            });
         }
+        lTDescr = LeanTween.delayedCall(shouldScale ? 4f : 2f, ScalePingPong);
     }
 
     void HandlePan() {
@@ -133,9 +138,6 @@ public class ItemController : MonoBehaviour {
 
                 if (square) {
                     if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
-                        if (square.HasAnyCoroutines()) {
-                            square.StopCoroutines();
-                        }
                         square.TemporarySetItemToNull();
                         BackToOriginal();
                         square = null;
@@ -152,12 +154,13 @@ public class ItemController : MonoBehaviour {
                     lastClickTime = Time.time;
 
                     // Is square having any coroutines (AnimateToCenter,...), do nothing, because SetItemToNull can cause error
-                    if (square.HasAnyCoroutines()) {
+                    if (animatingToSquare) {
                         isPanning = false;
                         return;
                     }
 
                     // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
+                    ResetCoroutines();
                     originalColor = square.GetColor();
                     square.TemporarySetItemToNull();
                     originalSquare = square;
@@ -174,12 +177,17 @@ public class ItemController : MonoBehaviour {
 
         if (GameHelper.TouchReleased()) {
             Controller.GameGraft.HideSquareBorder();
-            if (shouldBackToChoices) {
+
+            void BackToChoice() {
                 square = null;
-                originalSquare = null;
                 shouldBackToChoices = false;
                 Controller.ChoicesBoardBorder.enabled = false;
                 BackToOriginal();
+                CheckValidAtOriginalSquare();
+            }
+
+            if (shouldBackToChoices) {
+                BackToChoice();
             }
             else if (square && square != originalSquare) {
                 ItemController currentItem = square.GetItemController();
@@ -189,16 +197,19 @@ public class ItemController : MonoBehaviour {
                 else {
                     square.AttachItem(this, animatedTo: true, checkEndGame: true, checkValidAroundSquares: true);
                 }
-                if (originalSquare) {
-                    // TODO: Check valid for squares are around original square
-                    originalSquare = null;
-                }
+                CheckValidAtOriginalSquare();
             }
             else if (originalSquare) {
-                square = originalSquare;
-                square.AttachItem(this, animatedTo: true, color: originalColor);
-                originalSquare = null;
-                originalColor = null;
+                if (originalSquare.isError) {
+                    originalSquare.ResetError();
+                    BackToChoice();
+                }
+                else {
+                    square = originalSquare;
+                    square.AttachItem(this, animatedTo: true, color: originalColor);
+                    originalSquare = null;
+                    originalColor = null;
+                }
             }
             else {
                 BackToOriginal();
@@ -213,6 +224,35 @@ public class ItemController : MonoBehaviour {
         transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
     }
 
+    public void ResetCoroutines() {
+        LeanTween.cancel(gameObject);
+        ResetLtDescr();
+        StopAllCoroutines();
+        transform.localScale = originalScale;
+    }
+
+    public void AnimateToSquare() {
+        animatingToSquare = true;
+        LeanTween.move(gameObject, square.Center, 0.1f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+            Controller.GameGraft.CheckEndGame();
+            animatingToSquare = false;
+        });
+    }
+
+    void ResetLtDescr() {
+        if (lTDescr != null) {
+            LeanTween.cancel(lTDescr.id);
+            lTDescr = null;
+        }
+    }
+
+    void CheckValidAtOriginalSquare() {
+        if (originalSquare) {
+            Controller.GameGraft.CheckValidAroundSquare(originalSquare, hasMatched: false);
+            originalSquare = null;
+        }
+    }
+
     void ReplaceItem(ItemController replacedItem) {
         Square sq = replacedItem.square;
         replacedItem.square = null;
@@ -221,8 +261,12 @@ public class ItemController : MonoBehaviour {
     }
 
     void BackToOriginal() {
+        LeanTween.cancel(gameObject);
         StopAllCoroutines();
-        StartCoroutine(BackToOriginalCoroutine());
+        capsuleCollider.enabled = false;
+        LeanTween.move(gameObject, originalPos, 0.15f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+            capsuleCollider.enabled = true;
+        });
     }
 
     Quaternion GetRotation(string dir, float offset, SpriteRenderer sr) {
@@ -242,19 +286,5 @@ public class ItemController : MonoBehaviour {
             return Quaternion.Euler(0f, 0f, 90f + offset);
         }
         return Quaternion.identity;
-    }
-
-    IEnumerator BackToOriginalCoroutine() {
-        capsuleCollider.enabled = false;
-        float duration = 0.15f;
-        float elapsedTime = 0f;
-        Vector3 currentPos = transform.position;
-        while (elapsedTime < duration) {
-            transform.position = Vector3.Lerp(currentPos, originalPos, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        transform.position = originalPos;
-        capsuleCollider.enabled = true;
     }
 }

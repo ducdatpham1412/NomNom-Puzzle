@@ -4,12 +4,12 @@ using UnityEngine;
 public class Square : MonoBehaviour {
     public GameController Controller;
     public Vector2 Pos;
-    public Vector3 Center;
+    public Vector3 Center { get; private set; }
+    [HideInInspector] public bool isError { get; private set; } = false;
     Color Color = Configs.DefaultSquareColor;
 
     ItemController ItemController;
     Material material;
-    Coroutine animatedCenter;
 
     public void AttachItem(
         ItemController item,
@@ -22,7 +22,7 @@ public class Square : MonoBehaviour {
         ItemController = item;
         ItemController.square = this;
         if (animatedTo) {
-            animatedCenter = StartCoroutine(AnimateToCenter(checkEndGame));
+            ItemController.AnimateToSquare();
         }
         else {
             ItemController.gameObject.transform.position = Center;
@@ -78,30 +78,15 @@ public class Square : MonoBehaviour {
     }
 
     public void PingError(bool shouldScale) {
-        StartCoroutine(ItemController.PingErrorInterval(shouldScale));
+        ItemController.PingErrorInterval(shouldScale);
         SetColor(Configs.ErrorSquareColor);
+        isError = true;
     }
 
-    public void StopCoroutines() {
-        StopAllCoroutines();
-        animatedCenter = null;
+    public void ResetError() {
+        isError = false;
+        Controller.GameGraft.SetSquareColor(this);
+        if (ItemController) ItemController.ResetCoroutines();
     }
 
-    public bool HasAnyCoroutines() {
-        return animatedCenter != null;
-    }
-
-    IEnumerator AnimateToCenter(bool checkEndGame) {
-        float duration = 0.1f;
-        float elapsedTime = 0f;
-        Vector3 currentPos = ItemController.transform.position;
-        while (elapsedTime < duration) {
-            ItemController.gameObject.transform.position = Vector3.Lerp(currentPos, Center, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        ItemController.gameObject.transform.position = Center;
-        if (checkEndGame) Controller.GameGraft.CheckEndGame();
-        animatedCenter = null;
-    }
 }
