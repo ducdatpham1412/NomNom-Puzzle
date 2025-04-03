@@ -66,7 +66,7 @@ public class ItemController : MonoBehaviour {
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
 
-    public IEnumerator ScaleUpAndDownCoroutine(float shakeSpeed = 70f, float scale = 2f) {
+    public IEnumerator ScaleAndShake(float shakeSpeed = 70f, float scale = 2f) {
         float duration = 0.15f;
         float elapsedTime = 0f;
         Vector3 currentScale = transform.localScale;
@@ -107,11 +107,15 @@ public class ItemController : MonoBehaviour {
 
     public IEnumerator PingErrorInterval(bool shouldScale) {
         if (shouldScale) {
-            yield return StartCoroutine(ScaleUpAndDownCoroutine());
+            yield return StartCoroutine(ScaleAndShake());
         }
         yield return new WaitForSeconds(shouldScale ? 4f : 2f);
+        Vector3 currentScale = transform.localScale;
         while (true) {
-            yield return StartCoroutine(ScaleUpAndDownCoroutine(shakeSpeed: 50f, scale: 1.3f));
+            LeanTween.scale(gameObject, currentScale * 1.5f, 1f).setEase(LeanTweenType.punch)
+               .setOnComplete(() => {
+                   LeanTween.scale(gameObject, currentScale, 1f).setEase(LeanTweenType.punch);
+               });
             yield return new WaitForSeconds(4f);
         }
     }
@@ -185,7 +189,10 @@ public class ItemController : MonoBehaviour {
                 else {
                     square.AttachItem(this, animatedTo: true, checkEndGame: true, checkValidAroundSquares: true);
                 }
-                originalSquare = null;
+                if (originalSquare) {
+                    // TODO: Check valid for squares are around original square
+                    originalSquare = null;
+                }
             }
             else if (originalSquare) {
                 square = originalSquare;
