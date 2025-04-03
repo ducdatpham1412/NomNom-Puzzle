@@ -74,6 +74,7 @@
     <Compile Include="Assets/Scripts/Classes/Singleton.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralBasics2d.cs" />
     <Compile Include="Assets/Scripts/Utils/ButtonSound.cs" />
+    <Compile Include="Assets/Scripts/Utils/Animation/ScaleOnEnable.cs" />
     <Compile Include="Assets/Scripts/Utils/InputSecurity.cs" />
     <Compile Include="Assets/Scripts/Extensions/GameObjectExtensions.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/TestingZLegacy.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets/Scripts/Welcome/CreateAccountLogic.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingSceneSwitching.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralSequencer.cs" />
+    <Compile Include="Assets/Scripts/Game/Item/ItemCreature.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathBezier2d.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralEasingTypes.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSplinePerformance.cs" />
@@ -93,7 +95,6 @@
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSplineEndless.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/Following.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingRotate.cs" />
-    <Compile Include="Assets/Scripts/Utils/ButtonResponsiveWidth.cs" />
     <Compile Include="Assets/LeanTween/Testing/Testing240.cs" />
     <Compile Include="Assets/LeanTween/Testing/Scripts/LeanPool.cs" />
     <Compile Include="Assets/Scripts/Welcome/LoginLogic.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Assets/Scripts/Navigation/Navigator.cs" />
     <Compile Include="Assets/LeanTween/Framework/LeanSmooth.cs" />
     <Compile Include="Assets/Scripts/Game/LevelScroll.cs" />
+    <Compile Include="Assets/Scripts/Game/InformationController.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingMaxTweens.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralUISpace.cs" />
     <Compile Include="Assets/Scripts/Game/Item/ItemLevel.cs" />
@@ -130,7 +132,6 @@
     <Compile Include="Assets/LeanTween/Testing/TestingOptionalCancel.cs" />
     <Compile Include="Assets/LeanTween/Framework/LTDescr.cs" />
     <Compile Include="Assets/LeanTween/Testing/Testing248.cs" />
-    <Compile Include="Assets/Scripts/Utils/ScaleOnEnable.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingColorTweening.cs" />
     <Compile Include="Assets/Scripts/Utils/Switch.cs" />
     <Compile Include="Assets/Scripts/Classes/Serializable/Profile.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathBezier.cs" />
     <Compile Include="Assets/Scripts/Utils/Helper.cs" />
     <Compile Include="Assets/Scripts/Utils/LoadingManager.cs" />
+    <Compile Include="Assets/Scripts/Utils/ImageFiller.cs" />
     <Compile Include="Assets/Scripts/Game/Square/Square.cs" />
     <Compile Include="Assets/Scripts/Utils/GameHelper.cs" />
     <Compile Include="Assets/LeanTween/Testing/Testing246.cs" />

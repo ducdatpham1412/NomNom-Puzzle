@@ -18,7 +18,7 @@ public class LoginLogic : MonoBehaviour {
         Debug.Log($"Start login\nUsername: {username}\nPassword: {password}");
         yield return new WaitForSeconds(2f);
         buttonManager.StopLoading();
-        Navigator.Instance.NavigateTo(Navigator.Scene.Home);
+        // Navigator.Instance.NavigateTo(Navigator.Scene.Home);
     }
 
     public void Login() {

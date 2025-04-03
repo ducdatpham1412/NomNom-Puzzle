@@ -39,6 +39,18 @@ MonoBehaviour:
     m_Key: goToLevel
     m_Metadata:
       m_Items: []
+  - m_Id: 34117852284837888
+    m_Key: animalEat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34141524227776512
+    m_Key: eat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34141548118532096
+    m_Key: beEaten
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

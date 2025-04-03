@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -64,7 +65,7 @@ public class ItemController : MonoBehaviour {
 
     public void SetItem(Item item) {
         Item = item;
-        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == item.creature_id);
+        Creature creature = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == item.creature_id);
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         sr.sprite = creature.sprite;
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
@@ -228,11 +229,13 @@ public class ItemController : MonoBehaviour {
         transform.localScale = originalScale;
     }
 
-    public void AnimateToSquare() {
+    public void AnimateToSquare(Action callback) {
         animatingToSquare = true;
         LeanTween.move(gameObject, square.Center, 0.1f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+            callback.Invoke();
             Controller.GameGraft.CheckEndGame();
             animatingToSquare = false;
+            transform.position = square.Center;
         });
     }
 

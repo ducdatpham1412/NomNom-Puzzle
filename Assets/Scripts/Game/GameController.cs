@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
@@ -137,6 +138,10 @@ public class GameController : MonoBehaviour {
             }
             GameInit.InitGame(levels[currentLevel - 1], currentLevel);
         }
+    }
+
+    public void InformationScene() {
+        Navigator.Instance.NavigateTo(Navigator.Scene.InformationScene, LoadSceneMode.Additive);
     }
 
     IEnumerator EndGameCoroutine() {

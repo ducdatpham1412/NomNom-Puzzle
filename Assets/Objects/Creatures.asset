@@ -1,0 +1,236 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64bdd35368144606a4782fcbe92cf55, type: 3}
+  m_Name: Creatures
+  m_EditorClassIdentifier: 
+  Creatures:
+  - id: cat
+    type: 0
+    name:
+    - key: en
+      value: Cat
+    - key: jp
+      value: "\u732B"
+    - key: ko
+      value: "\uACE0\uC591\uC774"
+    - key: vi
+      value: "M\xE8o"
+    sprite: {fileID: -10524483601426386, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: chicken
+    type: 0
+    name:
+    - key: en
+      value: Chicken
+    - key: jp
+      value: "\u9D8F"
+    - key: ko
+      value: "\uB2ED"
+    - key: vi
+      value: "G\xE0"
+    sprite: {fileID: 5758861361426822821, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: dog
+    type: 0
+    name:
+    - key: en
+      value: Dog
+    - key: jp
+      value: "\u72AC"
+    - key: ko
+      value: "\uAC1C"
+    - key: vi
+      value: "Ch\xF3"
+    sprite: {fileID: -1319315252296537693, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: eagle
+    type: 0
+    name:
+    - key: en
+      value: Eagle
+    - key: jp
+      value: "\u9DF2"
+    - key: ko
+      value: "\uB3C5\uC218\uB9AC"
+    - key: vi
+      value: "\u0110\u1EA1i b\xE0ng"
+    sprite: {fileID: 8133266208652056809, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: fish
+    type: 0
+    name:
+    - key: en
+      value: Fish
+    - key: jp
+      value: "\u9B5A"
+    - key: ko
+      value: "\uBB3C\uACE0\uAE30"
+    - key: vi
+      value: "C\xE1"
+    sprite: {fileID: 8297040362687464060, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 90
+  - id: mouse
+    type: 0
+    name:
+    - key: en
+      value: Mouse
+    - key: jp
+      value: "\u9F20"
+    - key: ko
+      value: "\uC950"
+    - key: vi
+      value: "Chu\u1ED9t"
+    sprite: {fileID: 3277387584969892780, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: pig
+    type: 0
+    name:
+    - key: en
+      value: Pig
+    - key: jp
+      value: "\u8C5A"
+    - key: ko
+      value: "\uB3FC\uC9C0"
+    - key: vi
+      value: "L\u1EE3n"
+    sprite: {fileID: 6591381469864738340, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: snake
+    type: 0
+    name:
+    - key: en
+      value: Snake
+    - key: jp
+      value: "\u86C7"
+    - key: ko
+      value: "\uBC40"
+    - key: vi
+      value: "R\u1EAFn"
+    sprite: {fileID: 7913660522167358954, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 0
+  - id: worm
+    type: 0
+    name:
+    - key: en
+      value: Worm
+    - key: jp
+      value: "\u828B\u866B"
+    - key: ko
+      value: "\uBB34\uD55C \uADA4\uB3C4"
+    - key: vi
+      value: "S\xE2u"
+    sprite: {fileID: -953346549932427826, guid: 428c63dfdd11b4ab9bea27f267c31b55, type: 3}
+    rotationOffset: 90
+  - id: apple
+    type: 2
+    name:
+    - key: en
+      value: Apple
+    - key: jp
+      value: "\u30EA\u30F3\u30B4"
+    - key: ko
+      value: "\uC0AC\uACFC"
+    - key: vi
+      value: "T\xE1o"
+    sprite: {fileID: 1818289580, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: bone
+    type: 1
+    name:
+    - key: en
+      value: Bone
+    - key: jp
+      value: "\u9AA8"
+    - key: ko
+      value: "\uBF08"
+    - key: vi
+      value: "X\u01B0\u01A1ng"
+    sprite: {fileID: 822514875, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: carrot
+    type: 2
+    name:
+    - key: en
+      value: Carrot
+    - key: jp
+      value: "\u4EBA\u53C2"
+    - key: ko
+      value: "\uB2F9\uADFC"
+    - key: vi
+      value: "C\xE0 r\u1ED1t"
+    sprite: {fileID: 1792002427, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: cheese
+    type: 2
+    name:
+    - key: en
+      value: Cheese
+    - key: jp
+      value: "\u30C1\u30FC\u30BA"
+    - key: ko
+      value: "\uCE58\uC988"
+    - key: vi
+      value: "Ph\xF4 mai"
+    sprite: {fileID: 608162391, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: corn
+    type: 2
+    name:
+    - key: en
+      value: Corn
+    - key: jp
+      value: "\u30C8\u30A6\u30E2\u30ED\u30B3\u30B7"
+    - key: ko
+      value: "\uC625\uC218\uC218"
+    - key: vi
+      value: "Ng\xF4"
+    sprite: {fileID: 461280443, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: lettuce
+    type: 2
+    name:
+    - key: en
+      value: Lettuce
+    - key: jp
+      value: "\u30EC\u30BF\u30B9"
+    - key: ko
+      value: "\uC0C1\uCD94"
+    - key: vi
+      value: "Rau x\xE0 l\xE1ch"
+    sprite: {fileID: -882983538, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: peanut
+    type: 2
+    name:
+    - key: en
+      value: Peanut
+    - key: jp
+      value: "\u30D4\u30FC\u30CA\u30C3\u30C4"
+    - key: ko
+      value: "\uB545\uCF69"
+    - key: vi
+      value: "\u0110\u1EADu"
+    sprite: {fileID: 289134656, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0
+  - id: sweet_potato
+    type: 2
+    name:
+    - key: en
+      value: Sweet potato
+    - key: jp
+      value: "\u30B5\u30C4\u30DE\u30A4\u30E2"
+    - key: ko
+      value: "\uACE0\uAD6C\uB9C8"
+    - key: vi
+      value: Khoai lang
+    sprite: {fileID: 933704205, guid: 1b2369ecf86d94e25be3a19bfc29cc64, type: 3}
+    rotationOffset: 0

@@ -19,34 +19,37 @@ public class Square : MonoBehaviour {
         bool isRoot = false,
         bool checkValidAroundSquares = false
     ) {
+        void CheckAndSet() {
+            if (!material) material = GetComponent<SpriteRenderer>().material;
+
+            bool hasMatched = false;
+
+            if (isRoot) {
+                material.SetColor("_Color01", Configs.RootSquareColor);
+            }
+            else if (color != null) {
+                SetColor((Color)color);
+            }
+            else {
+                hasMatched = Controller.GameGraft.SetSquareColor(this);
+            }
+
+            if (checkValidAroundSquares) {
+                Controller.GameGraft.CheckValidAroundSquare(this, hasMatched);
+            }
+        }
+
         ItemController = item;
         ItemController.square = this;
         if (animatedTo) {
-            ItemController.AnimateToSquare();
+            ItemController.AnimateToSquare(CheckAndSet);
         }
         else {
             ItemController.gameObject.transform.position = Center;
             if (checkEndGame) {
                 Controller.GameGraft.CheckEndGame();
             }
-        }
-
-        if (!material) material = GetComponent<SpriteRenderer>().material;
-
-        bool hasMatched = false;
-
-        if (isRoot) {
-            material.SetColor("_Color01", Configs.RootSquareColor);
-        }
-        else if (color != null) {
-            SetColor((Color)color);
-        }
-        else {
-            hasMatched = Controller.GameGraft.SetSquareColor(this);
-        }
-
-        if (checkValidAroundSquares) {
-            Controller.GameGraft.CheckValidAroundSquare(this, hasMatched);
+            CheckAndSet();
         }
     }
 
