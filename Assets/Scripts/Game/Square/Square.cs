@@ -73,15 +73,12 @@ public class Square : MonoBehaviour {
     }
 
     public void PlayMatchedVFX() {
-        // scaleCoroutine = StartCoroutine(ScaleUpAndDown());
-        StartCoroutine(ItemController.ScaleUpAndDownCoroutine(shakeSpeed: 45f, scale: 1.5f));
+        StartCoroutine(ItemController.ScaleAndShake(shakeSpeed: 45f, scale: 1.5f));
         Controller.PlayVFXLeaf(Center);
     }
 
     public void PingError(bool shouldScale) {
-        if (shouldScale) {
-            StartCoroutine(ItemController.ScaleUpAndDownCoroutine());
-        }
+        StartCoroutine(ItemController.PingErrorInterval(shouldScale));
         SetColor(Configs.ErrorSquareColor);
     }
 

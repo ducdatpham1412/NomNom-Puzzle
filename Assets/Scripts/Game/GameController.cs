@@ -37,7 +37,6 @@ public class GameController : MonoBehaviour {
 
     void Start() {
         Level[] levels = GetLevels();
-        Storage.SET(Storage.Key.currentLevel, "1");
         int? lv = Storage.GET<int>(Storage.Key.currentLevel);
         if (lv == null) {
             Storage.SET(Storage.Key.currentLevel, "1");

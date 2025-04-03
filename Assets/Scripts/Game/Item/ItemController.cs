@@ -66,7 +66,7 @@ public class ItemController : MonoBehaviour {
         transform.rotation = GetRotation(item.direction, creature.rotationOffset, sr);
     }
 
-    public IEnumerator ScaleUpAndDownCoroutine(float shakeSpeed = 70f, float scale = 2f) {
+    public IEnumerator ScaleAndShake(float shakeSpeed = 70f, float scale = 2f) {
         float duration = 0.15f;
         float elapsedTime = 0f;
         Vector3 currentScale = transform.localScale;
@@ -105,6 +105,21 @@ public class ItemController : MonoBehaviour {
         transform.localPosition = originalPos;
     }
 
+    public IEnumerator PingErrorInterval(bool shouldScale) {
+        if (shouldScale) {
+            yield return StartCoroutine(ScaleAndShake());
+        }
+        yield return new WaitForSeconds(shouldScale ? 4f : 2f);
+        Vector3 currentScale = transform.localScale;
+        while (true) {
+            LeanTween.scale(gameObject, currentScale * 1.5f, 1f).setEase(LeanTweenType.punch)
+               .setOnComplete(() => {
+                   LeanTween.scale(gameObject, currentScale, 1f).setEase(LeanTweenType.punch);
+               });
+            yield return new WaitForSeconds(4f);
+        }
+    }
+
     void HandlePan() {
         if (GameHelper.TouchBegin()) {
             Vector3 mousePos = Input.mousePosition;
@@ -122,7 +137,7 @@ public class ItemController : MonoBehaviour {
                             square.StopCoroutines();
                         }
                         square.TemporarySetItemToNull();
-                        StartCoroutine(BackToOriginal());
+                        BackToOriginal();
                         square = null;
                         originalColor = null;
                         originalSquare = null;
@@ -164,7 +179,7 @@ public class ItemController : MonoBehaviour {
                 originalSquare = null;
                 shouldBackToChoices = false;
                 Controller.ChoicesBoardBorder.enabled = false;
-                StartCoroutine(BackToOriginal());
+                BackToOriginal();
             }
             else if (square && square != originalSquare) {
                 ItemController currentItem = square.GetItemController();
@@ -174,7 +189,10 @@ public class ItemController : MonoBehaviour {
                 else {
                     square.AttachItem(this, animatedTo: true, checkEndGame: true, checkValidAroundSquares: true);
                 }
-                originalSquare = null;
+                if (originalSquare) {
+                    // TODO: Check valid for squares are around original square
+                    originalSquare = null;
+                }
             }
             else if (originalSquare) {
                 square = originalSquare;
@@ -183,7 +201,7 @@ public class ItemController : MonoBehaviour {
                 originalColor = null;
             }
             else {
-                StartCoroutine(BackToOriginal());
+                BackToOriginal();
             }
 
             Renderer.sortingOrder = originalSortingOrder;
@@ -198,8 +216,13 @@ public class ItemController : MonoBehaviour {
     void ReplaceItem(ItemController replacedItem) {
         Square sq = replacedItem.square;
         replacedItem.square = null;
-        StartCoroutine(replacedItem.BackToOriginal());
+        replacedItem.BackToOriginal();
         sq.AttachItem(this, animatedTo: true, checkEndGame: false, checkValidAroundSquares: true);
+    }
+
+    void BackToOriginal() {
+        StopAllCoroutines();
+        StartCoroutine(BackToOriginalCoroutine());
     }
 
     Quaternion GetRotation(string dir, float offset, SpriteRenderer sr) {
@@ -221,8 +244,7 @@ public class ItemController : MonoBehaviour {
         return Quaternion.identity;
     }
 
-
-    IEnumerator BackToOriginal() {
+    IEnumerator BackToOriginalCoroutine() {
         capsuleCollider.enabled = false;
         float duration = 0.15f;
         float elapsedTime = 0f;
