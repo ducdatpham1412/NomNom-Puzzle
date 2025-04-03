@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class ItemController : MonoBehaviour {
@@ -117,9 +116,7 @@ public class ItemController : MonoBehaviour {
         ResetLtDescr();
         void ScalePingPong() {
             LeanTween.scale(gameObject, originalScale * 1.7f, 1f).setEase(LeanTweenType.punch).setOnComplete(() => {
-                LeanTween.scale(gameObject, originalScale, 1f).setEase(LeanTweenType.punch).setOnComplete(() => {
-                    lTDescr = LeanTween.delayedCall(3.5f, ScalePingPong);
-                });
+                lTDescr = LeanTween.delayedCall(3.5f, ScalePingPong);
             });
         }
         lTDescr = LeanTween.delayedCall(shouldScale ? 4f : 2f, ScalePingPong);

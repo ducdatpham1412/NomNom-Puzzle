@@ -130,6 +130,7 @@
     <Compile Include="Assets/LeanTween/Testing/TestingOptionalCancel.cs" />
     <Compile Include="Assets/LeanTween/Framework/LTDescr.cs" />
     <Compile Include="Assets/LeanTween/Testing/Testing248.cs" />
+    <Compile Include="Assets/Scripts/Utils/ScaleOnEnable.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingColorTweening.cs" />
     <Compile Include="Assets/Scripts/Utils/Switch.cs" />
     <Compile Include="Assets/Scripts/Classes/Serializable/Profile.cs" />
