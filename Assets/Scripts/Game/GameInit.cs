@@ -15,7 +15,7 @@ public class GameInit : MonoBehaviour {
     [SerializeField] Text TextLevel;
 
     [Header("Resources")]
-    public List<Creature> Creatures = new List<Creature>();
+    public CreaturesObject CreaturesObject;
     public Dictionary<string, Relationship> Relationship = new Dictionary<string, Relationship>();
     public string SquareTag = Helper.Tag.Square.ToString();
     public string ChoicesBoardTag = Helper.Tag.ChoicesBoard.ToString();

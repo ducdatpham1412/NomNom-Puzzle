@@ -42,6 +42,18 @@ MonoBehaviour:
     m_Localized: Go to level {0}
     m_Metadata:
       m_Items: []
+  - m_Id: 34117852284837888
+    m_Localized: What do animals eat?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34141524227776512
+    m_Localized: Eat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34141548118532096
+    m_Localized: Be eaten
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -128,7 +128,7 @@ public class GameGraft : MonoBehaviour {
         ItemController itemController = square.GetItemController();
         if (!itemController) return;
 
-        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == itemController.Item.creature_id);
+        Creature creature = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == itemController.Item.creature_id);
         if (creature == null) return;
 
         List<Square> nextSquares = new List<Square>();
@@ -196,7 +196,7 @@ public class GameGraft : MonoBehaviour {
         bool? eat = null,
         bool itemDirNullEnable = true
     ) {
-        Creature creature = Controller.GameInit.Creatures.Find(c => c.id == controller.Item.creature_id);
+        Creature creature = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == controller.Item.creature_id);
         if (creature == null) return false;
 
         if (eat == null) {
@@ -227,7 +227,7 @@ public class GameGraft : MonoBehaviour {
             if (sq == null) return true;
             ItemController ct = sq.GetItemController();
             if (ct == null) return itemDirNullEnable;
-            Creature cr = Controller.GameInit.Creatures.Find(c => c.id == ct.Item.creature_id);
+            Creature cr = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == ct.Item.creature_id);
             if (cr == null) return false;
             if (cr.type != Creature.Type.animal) return true;
             if (ct.Item.direction != dir) return true;
@@ -313,7 +313,7 @@ public class GameGraft : MonoBehaviour {
         if (sq == null) return false;
         ItemController ct = sq.GetItemController();
         if (ct == null) return false;
-        Creature cr = Controller.GameInit.Creatures.Find(c => c.id == ct.Item.creature_id);
+        Creature cr = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == ct.Item.creature_id);
         if (cr == null) return false;
         string availableDir = GetAvailableDir(ct.Item.direction, cr);
         if (availableDir != dir.ToString()) return false;
