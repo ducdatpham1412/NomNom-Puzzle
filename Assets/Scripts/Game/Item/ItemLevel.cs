@@ -23,7 +23,7 @@ public class ItemLevel : MonoBehaviour {
         bool canPlay = level <= GameManager.Instance.Controller.levelStorage;
         bool isCurrentLevel = level == GameManager.Instance.Controller.currentLevel;
 
-        GameState.PlayingLevel playingLevel = GameManager.Instance.gameState.playingLevels.Find(l => l.level == lv);
+        GameState.PlayingLevel playingLevel = GameManager.Instance.Controller.GetPlayingLevel(lv);
         bool isPlaying = playingLevel != null;
 
         if (!canPlay) {
