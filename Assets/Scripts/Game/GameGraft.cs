@@ -16,7 +16,7 @@ public class GameGraft : MonoBehaviour {
         Item.Direction.right.ToString(),
     };
 
-    void Start() {
+    void Awake() {
         Controller = GetComponent<GameController>();
         SquareRenderer = SquareBorder.GetComponent<SpriteRenderer>();
     }
@@ -44,7 +44,7 @@ public class GameGraft : MonoBehaviour {
         SquareBorder.transform.localScale = value;
     }
 
-    public bool SetSquareColor(Square square) {
+    public bool SetSquareColor(Square square, bool playVFX = true) {
         if (square.GetItemController() == null) {
             square.SetColor(Configs.DefaultSquareColor);
             return false;
@@ -94,8 +94,10 @@ public class GameGraft : MonoBehaviour {
         */
         bool hasMatched = false;
         if (squaresChain.Count >= 2) {
-            foreach (Square s in squaresChain) {
-                s.PlayMatchedVFX();
+            if (playVFX) {
+                foreach (Square s in squaresChain) {
+                    s.PlayMatchedVFX();
+                }
             }
             hasMatched = true;
         }

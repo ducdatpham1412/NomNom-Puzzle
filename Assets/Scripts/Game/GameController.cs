@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using Matching = GameState.PlayingLevel.Matching;
+
 public class GameController : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject SettingDialog;
@@ -42,8 +44,9 @@ public class GameController : MonoBehaviour {
     }
 
     void Start() {
+        GameManager.Instance.Initialize();
         Level[] levels = GetLevels();
-        int? lv = Storage.GET<int>(Storage.Key.currentLevel);
+        int? lv = Storage.GETStruct<int>(Storage.Key.currentLevel);
         if (lv == null) {
             Storage.SET(Storage.Key.currentLevel, "1");
             currentLevel = 1;
@@ -55,7 +58,6 @@ public class GameController : MonoBehaviour {
         TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
-
 
     Level[] GetLevels() {
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/levels");
@@ -75,6 +77,7 @@ public class GameController : MonoBehaviour {
 
     public void EndGame() {
         ended = true;
+        RemoveLevelStatus();
         currentLevel++;
         if (currentLevel > levelStorage) {
             levelStorage = currentLevel;
@@ -94,10 +97,16 @@ public class GameController : MonoBehaviour {
     }
 
     public void GoToLevel() {
+        if (ended) {
+            ended = false;
+        }
+        else {
+            SaveLevelStatus();
+        }
         currentLevel = levelGoTo;
         LevelsDialog.SetActive(false);
         GoToLevelDialog.SetActive(false);
-        ended = false;
+
         Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
@@ -150,5 +159,46 @@ public class GameController : MonoBehaviour {
         TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
         yield return new WaitForSeconds(2f);
         NextLevelDialog.SetActive(true);
+    }
+
+    void RemoveLevelStatus() {
+        GameState.PlayingLevel level = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+        if (level != null) {
+            GameManager.Instance.gameState.playingLevels.Remove(level);
+        }
+    }
+
+    void SaveLevelStatus() {
+        List<Matching> matching = new();
+        foreach (var row in GameInit.Squares) {
+            foreach (Square sq in row) {
+                ItemController item = sq.GetItemController();
+                if (item != null) {
+                    matching.Add(new Matching {
+                        itemPos = item.Item.pos,
+                        squarePos = sq.Pos,
+                    });
+                }
+            }
+        }
+        GameState.PlayingLevel level = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+
+        if (matching.Count <= 1) {
+            if (level != null) {
+                GameManager.Instance.gameState.playingLevels.Remove(level);
+            }
+            return;
+        }
+
+        if (level != null) {
+            level.level = currentLevel;
+            level.matchings = matching;
+        }
+        else {
+            GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
+                level = currentLevel,
+                matchings = matching,
+            });
+        }
     }
 }
