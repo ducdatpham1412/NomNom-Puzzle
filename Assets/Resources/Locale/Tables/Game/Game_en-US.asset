@@ -54,6 +54,10 @@ MonoBehaviour:
     m_Localized: Be eaten
     m_Metadata:
       m_Items: []
+  - m_Id: 34463667910074368
+    m_Localized: Play again
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

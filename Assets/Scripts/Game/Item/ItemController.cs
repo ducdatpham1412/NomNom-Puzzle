@@ -11,6 +11,7 @@ public class ItemController : MonoBehaviour {
     bool isPanning = false;
     bool shouldBackToChoices = false;
     bool animatingToSquare = false;
+    bool animatingToOriginalFromDoubleClick = false;
     float lastClickTime = 0f;
     int originalSortingOrder;
     Vector3 originalPos;
@@ -36,7 +37,7 @@ public class ItemController : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D col) {
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
             Square colSquare = col.GetComponent<Square>();
-            if (colSquare != square) {
+            if (colSquare != square && !animatingToOriginalFromDoubleClick) {
                 bool isValid = Controller.GameGraft.OpenSquareBorder(colSquare, this);
                 if (isValid) square = colSquare;
             }
@@ -50,7 +51,7 @@ public class ItemController : MonoBehaviour {
     void OnTriggerExit2D(Collider2D col) {
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
             Square colSquare = col.GetComponent<Square>();
-            if (colSquare == square) {
+            if (colSquare == square && !animatingToOriginalFromDoubleClick) {
                 Controller.GameGraft.HideSquareBorder();
                 square = null;
             }
@@ -138,11 +139,14 @@ public class ItemController : MonoBehaviour {
 
                 if (square) {
                     if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
+                        animatingToOriginalFromDoubleClick = true;
                         square.TemporarySetItemToNull();
                         BackToOriginal();
+                        // Have to set originalSquare = square, because originalSquare has been null at the lase release, see "@Tag: Set to null after release"
+                        originalSquare = square;
+                        CheckValidAtOriginalSquare();
                         square = null;
                         originalColor = null;
-                        originalSquare = null;
                         lastClickTime = 0f;
                         isPanning = false;
 
@@ -207,7 +211,7 @@ public class ItemController : MonoBehaviour {
                 else {
                     square = originalSquare;
                     square.AttachItem(this, animatedTo: true, color: originalColor);
-                    originalSquare = null;
+                    originalSquare = null; // @Tag: Set to null after release
                     originalColor = null;
                 }
             }
@@ -268,6 +272,7 @@ public class ItemController : MonoBehaviour {
         capsuleCollider.enabled = false;
         LeanTween.move(gameObject, originalPos, 0.15f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
             capsuleCollider.enabled = true;
+            animatingToOriginalFromDoubleClick = false;
         });
     }
 
