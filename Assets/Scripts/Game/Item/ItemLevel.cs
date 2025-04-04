@@ -7,6 +7,13 @@ public class ItemLevel : MonoBehaviour {
     int level;
     bool isSet = false;
 
+    static ColorConfigs colorConfigs = new ColorConfigs {
+        gray = Helper.ColorFromHex("#656565"),
+        green = Helper.ColorFromHex("#41FD38"),
+        yellow = Helper.ColorFromHex("#FFE200"),
+        orange = Helper.ColorFromHex("#FABE2E"),
+    };
+
     public void SetLevel(int lv) {
         text.text = $"{Helper.GetLocalizedValue("level")}\n{lv}";
         level = lv;
@@ -16,24 +23,27 @@ public class ItemLevel : MonoBehaviour {
         bool canPlay = level <= GameManager.Instance.Controller.levelStorage;
         bool isCurrentLevel = level == GameManager.Instance.Controller.currentLevel;
 
+        GameState.PlayingLevel playingLevel = GameManager.Instance.gameState.playingLevels.Find(l => l.level == lv);
+        bool isPlaying = playingLevel != null;
+
         if (!canPlay) {
             isSet = false;
             Btn.onClick.RemoveAllListeners();
             Btn.enabled = false;
-            img.color = Helper.ColorFromHex("#656565");
+            img.color = colorConfigs.gray;
             text.color = Color.white;
         }
         else if (isCurrentLevel) {
             isSet = false;
             Btn.onClick.RemoveAllListeners();
             Btn.enabled = false;
-            img.color = Helper.ColorFromHex("#41FD38");
-            text.color = Helper.ColorFromHex("#FFE200");
+            img.color = colorConfigs.green;
+            text.color = colorConfigs.yellow;
         }
         else {
             Btn.enabled = true;
-            img.color = Color.white;
-            text.color = Helper.ColorFromHex("#FFE200");
+            img.color = isPlaying ? colorConfigs.orange : Color.white;
+            text.color = colorConfigs.yellow;
             if (!isSet) {
                 isSet = true;
                 Btn.onClick.AddListener(GoToLevel);
@@ -43,5 +53,12 @@ public class ItemLevel : MonoBehaviour {
 
     void GoToLevel() {
         GameManager.Instance.Controller.OpenGoToLevelDialog(level);
+    }
+
+    class ColorConfigs {
+        public Color gray;
+        public Color green;
+        public Color yellow;
+        public Color orange;
     }
 }

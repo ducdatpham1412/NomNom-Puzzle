@@ -22,9 +22,7 @@ public class ItemController : MonoBehaviour {
     SpriteRenderer Renderer;
     LTDescr lTDescr;
 
-
     void Start() {
-        originalPos = transform.position;
         originalScale = transform.localScale;
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         Renderer = GetComponent<SpriteRenderer>();
@@ -121,6 +119,10 @@ public class ItemController : MonoBehaviour {
             });
         }
         lTDescr = LeanTween.delayedCall(shouldScale ? 4f : 2f, ScalePingPong);
+    }
+
+    public void SetOriginalPos(Vector3 pos) {
+        originalPos = pos;
     }
 
     void HandlePan() {

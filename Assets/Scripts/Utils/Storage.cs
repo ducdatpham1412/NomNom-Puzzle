@@ -4,8 +4,8 @@ using UnityEngine;
 public static class Storage {
     public enum Key {
         account, // AppState.Account
-        profile, // AppState.Profile
         currentLevel,
+        playingLevels,
     }
 
     public static void SET(Key key, string value) {
@@ -13,12 +13,23 @@ public static class Storage {
         PlayerPrefs.Save();
     }
 
-    public static T? GET<T>(Key key) where T : struct {
+    public static T? GETStruct<T>(Key key) where T : struct {
         string res = PlayerPrefs.GetString(key.ToString());
+        if (string.IsNullOrEmpty(res)) return null;
 
-        if (string.IsNullOrEmpty(res)) {
+        try {
+            return JsonConvert.DeserializeObject<T>(res);
+        }
+        catch (JsonException jsonEx) {
+            Debug.LogWarning($"Deserialization failed: {jsonEx.Message}");
             return null;
         }
+    }
+
+    public static T GETRef<T>(Key key) where T : class {
+        string res = PlayerPrefs.GetString(key.ToString());
+        if (string.IsNullOrEmpty(res)) return null;
+
         try {
             return JsonConvert.DeserializeObject<T>(res);
         }

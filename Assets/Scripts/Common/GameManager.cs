@@ -1,17 +1,26 @@
-using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
     protected GameManager() { }
 
-    public GameState gameState = new GameState();
-    public event Action<GameState> OnGameStateChanged;
+    public GameState gameState;
     public GameController Controller;
+
+    void Awake() {
+        List<GameState.PlayingLevel> playingLevels = Storage.GETRef<List<GameState.PlayingLevel>>(Storage.Key.playingLevels);
+        playingLevels = playingLevels ?? new List<GameState.PlayingLevel>();
+        gameState = new GameState {
+            playingLevels = playingLevels,
+        };
+    }
 
     public void Initialize() { }
 
     void OnApplicationQuit() {
-        // TODO: Save game status
+        string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
+        Storage.SET(Storage.Key.playingLevels, playingLevels);
     }
 
     void OnApplicationPause(bool pauseStatus) {
@@ -19,17 +28,6 @@ public class GameManager : Singleton<GameManager> {
         if (pauseStatus) {
             Debug.Log("App is paused (background mode)");
         }
-    }
-
-    public void UpdateGameState(GameState state) {
-        gameState = state;
-        OnGameStateChanged?.Invoke(gameState);
-    }
-
-    public GameState UpdateGameState(Func<GameState, GameState> action) {
-        gameState = action(gameState);
-        OnGameStateChanged?.Invoke(gameState);
-        return gameState;
     }
 }
 

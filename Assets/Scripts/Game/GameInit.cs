@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using Matching = GameState.PlayingLevel.Matching;
 
 public class GameInit : MonoBehaviour {
     [Header("Prefabs")]
@@ -37,7 +38,7 @@ public class GameInit : MonoBehaviour {
         level = _level;
         TextLevel.text = $"Lv. {currentLevel}";
         InitSquaresBoard();
-        InitChoicesBoard();
+        InitChoicesBoard(currentLevel);
     }
 
     void InitSquaresBoard() {
@@ -87,7 +88,7 @@ public class GameInit : MonoBehaviour {
         }
     }
 
-    void InitChoicesBoard() {
+    void InitChoicesBoard(int currentLevel) {
         Vector2 size = level.size;
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
@@ -106,17 +107,30 @@ public class GameInit : MonoBehaviour {
         float sc = scaleWidth / trueWidth;
         Vector3 scale = new Vector3(sc, sc, 1f);
 
+        GameState.PlayingLevel playingLevel = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+
         List<Item> itemsInChoicesBoard = new List<Item>();
         List<Item> itemsRecommended = new List<Item>();
+        List<MatchStore> itemsStorage = new List<MatchStore>();
+
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
                 int temp = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
                 if (temp >= 0) {
                     itemsRecommended.Add(item);
+                    continue;
                 }
-                else {
-                    itemsInChoicesBoard.Add(item);
+                if (playingLevel != null) {
+                    Matching matching = playingLevel.matchings.Find(m => m.itemPos.Equals(item.pos));
+                    if (matching != null) {
+                        itemsStorage.Add(new MatchStore {
+                            item = item,
+                            matching = matching,
+                        });
+                        continue;
+                    }
                 }
+                itemsInChoicesBoard.Add(item);
             }
         }
 
@@ -130,22 +144,41 @@ public class GameInit : MonoBehaviour {
         }
 
         // Instantiate InitItem
-        Helper.Shuffle(itemsInChoicesBoard);
         foreach (Item initItem in itemsRecommended) {
-            ItemController initController = InitItem(initItem);
+            ItemController ct = InitItem(initItem);
             Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
-            sq.AttachItem(initController, isRoot: true);
-            initController.GetComponent<CapsuleCollider2D>().enabled = false;
+            sq.AttachItem(ct, isRoot: true);
+            ct.GetComponent<CapsuleCollider2D>().enabled = false;
             sq.GetComponent<BoxCollider2D>().enabled = false;
         }
 
-        for (int i = 0; i < itemsInChoicesBoard.Count; i++) {
-            ItemController ct = InitItem(itemsInChoicesBoard[i]);
-            int row = i / cols;
-            int col = i % cols;
+        Helper.Shuffle(itemsInChoicesBoard);
+
+        int i = 0;
+
+        Vector3 GetPos(int _i) {
+            int row = _i / cols;
+            int col = _i % cols;
             float xPos = -width / 2 + col * gap + gap / 2;
             float yPos = height / 2 - row * gap - gap / 2;
-            ct.gameObject.transform.localPosition = new Vector3(xPos, yPos, 0f);
+            return new Vector3(xPos, yPos, 0f);
+        }
+
+        for (i = 0; i < itemsInChoicesBoard.Count; i++) {
+            ItemController ct = InitItem(itemsInChoicesBoard[i]);
+            ct.transform.localPosition = GetPos(i);
+            ct.SetOriginalPos(ct.transform.position);
+        }
+
+        foreach (MatchStore matchStore in itemsStorage) {
+            ItemController ct = InitItem(matchStore.item);
+            ct.transform.localPosition = GetPos(i);
+            ct.SetOriginalPos(ct.transform.position);
+
+            Square sq = Squares[(int)matchStore.matching.squarePos.y][(int)matchStore.matching.squarePos.x];
+            sq.AttachItem(ct, playVFX: false);
+
+            i++;
         }
     }
 
@@ -153,5 +186,11 @@ public class GameInit : MonoBehaviour {
     public class ChoicePos {
         public Vector3 localPos;
         public ItemController item;
+    }
+
+    [Serializable]
+    class MatchStore {
+        public Item item;
+        public Matching matching;
     }
 }
