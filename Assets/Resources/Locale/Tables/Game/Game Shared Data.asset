@@ -51,6 +51,10 @@ MonoBehaviour:
     m_Key: beEaten
     m_Metadata:
       m_Items: []
+  - m_Id: 34463667910074368
+    m_Key: playAgain
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

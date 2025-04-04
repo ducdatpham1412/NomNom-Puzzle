@@ -38,4 +38,9 @@ public static class Storage {
             return null;
         }
     }
+
+    public static void DELETE(Key key) {
+        PlayerPrefs.DeleteKey(key.ToString());
+        PlayerPrefs.Save();
+    }
 }

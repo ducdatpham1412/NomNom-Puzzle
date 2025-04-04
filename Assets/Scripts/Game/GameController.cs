@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
     public SpriteRenderer ChoicesBoardBorder;
     [SerializeField] Text TextNextLevel;
     [SerializeField] Text TextGoToLevel;
+    public Button PlayAgainButton;
 
     [Header("Prefabs")]
     [SerializeField] GameObject VFXLeaf;
@@ -31,9 +32,10 @@ public class GameController : MonoBehaviour {
     public int levelStorage;
     public int totalLevels;
     public readonly float doubleClickThreshold = 0.3f;
+    public bool ended = false;
     GameObject Vfx;
 
-    bool ended = false;
+
     int levelGoTo = -1;
     List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
 
@@ -153,6 +155,27 @@ public class GameController : MonoBehaviour {
         Navigator.Instance.NavigateTo(Navigator.Scene.InformationScene, LoadSceneMode.Additive);
     }
 
+    public GameState.PlayingLevel GetPlayingLevel(int lv) {
+        GameState.PlayingLevel level = GameManager.Instance.gameState.playingLevels.Find(l => l.level == lv);
+        return level;
+    }
+
+    public void PlayAgain() {
+        ended = false;
+        LeanTween.scale(PlayAgainButton.gameObject, Vector3.zero, 0.3f).setEaseInBounce().setOnComplete(() => {
+            PlayAgainButton.gameObject.SetActive(false);
+            GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
+            if (level != null) {
+                GameManager.Instance.gameState.playingLevels.Remove(level);
+            }
+            GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
+                level = currentLevel,
+                matchings = new List<Matching>(),
+            });
+            GameInit.InitGame(GameInit.level, currentLevel);
+        });
+    }
+
     IEnumerator EndGameCoroutine() {
         Vfx = Instantiate(VFXsWinner, VFXsContainer);
         // TODO: Playing sound winner
@@ -162,7 +185,7 @@ public class GameController : MonoBehaviour {
     }
 
     void RemoveLevelStatus() {
-        GameState.PlayingLevel level = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+        var level = GetPlayingLevel(currentLevel);
         if (level != null) {
             GameManager.Instance.gameState.playingLevels.Remove(level);
         }
@@ -181,7 +204,7 @@ public class GameController : MonoBehaviour {
                 }
             }
         }
-        GameState.PlayingLevel level = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+        GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
 
         if (matching.Count <= 1) {
             if (level != null) {

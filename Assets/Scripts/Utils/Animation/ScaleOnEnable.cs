@@ -16,6 +16,6 @@ public class ScaleOnEnable : MonoBehaviour {
     }
 
     void OnDisable() {
-        LeanTween.scale(gameObject, Vector3.zero, duration).setEase(tweenType);
+        GetComponent<RectTransform>().localScale = Vector3.zero;
     }
 }

@@ -37,16 +37,32 @@ public class GameInit : MonoBehaviour {
         if (!Controller) Controller = GetComponent<GameController>();
         level = _level;
         TextLevel.text = $"Lv. {currentLevel}";
+
         InitSquaresBoard();
+
+        if (currentLevel < Controller.levelStorage) {
+            var playingLevel = Controller.GetPlayingLevel(currentLevel);
+            if (playingLevel != null) {
+                InitChoicesBoard(currentLevel);
+            }
+            else {
+                Controller.ended = true;
+                FillAllSquares();
+            }
+            return;
+        }
+
         InitChoicesBoard(currentLevel);
     }
 
     void InitSquaresBoard() {
-        Vector2 size = level.size;
-        Squares = new Square[(int)size.y][];
+        Controller.PlayAgainButton.gameObject.SetActive(true);
+
         foreach (Transform child in SquaresBoard) {
             Destroy(child.gameObject);
         }
+        Vector2 size = level.size;
+        Squares = new Square[(int)size.y][];
         float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
         Vector2 boardSize;
         if (size.x >= size.y) {
@@ -89,25 +105,15 @@ public class GameInit : MonoBehaviour {
     }
 
     void InitChoicesBoard(int currentLevel) {
-        Vector2 size = level.size;
+        Controller.PlayAgainButton.gameObject.SetActive(false);
+
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }
-        SpriteRenderer sr = ChoicesBoard.GetComponent<SpriteRenderer>();
-        float width = sr.bounds.size.x - 0.2f;
-        float height = sr.bounds.size.y - 0.2f;
 
-        int s = (int)Mathf.Sqrt(size.x * size.y) + 1;
+        ChoiceBoardSize boardSize = GetChoiceBoardSize();
 
-        int cols = s + 1;
-        float gap = width / cols;
-
-        float scaleWidth = gap * 0.8f;
-        float trueWidth = Item.GetComponent<SpriteRenderer>().bounds.size.x;
-        float sc = scaleWidth / trueWidth;
-        Vector3 scale = new Vector3(sc, sc, 1f);
-
-        GameState.PlayingLevel playingLevel = GameManager.Instance.gameState.playingLevels.Find(l => l.level == currentLevel);
+        GameState.PlayingLevel playingLevel = Controller.GetPlayingLevel(currentLevel);
 
         List<Item> itemsInChoicesBoard = new List<Item>();
         List<Item> itemsRecommended = new List<Item>();
@@ -139,7 +145,7 @@ public class GameInit : MonoBehaviour {
             ItemController controller = NewItem.GetComponent<ItemController>();
             controller.Controller = Controller;
             controller.SetItem(item);
-            NewItem.transform.localScale = scale;
+            NewItem.transform.localScale = boardSize.scale;
             return controller;
         }
 
@@ -157,10 +163,10 @@ public class GameInit : MonoBehaviour {
         int i = 0;
 
         Vector3 GetPos(int _i) {
-            int row = _i / cols;
-            int col = _i % cols;
-            float xPos = -width / 2 + col * gap + gap / 2;
-            float yPos = height / 2 - row * gap - gap / 2;
+            int row = _i / boardSize.cols;
+            int col = _i % boardSize.cols;
+            float xPos = -boardSize.width / 2 + col * boardSize.gap + boardSize.gap / 2;
+            float yPos = boardSize.height / 2 - row * boardSize.gap - boardSize.gap / 2;
             return new Vector3(xPos, yPos, 0f);
         }
 
@@ -182,6 +188,50 @@ public class GameInit : MonoBehaviour {
         }
     }
 
+    void FillAllSquares() {
+        foreach (Transform child in ChoicesBoard) {
+            Destroy(child.gameObject);
+        }
+        ChoiceBoardSize boardSize = GetChoiceBoardSize();
+        foreach (Item[] row in level.data) {
+            foreach (Item item in row) {
+                GameObject NewItem = Instantiate(Item, ChoicesBoard);
+                ItemController controller = NewItem.GetComponent<ItemController>();
+                controller.Controller = Controller;
+                controller.SetItem(item);
+                Square sq = Squares[(int)item.pos.y][(int)item.pos.x];
+                NewItem.transform.localScale = boardSize.scale;
+                sq.AttachItem(controller, playVFX: false);
+            }
+        }
+    }
+
+
+    ChoiceBoardSize GetChoiceBoardSize() {
+        Vector2 size = level.size;
+        SpriteRenderer sr = ChoicesBoard.GetComponent<SpriteRenderer>();
+        float width = sr.bounds.size.x - 0.2f;
+        float height = sr.bounds.size.y - 0.2f;
+
+        int s = (int)Mathf.Sqrt(size.x * size.y) + 1;
+
+        int cols = s + 1;
+        float gap = width / cols;
+
+        float scaleWidth = gap * 0.8f;
+        float trueWidth = Item.GetComponent<SpriteRenderer>().bounds.size.x;
+        float sc = scaleWidth / trueWidth;
+        Vector3 scale = new Vector3(sc, sc, 1f);
+
+        return new ChoiceBoardSize {
+            width = width,
+            height = height,
+            gap = gap,
+            cols = cols,
+            scale = scale,
+        };
+    }
+
     [Serializable]
     public class ChoicePos {
         public Vector3 localPos;
@@ -192,5 +242,14 @@ public class GameInit : MonoBehaviour {
     class MatchStore {
         public Item item;
         public Matching matching;
+    }
+
+    [Serializable]
+    class ChoiceBoardSize {
+        public float width;
+        public float height;
+        public float gap;
+        public int cols;
+        public Vector3 scale;
     }
 }
