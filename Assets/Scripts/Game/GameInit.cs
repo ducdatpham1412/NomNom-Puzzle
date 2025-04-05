@@ -56,20 +56,20 @@ public class GameInit : MonoBehaviour {
     }
 
     void InitSquaresBoard() {
-        Controller.PlayAgainButton.gameObject.SetActive(true);
-
         foreach (Transform child in SquaresBoard) {
             Destroy(child.gameObject);
         }
+
         Vector2 size = level.size;
         Squares = new Square[(int)size.y][];
-        float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+        float boardWidth = SquaresBoard.GetComponent<SpriteRenderer>().bounds.size.x;
+
         Vector2 boardSize;
         if (size.x >= size.y) {
-            boardSize = new Vector2(screenWidth * 0.8f, screenWidth * 0.8f * (size.y / size.x));
+            boardSize = new Vector2(boardWidth, boardWidth * (size.y / size.x));
         }
         else {
-            boardSize = new Vector2(screenWidth * 0.8f * (size.x / size.y), screenWidth * 0.8f);
+            boardSize = new Vector2(boardWidth * (size.x / size.y), boardWidth);
         }
 
         float t = (size.x - 2f) / (7f - 2f);
@@ -106,7 +106,6 @@ public class GameInit : MonoBehaviour {
 
     void InitChoicesBoard(int currentLevel) {
         Controller.PlayAgainButton.gameObject.SetActive(false);
-
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }
@@ -121,8 +120,8 @@ public class GameInit : MonoBehaviour {
 
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
-                int temp = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
-                if (temp >= 0) {
+                int index = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
+                if (index >= 0) {
                     itemsRecommended.Add(item);
                     continue;
                 }
@@ -189,6 +188,7 @@ public class GameInit : MonoBehaviour {
     }
 
     void FillAllSquares() {
+        Controller.PlayAgainButton.gameObject.SetActive(true);
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }

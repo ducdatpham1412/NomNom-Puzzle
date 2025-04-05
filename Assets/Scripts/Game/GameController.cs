@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -17,7 +18,7 @@ public class GameController : MonoBehaviour {
     public SpriteRenderer ChoicesBoardBorder;
     [SerializeField] Text TextNextLevel;
     [SerializeField] Text TextGoToLevel;
-    public Button PlayAgainButton;
+    public ButtonManager PlayAgainButton;
 
     [Header("Prefabs")]
     [SerializeField] GameObject VFXLeaf;
@@ -161,19 +162,17 @@ public class GameController : MonoBehaviour {
     }
 
     public void PlayAgain() {
+        PlayAgainButton.gameObject.SetActive(false);
         ended = false;
-        LeanTween.scale(PlayAgainButton.gameObject, Vector3.zero, 0.3f).setEaseInBounce().setOnComplete(() => {
-            PlayAgainButton.gameObject.SetActive(false);
-            GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
-            if (level != null) {
-                GameManager.Instance.gameState.playingLevels.Remove(level);
-            }
-            GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
-                level = currentLevel,
-                matchings = new List<Matching>(),
-            });
-            GameInit.InitGame(GameInit.level, currentLevel);
+        GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
+        if (level != null) {
+            GameManager.Instance.gameState.playingLevels.Remove(level);
+        }
+        GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
+            level = currentLevel,
+            matchings = new List<Matching>(),
         });
+        GameInit.InitGame(GameInit.level, currentLevel);
     }
 
     IEnumerator EndGameCoroutine() {
@@ -196,7 +195,9 @@ public class GameController : MonoBehaviour {
         foreach (var row in GameInit.Squares) {
             foreach (Square sq in row) {
                 ItemController item = sq.GetItemController();
-                if (item != null) {
+                if (item == null) continue;
+                int index = Array.FindIndex(GameInit.level.init_pos, p => p.Equals(item.Item.pos));
+                if (index < 0) {
                     matching.Add(new Matching {
                         itemPos = item.Item.pos,
                         squarePos = sq.Pos,
@@ -206,15 +207,7 @@ public class GameController : MonoBehaviour {
         }
         GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
 
-        if (matching.Count <= 1) {
-            if (level != null) {
-                GameManager.Instance.gameState.playingLevels.Remove(level);
-            }
-            return;
-        }
-
         if (level != null) {
-            level.level = currentLevel;
             level.matchings = matching;
         }
         else {
