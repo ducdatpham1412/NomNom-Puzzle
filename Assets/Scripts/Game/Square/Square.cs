@@ -10,6 +10,10 @@ public class Square : MonoBehaviour {
     ItemController ItemController;
     Material material;
 
+    void Start() {
+        material = material = GetComponent<SpriteRenderer>().material;
+    }
+
     public void AttachItem(
         ItemController item,
         Color? color = null,

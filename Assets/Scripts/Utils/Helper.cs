@@ -97,6 +97,16 @@ public static class Helper {
         return texture;
     }
 
+
+    public static bool InWorldSpace(GameObject gObject) {
+        RectTransform rect = gObject.GetComponent<RectTransform>();
+        if (rect == null) return true;
+        Canvas parentCanvas = rect.GetComponentInParent<Canvas>();
+        if (parentCanvas == null) return true;
+        return parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay;
+    }
+
+
     public enum Layer {
         Environment,
         PlayerBlue,

@@ -66,6 +66,7 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/6000.0.29f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Scripts/Common/BlackCover.cs" />
     <Compile Include="Assets/Scripts/Common/GameManager.cs" />
     <Compile Include="Assets/Scripts/Utils/Configs.cs" />
     <Compile Include="Assets/LeanTween/Framework/LeanTest.cs" />
@@ -79,8 +80,10 @@
     <Compile Include="Assets/Scripts/Extensions/GameObjectExtensions.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/TestingZLegacy.cs" />
     <Compile Include="Assets/Scripts/Game/Item/ItemController.cs" />
+    <Compile Include="Assets/Scripts/Game/GameTutorial.cs" />
     <Compile Include="Assets/Scripts/Welcome/CreateAccountLogic.cs" />
     <Compile Include="Assets/LeanTween/Testing/TestingSceneSwitching.cs" />
+    <Compile Include="Assets/Scripts/Common/ToolTip.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralSequencer.cs" />
     <Compile Include="Assets/Scripts/Game/Item/ItemCreature.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathBezier2d.cs" />
@@ -115,6 +118,7 @@
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralCameraShake.cs" />
     <Compile Include="Assets/Scripts/Utils/DragTracker.cs" />
     <Compile Include="Assets/Scripts/Utils/Storage.cs" />
+    <Compile Include="Assets/Scripts/Common/InfoDialog.cs" />
     <Compile Include="Assets/Scripts/Game/Setting.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSplineTrack.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSpline.cs" />

@@ -58,6 +58,74 @@ MonoBehaviour:
     m_Localized: Play again
     m_Metadata:
       m_Items: []
+  - m_Id: 34775886271078400
+    m_Localized: "Perfect \U0001F9C0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34775826661629952
+    m_Localized: "Excellent \U0001F496"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34873950650490880
+    m_Localized: "Oh wow! Look!\nA super yummy piece of cheese! \U0001F9C0\U0001F496"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35061453063970816
+    m_Localized: 'Welcome to NomNom
+
+      Let''s get a quick tutorial
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35079392899096576
+    m_Localized: "A little mousey looking to the left! \U0001F42D\U0001F4AB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35093818410786816
+    m_Localized: "We need to feed our little mousey by dragging him to the right
+      square on the board! \U0001F42D\U0001F496"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35610831864455168
+    m_Localized: "Wow! Such a chubby wubby lil\u2019 wormy. So cute! \U0001F41B\U0001F497"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35610999645003776
+    m_Localized: "Fish like to eat worms, right? And he\u2019s looking down there!
+      \U0001F41F\U0001F41B\U0001F440"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35612594092892160
+    m_Localized: "Let\u2019s bring this lil\u2019 worm over to our fish friend!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613200643776512
+    m_Localized: "You can see what each animal eats by pressing the button at the
+      top right! \U0001F43E\U0001F37D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613517976428544
+    m_Localized: "Let\u2019s go"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613820385746944
+    m_Localized: "Nice! Now let\u2019s go create your very own food chain! \U0001F42D\u27A1\uFE0F\U0001F41F\u27A1\uFE0F\U0001F985"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35614819968081920
+    m_Localized: "Last one!\nCheck the animal\u2019s direction, they can only eat
+      where they\u2019re looking! \U0001F42D\U0001F440"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35615364049002496
+    m_Localized: Completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35748132825325568
+    m_Localized: View tutorial
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

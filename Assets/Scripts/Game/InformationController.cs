@@ -31,7 +31,7 @@ public class InformationController : MonoBehaviour {
 
         foreach (var (cr, index) in CreaturesObject.Creatures.Select((v, i) => (v, i))) {
             ItemCreature newCr = Instantiate(ItemCreature, ScrollContent).GetComponent<ItemCreature>();
-            newCr.SetCreature(cr, this, localeKey);
+            newCr.SetCreature(cr, this, localeKey, enableClick: true);
             if (index == 0) {
                 OnClickCreature(newCr);
             }
@@ -86,6 +86,14 @@ public class InformationController : MonoBehaviour {
 
     public void GoBackGameScene() {
         Navigator.Instance.UnloadSceneAsync(Navigator.Scene.InformationScene);
+    }
+
+    public void GoToTutorial() {
+        var tutorial = GameManager.Instance.Controller.GameTutorial;
+        if (!tutorial.isTutorial) {
+            tutorial.SetUpForTutorial();
+        }
+        GoBackGameScene();
     }
 
     void FadeInUp() {
