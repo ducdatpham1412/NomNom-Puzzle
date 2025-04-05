@@ -140,7 +140,7 @@ public class ItemController : MonoBehaviour {
                 if (square) {
                     if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
                         animatingToOriginalFromDoubleClick = true;
-                        square.TemporarySetItemToNull();
+                        square.RemoveItem();
                         BackToOriginal();
                         // Have to set originalSquare = square, because originalSquare has been null at the lase release, see "@Tag: Set to null after release"
                         originalSquare = square;
@@ -166,7 +166,7 @@ public class ItemController : MonoBehaviour {
                     // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
                     ResetCoroutines();
                     originalColor = square.GetColor();
-                    square.TemporarySetItemToNull();
+                    square.RemoveItem();
                     originalSquare = square;
                     square = null;
                 }

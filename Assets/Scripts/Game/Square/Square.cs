@@ -61,7 +61,7 @@ public class Square : MonoBehaviour {
         return ItemController;
     }
 
-    public void TemporarySetItemToNull() {
+    public void RemoveItem() {
         ItemController = null;
         SetColor(Configs.DefaultSquareColor);
     }
