@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -39,6 +40,7 @@ public class GameInit : MonoBehaviour {
         TextLevel.text = $"Lv. {currentLevel}";
 
         InitSquaresBoard();
+        StartCoroutine(AnimateSquares());
 
         if (currentLevel < Controller.levelStorage) {
             var playingLevel = Controller.GetPlayingLevel(currentLevel);
@@ -96,10 +98,68 @@ public class GameInit : MonoBehaviour {
                 cpn.Controller = Controller;
                 cpn.SetCenter(squareSize);
                 Squares[row][col] = cpn;
-                // sr = square.GetComponent<SpriteRenderer>();
-                // if (sr != null) {
-                //     sr.color = (row + col) % 2 == 0 ? Color.white : Color.black;
-                // }
+            }
+        }
+    }
+
+    IEnumerator AnimateSquares() {
+        Vector2 size = level.size;
+        Vector3 originalScale = Squares[0][0].transform.localScale;
+        float deltaTime = Mathf.Min(1.1f / (size.x * size.y), 0.06f);
+        float duration = 0.4f;
+
+        string[] methods = new string[] { "move", "rotate" };
+        string method = methods[UnityEngine.Random.Range(0, methods.Length)];
+
+        for (int row = 0; row < size.y; row++) {
+            for (int col = 0; col < size.x; col++) {
+                Squares[row][col].GetComponent<Collider2D>().enabled = false;
+            }
+        }
+
+        if (method == "move") {
+            for (int row = 0; row < size.y; row++) {
+                for (int col = 0; col < size.x; col++) {
+                    Squares[row][col].transform.localScale = Vector3.zero;
+                }
+            }
+
+            for (int col = (int)size.x - 1; col >= 0; col--) {
+                for (int row = 0; row < size.y; row++) {
+                    Square sq = Squares[row][col];
+                    Vector3 originalPos = sq.transform.position;
+                    sq.transform.position += new Vector3(0f, 1.3f, 0f);
+                    LeanTween.move(sq.gameObject, originalPos, duration).setEase(LeanTweenType.easeOutQuad);
+                    LeanTween.scale(sq.gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
+                    yield return new WaitForSeconds(deltaTime);
+                }
+            }
+        }
+
+        else if (method == "rotate") {
+            for (int row = 0; row < size.y; row++) {
+                for (int col = 0; col < size.x; col++) {
+                    Square sq = Squares[row][col];
+                    sq.transform.rotation = Quaternion.Euler(0, 0, 60);
+                    sq.transform.localScale = Vector3.zero;
+                }
+            }
+
+            for (int col = 0; col < size.x; col++) {
+                for (int row = 0; row < size.y; row++) {
+                    Square sq = Squares[row][col];
+                    LeanTween.rotate(sq.gameObject, Vector3.zero, duration).setEase(LeanTweenType.easeOutQuad);
+                    LeanTween.scale(sq.gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
+                    yield return new WaitForSeconds(deltaTime);
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(duration); // Wait for the last tween finished to confirm squares're  not be collided
+
+        for (int row = 0; row < size.y; row++) {
+            for (int col = 0; col < size.x; col++) {
+                Squares[row][col].GetComponent<Collider2D>().enabled = true;
             }
         }
     }
@@ -205,7 +265,6 @@ public class GameInit : MonoBehaviour {
             }
         }
     }
-
 
     ChoiceBoardSize GetChoiceBoardSize() {
         Vector2 size = level.size;
