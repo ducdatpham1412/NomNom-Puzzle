@@ -11,8 +11,9 @@ public class Setting : MonoBehaviour {
     void Start() {
         MusicSwitch.ActionChange += MusicChanged;
         SfxSwitch.ActionChange += SfxChanged;
-        MusicSwitch.SetValue(true);
-        SfxSwitch.SetValue(true);
+        MusicSwitch.SetValue(GameManager.Instance.profile.music);
+        SfxSwitch.SetValue(GameManager.Instance.profile.sfx);
+        SetLocale(GameManager.Instance.profile.localeID ?? 0);
     }
 
     void OnDestroy() {
@@ -22,6 +23,7 @@ public class Setting : MonoBehaviour {
 
     public void SetLocale(int localeID) {
         LocalizationManager.Instance.SetLocale(localeID);
+        GameManager.Instance.profile.localeID = localeID;
         foreach (var lan in LanguageButtons) {
             if (lan.Id == localeID) {
                 lan.Image.color = Helper.ColorFromHex(Configs.Color.yellow);
@@ -33,11 +35,12 @@ public class Setting : MonoBehaviour {
     }
 
     void MusicChanged(bool isActive) {
+        GameManager.Instance.profile.music = isActive;
         SoundManager.Instance.PauseUnPauseMusicBackground();
     }
 
     void SfxChanged(bool isActive) {
-        SoundManager.Instance.playSF = isActive;
+        GameManager.Instance.profile.sfx = isActive;
     }
 
     [Serializable]
