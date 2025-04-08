@@ -24,6 +24,7 @@ public class GameInit : MonoBehaviour {
 
     [Header("Stats")]
     public Square[][] Squares;
+    public List<ItemController> Items;
     public Level level;
 
     GameController Controller;
@@ -41,6 +42,11 @@ public class GameInit : MonoBehaviour {
 
         InitSquaresBoard();
         StartCoroutine(AnimateSquares());
+
+        if (Controller.GameTutorial.isTutorial) {
+            InitChoicesBoard(currentLevel);
+            return;
+        }
 
         if (currentLevel < Controller.levelStorage) {
             var playingLevel = Controller.GetPlayingLevel(currentLevel);
@@ -108,8 +114,7 @@ public class GameInit : MonoBehaviour {
         float deltaTime = Mathf.Min(1.1f / (size.x * size.y), 0.06f);
         float duration = 0.4f;
 
-        string[] methods = new string[] { "move", "rotate" };
-        string method = methods[UnityEngine.Random.Range(0, methods.Length)];
+        string method = Helper.GetRandomInArr(new string[] { "move", "rotate" });
 
         for (int row = 0; row < size.y; row++) {
             for (int col = 0; col < size.x; col++) {
@@ -169,14 +174,15 @@ public class GameInit : MonoBehaviour {
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }
-
+        Items = new List<ItemController>();
         ChoiceBoardSize boardSize = GetChoiceBoardSize();
-
         GameState.PlayingLevel playingLevel = Controller.GetPlayingLevel(currentLevel);
 
         List<Item> itemsInChoicesBoard = new List<Item>();
         List<Item> itemsRecommended = new List<Item>();
         List<MatchStore> itemsStorage = new List<MatchStore>();
+
+
 
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
@@ -205,6 +211,7 @@ public class GameInit : MonoBehaviour {
             controller.Controller = Controller;
             controller.SetItem(item);
             NewItem.transform.localScale = boardSize.scale;
+            Items.Add(controller);
             return controller;
         }
 
@@ -245,10 +252,16 @@ public class GameInit : MonoBehaviour {
 
             i++;
         }
+
+        if (Controller.GameTutorial.GameInitializedAction != null) {
+            Controller.GameTutorial.GameInitializedAction?.Invoke();
+            Controller.GameTutorial.GameInitializedAction = null;
+        }
     }
 
     void FillAllSquares() {
         Controller.PlayAgainButton.gameObject.SetActive(true);
+        Items = new List<ItemController>();
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }

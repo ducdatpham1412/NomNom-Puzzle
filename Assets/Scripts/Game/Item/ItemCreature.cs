@@ -8,12 +8,14 @@ public class ItemCreature : MonoBehaviour {
     [SerializeField] Button Btn;
     public Creature creature;
 
-    public void SetCreature(Creature cr, InformationController controller, string localeKey) {
+    public void SetCreature(Creature cr, InformationController controller, string localeKey, bool enableClick = false) {
         creature = cr;
         Img.sprite = cr.sprite;
         Name.text = cr.name.Find(n => n.key == localeKey)?.value ?? "";
         Btn.onClick.RemoveAllListeners();
-        Btn.onClick.AddListener(() => controller.OnClickCreature(this));
+        if (enableClick) {
+            Btn.onClick.AddListener(() => controller.OnClickCreature(this));
+        }
     }
 
     public void SetActive(bool active) {

@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class InfoDialog : MonoBehaviour {
+    [SerializeField] RectTransform Content;
+    [SerializeField] Image Image;
+    public Text Title;
+    [SerializeField] Text BtnTitle;
+    [SerializeField] GameObject CloseButton;
+    Action OnClick;
+
+    public void ClickButton() {
+        OnClick?.Invoke();
+    }
+
+    public void Open(Info info) {
+        Title.text = info.title;
+        BtnTitle.text = info.btnTitle;
+        OnClick = info.OnClick;
+        CloseButton.SetActive(info.canClose != false);
+
+        gameObject.SetActive(true);
+        StartCoroutine(RebuildAfterOneFrame());
+        return;
+    }
+
+    public void Close() {
+        gameObject.SetActive(false);
+    }
+
+    IEnumerator RebuildAfterOneFrame() {
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(Content);
+    }
+
+    [SerializeField]
+    public class Info {
+        public string title;
+        public string btnTitle;
+        public bool canClose = true;
+        public Action OnClick;
+    }
+}

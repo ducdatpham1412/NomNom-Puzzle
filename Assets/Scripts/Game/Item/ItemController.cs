@@ -130,11 +130,21 @@ public class ItemController : MonoBehaviour {
         if (GameHelper.TouchBegin()) {
             Vector3 mousePos = Input.mousePosition;
             isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
-
             if (isPanning) {
                 if (!Controller.ShouldHandlePan()) {
                     isPanning = false;
                     return;
+                }
+
+                if (Controller.GameTutorial.isTutorial) {
+                    if (Controller.GameTutorial.StepGameObject != gameObject) {
+                        isPanning = false;
+                        return;
+                    }
+                    if (Controller.GameTutorial.StartPanItemAction != null) {
+                        Controller.GameTutorial.StartPanItemAction?.Invoke();
+                        Controller.GameTutorial.StartPanItemAction = null;
+                    }
                 }
 
                 if (square) {

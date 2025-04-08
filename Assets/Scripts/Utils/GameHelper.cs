@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public static class GameHelper {
@@ -65,5 +66,17 @@ public static class GameHelper {
             if (h.collider.gameObject == gameObject) return true;
         }
         return false;
+    }
+
+    public static void ScalePingPong(GameObject gObject, Vector3 scale, float time = 1f, float delay = 2f, Action<LTDescr> OnChange = null) {
+        void Scale() {
+            LeanTween.scale(gObject, scale, time).setEase(LeanTweenType.punch).setOnComplete(() => {
+                LTDescr LT = LeanTween.delayedCall(delay, Scale);
+                if (OnChange != null) {
+                    OnChange?.Invoke(LT);
+                }
+            });
+        }
+        Scale();
     }
 }

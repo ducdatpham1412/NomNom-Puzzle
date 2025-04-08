@@ -16,7 +16,11 @@ public class GameManager : Singleton<GameManager> {
         };
     }
 
-    public void Initialize() { }
+    void Start() {
+        if (Application.isEditor) {
+            Application.targetFrameRate = 30;
+        }
+    }
 
     void OnApplicationQuit() {
         string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
@@ -29,5 +33,7 @@ public class GameManager : Singleton<GameManager> {
             Debug.Log("App is paused (background mode)");
         }
     }
+
+    public void Initialize() { }
 }
 

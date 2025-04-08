@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 using Matching = GameState.PlayingLevel.Matching;
 
@@ -12,12 +11,10 @@ public class GameController : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject SettingDialog;
     [SerializeField] GameObject LevelsDialog;
-    [SerializeField] GameObject GoToLevelDialog;
-    [SerializeField] GameObject NextLevelDialog;
+    public InfoDialog InfoDialog;
+    public ToolTip ToolTip;
     [SerializeField] Transform VFXsContainer;
     public SpriteRenderer ChoicesBoardBorder;
-    [SerializeField] Text TextNextLevel;
-    [SerializeField] Text TextGoToLevel;
     public ButtonManager PlayAgainButton;
 
     [Header("Prefabs")]
@@ -27,6 +24,7 @@ public class GameController : MonoBehaviour {
 
     [HideInInspector] public GameInit GameInit;
     [HideInInspector] public GameGraft GameGraft;
+    [HideInInspector] public GameTutorial GameTutorial;
 
     [Header("Stats")]
     public int currentLevel;
@@ -34,23 +32,22 @@ public class GameController : MonoBehaviour {
     public int totalLevels;
     public readonly float doubleClickThreshold = 0.3f;
     public bool ended = false;
+
     GameObject Vfx;
-
-
-    int levelGoTo = -1;
     List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
 
     void Awake() {
         GameManager.Instance.Controller = this;
         GameInit = GetComponent<GameInit>();
         GameGraft = GetComponent<GameGraft>();
+        GameTutorial = GetComponent<GameTutorial>();
     }
 
     void Start() {
-        GameManager.Instance.Initialize();
         Level[] levels = GetLevels();
         int? lv = Storage.GETStruct<int>(Storage.Key.currentLevel);
         if (lv == null) {
+            GameTutorial.StartTutorial();
             Storage.SET(Storage.Key.currentLevel, "1");
             currentLevel = 1;
         }
@@ -58,7 +55,6 @@ public class GameController : MonoBehaviour {
             currentLevel = (int)lv;
         }
         levelStorage = currentLevel;
-        TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
 
@@ -71,10 +67,12 @@ public class GameController : MonoBehaviour {
     }
 
     public void ShowHideSettingDialog() {
+        if (GameTutorial.isTutorial && GameTutorial.StepGameObject != SettingDialog.gameObject) return;
         SettingDialog.SetActive(!SettingDialog.activeInHierarchy);
     }
 
     public void ShowHideLevelsDialog() {
+        if (GameTutorial.isTutorial && GameTutorial.StepGameObject != LevelsDialog.gameObject) return;
         LevelsDialog.SetActive(!LevelsDialog.activeInHierarchy);
     }
 
@@ -90,32 +88,33 @@ public class GameController : MonoBehaviour {
     }
 
     public void OpenGoToLevelDialog(int level) {
-        levelGoTo = level;
-        TextGoToLevel.text = Helper.GetLocalizedValue("goToLevel", new string[] { level.ToString() });
-        GoToLevelDialog.SetActive(true);
+        InfoDialog.Open(new InfoDialog.Info {
+            title = Helper.GetLocalizedValue("goToLevel", new string[] { level.ToString() }),
+            btnTitle = "Ok",
+            OnClick = () => GoToLevel(level),
+        });
     }
 
     public void CloseGoToLevelDialog() {
-        GoToLevelDialog.SetActive(false);
+        InfoDialog.Close();
     }
 
-    public void GoToLevel() {
+    public void GoToLevel(int level) {
         if (ended) {
             ended = false;
         }
         else {
             SaveLevelStatus();
         }
-        currentLevel = levelGoTo;
+        currentLevel = level;
         LevelsDialog.SetActive(false);
-        GoToLevelDialog.SetActive(false);
-
+        InfoDialog.Close();
         Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
 
     public bool ShouldHandlePan() {
-        return !LevelsDialog.activeInHierarchy && !ended && !SettingDialog.activeInHierarchy && !GoToLevelDialog.activeInHierarchy;
+        return !LevelsDialog.activeInHierarchy && !ended && !SettingDialog.activeInHierarchy && !InfoDialog.gameObject.activeInHierarchy;
     }
 
     public void PlayVFXLeaf(Vector3 pos) {
@@ -139,7 +138,7 @@ public class GameController : MonoBehaviour {
     public void NextLevel() {
         ended = false;
         Level[] levels = GetLevels();
-        NextLevelDialog.SetActive(false);
+        InfoDialog.Close();
         if (currentLevel == levels.Length) {
             // TODO: Congratulation
         }
@@ -178,9 +177,17 @@ public class GameController : MonoBehaviour {
     IEnumerator EndGameCoroutine() {
         Vfx = Instantiate(VFXsWinner, VFXsContainer);
         // TODO: Playing sound winner
-        TextNextLevel.text = $"{Helper.GetLocalizedValue("nextLevel")}: {currentLevel}";
+
         yield return new WaitForSeconds(2f);
-        NextLevelDialog.SetActive(true);
+        InfoDialog.Open(new InfoDialog.Info {
+            title = Helper.GetLocalizedValue(Helper.GetRandomInArr(new string[]{
+                "perfect",
+                "excellent",
+            })),
+            btnTitle = Helper.GetLocalizedValue("nextLevel"),
+            OnClick = NextLevel,
+            canClose = false,
+        });
     }
 
     void RemoveLevelStatus() {

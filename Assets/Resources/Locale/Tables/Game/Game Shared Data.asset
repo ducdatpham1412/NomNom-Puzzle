@@ -55,6 +55,66 @@ MonoBehaviour:
     m_Key: playAgain
     m_Metadata:
       m_Items: []
+  - m_Id: 34775826661629952
+    m_Key: excellent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34775886271078400
+    m_Key: perfect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35061453063970816
+    m_Key: startTutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34873950650490880
+    m_Key: deliciousCheese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35079392899096576
+    m_Key: mouseLookToTheLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35093818410786816
+    m_Key: needToFeedTheMouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35610831864455168
+    m_Key: wowFatWorm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35610999645003776
+    m_Key: catLikeWormRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35612594092892160
+    m_Key: bringWormToFish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613200643776512
+    m_Key: seeEachAnimalEat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613517976428544
+    m_Key: letGo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35613820385746944
+    m_Key: goCreateFoodChain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35614819968081920
+    m_Key: lastCheckAnimalDirection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35615364049002496
+    m_Key: completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35748132825325568
+    m_Key: viewTutorial
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
