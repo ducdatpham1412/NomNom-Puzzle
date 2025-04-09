@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour {
     }
 
     void Start() {
-        Level[] levels = GetLevels();
         int? lv = Storage.GETStruct<int>(Storage.Key.currentLevel);
         if (lv == null) {
             GameTutorial.StartTutorial();
@@ -55,6 +54,8 @@ public class GameController : MonoBehaviour {
             currentLevel = (int)lv;
         }
         levelStorage = currentLevel;
+
+        Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
     }
 
@@ -92,6 +93,7 @@ public class GameController : MonoBehaviour {
             title = Helper.GetLocalizedValue("goToLevel", new string[] { level.ToString() }),
             btnTitle = "Ok",
             OnClick = () => GoToLevel(level),
+            sfx = SoundManager.SF.None
         });
     }
 
@@ -132,7 +134,6 @@ public class GameController : MonoBehaviour {
             Ps.gameObject.transform.position = pos;
             Ps.Play();
         }
-        // TODO: Adding sound
     }
 
     public void NextLevel() {
@@ -175,17 +176,30 @@ public class GameController : MonoBehaviour {
     }
 
     IEnumerator EndGameCoroutine() {
+        List<AudioSource> audios = new List<AudioSource>();
         Vfx = Instantiate(VFXsWinner, VFXsContainer);
-        // TODO: Playing sound winner
-
-        yield return new WaitForSeconds(2f);
+        float duration = 0.6f;
+        float elapsedTime = 0f;
+        float deltaTime = 0.1f;
+        while (elapsedTime <= duration) {
+            audios.Add(SoundManager.Instance.PlaySF(SoundManager.SF.Pop_01));
+            elapsedTime += deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
+        yield return new WaitForSeconds(0.5f);
+        audios.Add(SoundManager.Instance.PlaySF(SoundManager.SF.LevelWin));
         InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue(Helper.GetRandomInArr(new string[]{
                 "perfect",
                 "excellent",
             })),
             btnTitle = Helper.GetLocalizedValue("nextLevel"),
-            OnClick = NextLevel,
+            OnClick = () => {
+                foreach (AudioSource audio in audios) {
+                    SoundManager.Instance.RemoveAudioSource(audio);
+                }
+                NextLevel();
+            },
             canClose = false,
         });
     }
@@ -197,7 +211,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    void SaveLevelStatus() {
+    public void SaveLevelStatus() {
         List<Matching> matching = new();
         foreach (var row in GameInit.Squares) {
             foreach (Square sq in row) {

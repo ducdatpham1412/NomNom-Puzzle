@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 351637949544263392}
   - component: {fileID: 8242694374471446402}
   - component: {fileID: 5844348082804557024}
+  - component: {fileID: -3106285468685382092}
   m_Layer: 5
   m_Name: ItemCreature
   m_TagString: Untagged
@@ -220,6 +221,22 @@ MonoBehaviour:
     name: []
     sprite: {fileID: 0}
     rotationOffset: 0
+--- !u!114 &-3106285468685382092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9123285463749273495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc77deac7f6943438c7ad61f593f065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: {fileID: 0}
+  loadingManager: {fileID: 0}
+  audioClick: 1
+  animationClick: 34
 --- !u!1001 &7399162226561617645
 PrefabInstance:
   m_ObjectHideFlags: 0

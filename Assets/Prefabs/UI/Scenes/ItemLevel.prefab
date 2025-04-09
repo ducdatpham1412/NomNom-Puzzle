@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 0
+  audioClick: 1
   animationClick: 34
 --- !u!1001 &4404849138608918142
 PrefabInstance:

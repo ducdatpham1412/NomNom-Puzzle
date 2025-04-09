@@ -22,6 +22,7 @@ public class Setting : MonoBehaviour {
     }
 
     public void SetLocale(int localeID) {
+        Helper.Haptic();
         LocalizationManager.Instance.SetLocale(localeID);
         GameManager.Instance.profile.localeID = localeID;
         foreach (var lan in LanguageButtons) {
@@ -35,11 +36,13 @@ public class Setting : MonoBehaviour {
     }
 
     void MusicChanged(bool isActive) {
+        Helper.Haptic();
         GameManager.Instance.profile.music = isActive;
         SoundManager.Instance.PauseUnPauseMusicBackground();
     }
 
     void SfxChanged(bool isActive) {
+        Helper.Haptic();
         GameManager.Instance.profile.sfx = isActive;
     }
 

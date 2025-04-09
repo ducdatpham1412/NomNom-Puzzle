@@ -3,18 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public enum AudioClick {
-    KnockWood,
-    None,
-}
-
 public class ButtonManager : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject Title;
     [SerializeField] LoadingManager loadingManager;
 
     [Header("Stats")]
-    [SerializeField] AudioClick audioClick = AudioClick.KnockWood;
+    [SerializeField] SoundManager.SF audioClick = SoundManager.SF.Pop_01;
     [SerializeField] LeanTweenType animationClick = LeanTweenType.punch;
 
     public Action OnEndAnimationClick;
@@ -31,9 +26,7 @@ public class ButtonManager : MonoBehaviour {
     }
 
     void OnClick() {
-        if (audioClick == AudioClick.KnockWood) {
-            SoundManager.Instance.PlaySF(SoundManager.SF.KnockWood);
-        }
+        SoundManager.Instance.PlaySF(audioClick);
 
         if (animationClick != LeanTweenType.notUsed) {
             LeanTween.cancel(gameObject);

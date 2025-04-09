@@ -9,6 +9,7 @@ public class ItemController : MonoBehaviour {
     public CapsuleCollider2D capsuleCollider;
 
     bool isPanning = false;
+    bool isFirstTouch = false;
     bool shouldBackToChoices = false;
     bool animatingToSquare = false;
     bool animatingToOriginalFromDoubleClick = false;
@@ -110,6 +111,7 @@ public class ItemController : MonoBehaviour {
 
     public void PingErrorInterval(bool shouldScale) {
         if (shouldScale) {
+            Helper.Vibrate();
             StartCoroutine(ScaleAndShake());
         }
         LeanTween.cancel(gameObject);
@@ -131,6 +133,8 @@ public class ItemController : MonoBehaviour {
             Vector3 mousePos = Input.mousePosition;
             isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
             if (isPanning) {
+                bool shouldMoveUp = true;
+
                 if (!Controller.ShouldHandlePan()) {
                     isPanning = false;
                     return;
@@ -148,6 +152,8 @@ public class ItemController : MonoBehaviour {
                 }
 
                 if (square) {
+                    shouldMoveUp = false;
+
                     if (lastClickTime != 0f && Time.time - lastClickTime < Controller.doubleClickThreshold) {
                         animatingToOriginalFromDoubleClick = true;
                         square.RemoveItem();
@@ -159,9 +165,6 @@ public class ItemController : MonoBehaviour {
                         originalColor = null;
                         lastClickTime = 0f;
                         isPanning = false;
-
-                        // TODO: Playing sound
-
                         return;
                     }
 
@@ -181,9 +184,20 @@ public class ItemController : MonoBehaviour {
                     square = null;
                 }
 
+                isFirstTouch = true;
                 pivotPos = transform.position;
                 touchPos = GameHelper.ToWorldPoint(mousePos);
                 Renderer.sortingOrder = originalSortingOrder + 1;
+                SoundManager.Instance.PlaySF(SoundManager.SF.Pop_01);
+
+                LeanTween.scale(gameObject, originalScale * 1.5f, 0.1f).setEase(LeanTweenType.easeOutBounce).setOnComplete(() => {
+                    isFirstTouch = false;
+                });
+                if (shouldMoveUp) {
+                    LeanTween.moveY(gameObject, pivotPos.y + 0.7f, 0.1f).setEase(LeanTweenType.easeOutBounce).setOnComplete(() => {
+                        pivotPos = transform.position;
+                    });
+                }
             }
         }
 
@@ -234,6 +248,8 @@ public class ItemController : MonoBehaviour {
             return;
         }
 
+        if (isFirstTouch) return;
+
         Vector3 mouseWorldPos = GameHelper.ToWorldPoint(Input.mousePosition);
         transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
     }
@@ -247,7 +263,9 @@ public class ItemController : MonoBehaviour {
 
     public void AnimateToSquare(Action callback) {
         animatingToSquare = true;
-        LeanTween.move(gameObject, square.Center, 0.1f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+        float duration = 0.1f;
+        LeanTween.scale(gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
+        LeanTween.move(gameObject, square.Center, duration).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
             callback.Invoke();
             Controller.GameGraft.CheckEndGame();
             animatingToSquare = false;
@@ -277,8 +295,7 @@ public class ItemController : MonoBehaviour {
     }
 
     void BackToOriginal() {
-        LeanTween.cancel(gameObject);
-        StopAllCoroutines();
+        ResetCoroutines();
         capsuleCollider.enabled = false;
         LeanTween.move(gameObject, originalPos, 0.15f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
             capsuleCollider.enabled = true;

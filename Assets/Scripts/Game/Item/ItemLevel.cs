@@ -5,7 +5,6 @@ public class ItemLevel : MonoBehaviour {
     [SerializeField] Text text;
     Button Btn;
     int level;
-    bool isSet = false;
 
     static ColorConfigs colorConfigs = new ColorConfigs {
         gray = Helper.ColorFromHex("#656565"),
@@ -27,15 +26,13 @@ public class ItemLevel : MonoBehaviour {
         bool isPlaying = playingLevel != null;
 
         if (!canPlay) {
-            isSet = false;
-            Btn.onClick.RemoveAllListeners();
+            Btn.onClick.RemoveListener(GoToLevel);
             Btn.enabled = false;
             img.color = colorConfigs.gray;
             text.color = Color.white;
         }
         else if (isCurrentLevel) {
-            isSet = false;
-            Btn.onClick.RemoveAllListeners();
+            Btn.onClick.RemoveListener(GoToLevel);
             Btn.enabled = false;
             img.color = colorConfigs.green;
             text.color = colorConfigs.yellow;
@@ -44,10 +41,7 @@ public class ItemLevel : MonoBehaviour {
             Btn.enabled = true;
             img.color = isPlaying ? colorConfigs.orange : Color.white;
             text.color = colorConfigs.yellow;
-            if (!isSet) {
-                isSet = true;
-                Btn.onClick.AddListener(GoToLevel);
-            }
+            Btn.onClick.AddListener(GoToLevel);
         }
     }
 
