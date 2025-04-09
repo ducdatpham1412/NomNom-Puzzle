@@ -6,6 +6,7 @@ public static class Storage {
         account, // AppState.Account
         currentLevel,
         playingLevels,
+        profile,
     }
 
     public static void SET(Key key, string value) {

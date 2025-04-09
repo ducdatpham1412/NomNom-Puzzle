@@ -6,7 +6,10 @@ public class GameManager : Singleton<GameManager> {
     protected GameManager() { }
 
     public GameState gameState;
+    public Profile profile;
     public GameController Controller;
+
+    Sprite background;
 
     void Awake() {
         List<GameState.PlayingLevel> playingLevels = Storage.GETRef<List<GameState.PlayingLevel>>(Storage.Key.playingLevels);
@@ -14,6 +17,19 @@ public class GameManager : Singleton<GameManager> {
         gameState = new GameState {
             playingLevels = playingLevels,
         };
+
+        profile = Storage.GETRef<Profile>(Storage.Key.profile);
+        profile = profile ?? new Profile {
+            device_id = SystemInfo.deviceUniqueIdentifier,
+            localeID = null,
+            music = true,
+            sfx = true,
+        };
+
+        SoundManager.Instance.Initialize();
+        if (profile.music) {
+            SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
+        }
     }
 
     void Start() {
@@ -24,16 +40,24 @@ public class GameManager : Singleton<GameManager> {
 
     void OnApplicationQuit() {
         string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
+        string strProfile = JsonConvert.SerializeObject(profile);
         Storage.SET(Storage.Key.playingLevels, playingLevels);
+        Storage.SET(Storage.Key.profile, strProfile);
     }
 
     void OnApplicationPause(bool pauseStatus) {
-        // TODO: Check "in_game" status to go to match scene
         if (pauseStatus) {
             Debug.Log("App is paused (background mode)");
         }
     }
 
     public void Initialize() { }
+
+    public Sprite GetBackground() {
+        if (background != null) return background;
+        Sprite[] bgSprites = Resources.LoadAll<Sprite>("Images");
+        background = bgSprites[Random.Range(0, bgSprites.Length)];
+        return background;
+    }
 }
 

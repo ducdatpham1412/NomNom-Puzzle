@@ -6,8 +6,9 @@ using UnityEngine;
 [Serializable]
 public class Profile {
     public string device_id;
-    public string language;
-    public int current_level;
+    public int? localeID = null;
+    public bool music;
+    public bool sfx;
 }
 
 
@@ -18,21 +19,6 @@ public class Creature {
     public List<Name> name;
     public Sprite sprite;
     public float rotationOffset = 0f;
-
-    // public void OnValidate() {
-    //     if (name == null) {
-    //         name = new List<Name>();
-    //     }
-
-    //     string[] defaultKeys = { "en", "jp", "ko", "vi" };
-
-    //     // Add missing keys
-    //     foreach (string key in defaultKeys) {
-    //         if (!name.Exists(n => n.key == key)) {
-    //             name.Add(new Name { key = key, value = "" });
-    //         }
-    //     }
-    // }
 
     public enum Type {
         animal,

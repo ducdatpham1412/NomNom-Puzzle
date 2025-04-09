@@ -1,83 +1,31 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-
 public class WelcomeLogic : MonoBehaviour {
-    public List<CanvasEntry> canvases = new List<CanvasEntry>();
-    public GameObject CreateAccountError;
-
-    bool shouldAddNewCanvas = true;
-    List<string> histories = new List<string>();
+    [SerializeField] ButtonSound BtnSound;
+    [SerializeField] Canvas SelectLanguage;
 
     void Start() {
         GameManager.Instance.Initialize();
-        SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
-        InitApp();
-    }
-
-    private void InitApp() {
-        try {
-            // var storageProfile = Storage.GET<>(Storage.Key.account);
-
-            // if (storageProfile != null) {
-            //     // TODO: Come to GameScene
-            //     return;
-            // }
-
-            // ShowCanvas("SelectLanguage");
-        }
-        catch (Exception ex) {
-            Debug.Log($"Error: {ex.Message}");
-        }
-    }
-
-    public void ShowCanvas(string canvasName) {
-        if (shouldAddNewCanvas) {
-            histories.Add(canvasName);
+        if (GameManager.Instance.profile.localeID == null) {
+            BtnSound.SetPlaying(SoundManager.Instance.Music.isPlaying);
+            SelectLanguage.gameObject.SetActive(true);
         }
         else {
-            shouldAddNewCanvas = true;
-        }
-        foreach (CanvasEntry cv in canvases) {
-            if (cv.name.ToString() == canvasName) {
-                cv.gameObject.SetActive(true);
-                // currentCanvas = cv.name;
-            }
-            else {
-                cv.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    public void GoBack() {
-        if (histories.Count >= 2) {
-            shouldAddNewCanvas = false;
-            histories.RemoveAt(histories.Count - 1);
-            ShowCanvas(histories[histories.Count - 1]);
+            Navigator.Instance.NavigateTo(Navigator.Scene.GameScene);
         }
     }
 
     public void PauseUnPauseMusicBackground() {
         SoundManager.Instance.PauseUnPauseMusicBackground();
+        bool isPlaying = SoundManager.Instance.Music.isPlaying;
+        BtnSound.SetPlaying(isPlaying);
+        GameManager.Instance.profile.music = isPlaying;
     }
 
     public void SetLocale(int localeID) {
-        LocalizationManager.Instance.SetLocale(localeID);
+        LocalizationManager.Instance.SetLocale(localeID, callback: () => {
+            GameManager.Instance.profile.localeID = localeID;
+            Navigator.Instance.NavigateTo(Navigator.Scene.GameScene);
+        });
     }
-
-    public enum CanvasName {
-        SelectLanguage,
-        LoginCreateAccount,
-        Login,
-        CreateAccount,
-        EnterName,
-    }
-
-
-    public class CanvasEntry {
-        public CanvasName name;
-        public GameObject gameObject;
-    }
-
 }
