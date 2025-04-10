@@ -234,7 +234,7 @@ public class ItemController : MonoBehaviour {
                 }
                 else {
                     square = originalSquare;
-                    square.AttachItem(this, animatedTo: true, color: originalColor);
+                    square.AttachItem(this, animatedTo: true, color: originalColor, playVFX: false, playSound: false);
                     originalSquare = null; // @Tag: Set to null after release
                     originalColor = null;
                 }

@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager> {
         if (Application.isEditor) {
             Application.targetFrameRate = 30;
         }
+        GoogleAds.Instance.ShowBanner();
     }
 
     void OnApplicationQuit() {
