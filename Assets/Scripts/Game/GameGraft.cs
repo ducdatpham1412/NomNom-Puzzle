@@ -15,6 +15,8 @@ public class GameGraft : MonoBehaviour {
         Item.Direction.down.ToString(),
         Item.Direction.right.ToString(),
     };
+    List<Square> squaresChain = new List<Square>();
+    bool playMatchingSound = true;
 
     void Awake() {
         Controller = GetComponent<GameController>();
@@ -44,24 +46,16 @@ public class GameGraft : MonoBehaviour {
         SquareBorder.transform.localScale = value;
     }
 
-    public bool SetSquareColor(Square square, bool playVFX = true) {
+    public bool SetSquareColor(Square square, bool playVFX = true, bool playSound = true) {
+        playMatchingSound = playSound;
         if (square.GetItemController() == null) {
             square.SetColor(Configs.DefaultSquareColor);
             return false;
         }
 
-        List<Square> squaresChain = new List<Square> { square };
-        RecursiveSquaresChain(square, squaresChain);
-
-        if (squaresChain.Count <= 2) {
-            // TODO: Player sound Impressive = 1
-        }
-        else if (squaresChain.Count == 3) {
-            // TODO: Player sound Impressive = 2
-        }
-        else if (squaresChain.Count > 3) {
-            // TODO: Player sound Impressive = 3
-        }
+        squaresChain.Clear();
+        squaresChain.Add(square);
+        RecursiveSquaresChain(square);
 
         /*
         Get color which is not the same to item around squaresChain
@@ -101,6 +95,7 @@ public class GameGraft : MonoBehaviour {
             }
             hasMatched = true;
         }
+
         return hasMatched;
     }
 
@@ -120,13 +115,29 @@ public class GameGraft : MonoBehaviour {
         foreach (var row in Controller.GameInit.Squares) {
             foreach (Square s in row) {
                 ItemController c = s.GetItemController();
-                if (c == null || !CheckValidSquare(square: s, controller: c, itemDirNullEnable: false)) return;
+                if (c == null || !CheckValidSquare(square: s, controller: c, itemDirNullEnable: false)) {
+                    if (playMatchingSound) {
+                        if (squaresChain.Count == 1) {
+                            SoundManager.Instance.PlaySF(SoundManager.SF.Marimba_01);
+                        }
+                        else if (squaresChain.Count == 2) {
+                            SoundManager.Instance.PlaySF(SoundManager.SF.Marimba_02);
+                        }
+                        else if (squaresChain.Count == 3) {
+                            SoundManager.Instance.PlaySF(SoundManager.SF.Marimba_03);
+                        }
+                        else if (squaresChain.Count > 3) {
+                            SoundManager.Instance.PlaySF(SoundManager.SF.Marimba_04);
+                        }
+                    }
+                    return;
+                }
             }
         }
         Controller.EndGame();
     }
 
-    void RecursiveSquaresChain(Square square, List<Square> squaresChain) {
+    void RecursiveSquaresChain(Square square) {
         ItemController itemController = square.GetItemController();
         if (!itemController) return;
 
@@ -155,7 +166,7 @@ public class GameGraft : MonoBehaviour {
 
         if (Controller.GameInit.Relationship[itemController.Item.creature_id].eaten.Count == 0) {
             foreach (Square s in nextSquares) {
-                RecursiveSquaresChain(s, squaresChain);
+                RecursiveSquaresChain(s);
             }
             return;
         }
@@ -183,12 +194,13 @@ public class GameGraft : MonoBehaviour {
         }
 
         foreach (Square s in squaresEat) {
+            if (squaresChain.Contains(s)) continue;
             squaresChain.Add(s);
             nextSquares.Add(s);
         }
 
         foreach (Square s in nextSquares) {
-            RecursiveSquaresChain(s, squaresChain);
+            RecursiveSquaresChain(s);
         }
     }
 

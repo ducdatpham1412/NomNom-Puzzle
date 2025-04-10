@@ -122,6 +122,8 @@ public class GameInit : MonoBehaviour {
             }
         }
 
+        List<AudioSource> audios = new List<AudioSource>();
+
         if (method == "move") {
             for (int row = 0; row < size.y; row++) {
                 for (int col = 0; col < size.x; col++) {
@@ -136,6 +138,8 @@ public class GameInit : MonoBehaviour {
                     sq.transform.position += new Vector3(0f, 1.3f, 0f);
                     LeanTween.move(sq.gameObject, originalPos, duration).setEase(LeanTweenType.easeOutQuad);
                     LeanTween.scale(sq.gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
+                    AudioSource audio = SoundManager.Instance.PlaySF(SoundManager.SF.Bubble);
+                    if (audio != null) audios.Add(audio);
                     yield return new WaitForSeconds(deltaTime);
                 }
             }
@@ -155,6 +159,8 @@ public class GameInit : MonoBehaviour {
                     Square sq = Squares[row][col];
                     LeanTween.rotate(sq.gameObject, Vector3.zero, duration).setEase(LeanTweenType.easeOutQuad);
                     LeanTween.scale(sq.gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
+                    AudioSource audio = SoundManager.Instance.PlaySF(SoundManager.SF.Bubble);
+                    if (audio != null) audios.Add(audio);
                     yield return new WaitForSeconds(deltaTime);
                 }
             }
@@ -166,6 +172,10 @@ public class GameInit : MonoBehaviour {
             for (int col = 0; col < size.x; col++) {
                 Squares[row][col].GetComponent<Collider2D>().enabled = true;
             }
+        }
+
+        foreach (AudioSource audio in audios) {
+            SoundManager.Instance.RemoveAudioSource(audio);
         }
     }
 
@@ -219,7 +229,7 @@ public class GameInit : MonoBehaviour {
         foreach (Item initItem in itemsRecommended) {
             ItemController ct = InitItem(initItem);
             Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
-            sq.AttachItem(ct, isRoot: true);
+            sq.AttachItem(ct, isRoot: true, playSound: false);
             ct.GetComponent<CapsuleCollider2D>().enabled = false;
             sq.GetComponent<BoxCollider2D>().enabled = false;
         }
@@ -248,7 +258,7 @@ public class GameInit : MonoBehaviour {
             ct.SetOriginalPos(ct.transform.position);
 
             Square sq = Squares[(int)matchStore.matching.squarePos.y][(int)matchStore.matching.squarePos.x];
-            sq.AttachItem(ct, playVFX: false);
+            sq.AttachItem(ct, playVFX: false, playSound: false);
 
             i++;
         }
@@ -274,7 +284,7 @@ public class GameInit : MonoBehaviour {
                 controller.SetItem(item);
                 Square sq = Squares[(int)item.pos.y][(int)item.pos.x];
                 NewItem.transform.localScale = boardSize.scale;
-                sq.AttachItem(controller, playVFX: false);
+                sq.AttachItem(controller, playVFX: false, playSound: false);
             }
         }
     }

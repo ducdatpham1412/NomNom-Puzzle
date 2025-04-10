@@ -21,7 +21,8 @@ public class Square : MonoBehaviour {
         bool checkEndGame = false,
         bool isRoot = false,
         bool checkValidAroundSquares = false,
-        bool playVFX = true
+        bool playVFX = true,
+        bool playSound = true
     ) {
         void CheckAndSet() {
             if (!material) material = GetComponent<SpriteRenderer>().material;
@@ -35,7 +36,7 @@ public class Square : MonoBehaviour {
                 SetColor((Color)color);
             }
             else {
-                hasMatched = Controller.GameGraft.SetSquareColor(this, playVFX);
+                hasMatched = Controller.GameGraft.SetSquareColor(this, playVFX, playSound);
             }
 
             if (checkValidAroundSquares) {

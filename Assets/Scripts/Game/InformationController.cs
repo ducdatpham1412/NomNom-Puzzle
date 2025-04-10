@@ -23,6 +23,7 @@ public class InformationController : MonoBehaviour {
     ItemCreature focusingCreature;
 
     void Start() {
+        SoundManager.Instance.PlaySF(SoundManager.SF.Whoosh_Transition);
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/relationship");
         string json = jsonFile.text;
         Relationship = JsonConvert.DeserializeObject<Dictionary<string, Relationship>>(json);

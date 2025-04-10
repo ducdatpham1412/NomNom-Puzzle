@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager> {
 
         SoundManager.Instance.Initialize();
         if (profile.music) {
-            SoundManager.Instance.PlayMusic(SoundManager.MusicSource.background);
+            SoundManager.Instance.PlayMusic(SoundManager.MusicSource.Kid);
         }
     }
 
@@ -39,6 +39,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     void OnApplicationQuit() {
+        Controller.SaveLevelStatus();
         string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
         string strProfile = JsonConvert.SerializeObject(profile);
         Storage.SET(Storage.Key.playingLevels, playingLevels);

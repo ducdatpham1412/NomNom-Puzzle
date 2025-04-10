@@ -107,6 +107,14 @@ public static class Helper {
     }
 
 
+    public static void Haptic() {
+    }
+
+    public static void Vibrate() {
+        Handheld.Vibrate();
+    }
+
+
     public enum Layer {
         Environment,
         PlayerBlue,

@@ -1681,7 +1681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 0
+  audioClick: 4
   animationClick: 34
 --- !u!114 &670211409
 MonoBehaviour:
@@ -1989,7 +1989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 1
+  audioClick: 0
   animationClick: 34
 --- !u!114 &778740089
 MonoBehaviour:
@@ -2214,7 +2214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 0
+  audioClick: 2
   animationClick: 34
 --- !u!114 &818270824
 MonoBehaviour:
@@ -2364,7 +2364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 0
+  audioClick: 2
   animationClick: 34
 --- !u!114 &848455281
 MonoBehaviour:
@@ -2788,7 +2788,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 1461850515}
   loadingManager: {fileID: 618523500}
-  audioClick: 0
+  audioClick: 1
   animationClick: 34
 --- !u!114 &971053181
 MonoBehaviour:
@@ -2965,7 +2965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 1604825701}
   loadingManager: {fileID: 497344698}
-  audioClick: 0
+  audioClick: 1
   animationClick: 34
 --- !u!114 &1048581361
 MonoBehaviour:
@@ -3536,7 +3536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1452873850704775897, guid: 4d221b3f416764d37a2a024ff0c2f0b5, type: 3}
       propertyPath: audioClick
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3446676114259374912, guid: 4d221b3f416764d37a2a024ff0c2f0b5, type: 3}
       propertyPath: m_Text
@@ -5384,7 +5384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 632880440}
   loadingManager: {fileID: 1853211967}
-  audioClick: 0
+  audioClick: 1
   animationClick: 34
 --- !u!114 &1657917081
 MonoBehaviour:
@@ -6035,7 +6035,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 333333255}
   loadingManager: {fileID: 1405235305}
-  audioClick: 0
+  audioClick: 1
   animationClick: 34
 --- !u!114 &1911369085
 MonoBehaviour:
@@ -6952,6 +6952,10 @@ PrefabInstance:
       propertyPath: Canvas
       value: 
       objectReference: {fileID: 36413883}
+    - target: {fileID: 621439723978075167, guid: 7ac6cb31e4e274ba391f4713cd77be31, type: 3}
+      propertyPath: audioClick
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 796450476914204376, guid: 7ac6cb31e4e274ba391f4713cd77be31, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -7263,6 +7267,10 @@ PrefabInstance:
     - target: {fileID: 5222325895986295725, guid: 39810a4ab24434f759d0fdac510d3238, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -144.442
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383027067075780357, guid: 39810a4ab24434f759d0fdac510d3238, type: 3}
+      propertyPath: audioClick
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6683144372095286160, guid: 39810a4ab24434f759d0fdac510d3238, type: 3}
       propertyPath: m_Name

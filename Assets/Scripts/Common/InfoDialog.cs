@@ -9,9 +9,11 @@ public class InfoDialog : MonoBehaviour {
     public Text Title;
     [SerializeField] Text BtnTitle;
     [SerializeField] GameObject CloseButton;
+    [SerializeField] SoundManager.SF soundEffect = SoundManager.SF.Pop_01;
     Action OnClick;
 
     public void ClickButton() {
+        SoundManager.Instance.PlaySF(soundEffect);
         OnClick?.Invoke();
     }
 
@@ -20,6 +22,7 @@ public class InfoDialog : MonoBehaviour {
         BtnTitle.text = info.btnTitle;
         OnClick = info.OnClick;
         CloseButton.SetActive(info.canClose != false);
+        soundEffect = info.sfx;
 
         gameObject.SetActive(true);
         StartCoroutine(RebuildAfterOneFrame());
@@ -41,5 +44,6 @@ public class InfoDialog : MonoBehaviour {
         public string btnTitle;
         public bool canClose = true;
         public Action OnClick;
+        public SoundManager.SF sfx = SoundManager.SF.Pop_01;
     }
 }
