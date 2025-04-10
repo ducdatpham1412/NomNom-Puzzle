@@ -22,8 +22,11 @@ public class InformationController : MonoBehaviour {
     string localeKey;
     ItemCreature focusingCreature;
 
-    void Start() {
+    void Awake() {
         SoundManager.Instance.PlaySF(SoundManager.SF.Whoosh_Transition);
+    }
+
+    void Start() {
         TextAsset jsonFile = Resources.Load<TextAsset>("Data/relationship");
         string json = jsonFile.text;
         Relationship = JsonConvert.DeserializeObject<Dictionary<string, Relationship>>(json);

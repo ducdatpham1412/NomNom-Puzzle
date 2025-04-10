@@ -21,7 +21,6 @@ public class SoundManager : Singleton<SoundManager> {
         MusicSources[MusicSource.Kid] = LoadMusic("mc_kid");
 
         SFSources[SF.Pop_01] = LoadSF("sf_pop_01");
-        SFSources[SF.Pop_02] = LoadSF("sf_pop_02");
         SFSources[SF.Marimba_01] = LoadSF("sf_marimba_01");
         SFSources[SF.Marimba_02] = LoadSF("sf_marimba_02");
         SFSources[SF.Marimba_03] = LoadSF("sf_marimba_03");
