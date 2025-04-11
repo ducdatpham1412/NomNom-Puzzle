@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,12 +10,12 @@ public class ItemController : MonoBehaviour {
     bool isPanning = false;
     bool isFirstTouch = false;
     bool shouldBackToChoices = false;
-    bool animatingToSquare = false;
+    [HideInInspector] public bool animatingToSquare = false;
     bool animatingToOriginalFromDoubleClick = false;
     float lastClickTime = 0f;
     int originalSortingOrder;
     Vector3 originalPos;
-    Vector3 originalScale;
+    [HideInInspector] public Vector3 originalScale { get; private set; }
     Vector3 pivotPos;
     Vector3 touchPos;
     Square originalSquare;
@@ -35,10 +34,18 @@ public class ItemController : MonoBehaviour {
         HandlePan();
     }
 
+    void OnDestroy() {
+        // ResetAllActions to avoid LeanTween delay to destroyed game objects (function ScalePingPong)
+        ResetAllActions();
+    }
+
     void OnTriggerEnter2D(Collider2D col) {
+        if (animatingToOriginalFromDoubleClick || animatingToSquare) return;
+
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
             Square colSquare = col.GetComponent<Square>();
-            if (colSquare != square && !animatingToOriginalFromDoubleClick) {
+            if (col != colSquare.PanCollider) return;
+            if (colSquare != square) {
                 bool isValid = Controller.GameGraft.OpenSquareBorder(colSquare, this);
                 if (isValid) square = colSquare;
             }
@@ -50,9 +57,11 @@ public class ItemController : MonoBehaviour {
     }
 
     void OnTriggerExit2D(Collider2D col) {
+        if (animatingToOriginalFromDoubleClick || animatingToSquare) return;
+
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
             Square colSquare = col.GetComponent<Square>();
-            if (colSquare == square && !animatingToOriginalFromDoubleClick) {
+            if (colSquare == square) {
                 Controller.GameGraft.HideSquareBorder();
                 square = null;
             }
@@ -117,6 +126,9 @@ public class ItemController : MonoBehaviour {
         LeanTween.cancel(gameObject);
         ResetLtDescr();
         void ScalePingPong() {
+            // We have ResetAllActions above to avoid ScalePingPong delay to destroyed game objects, but check here one move for sure
+            if (gameObject == null) return;
+
             LeanTween.scale(gameObject, originalScale * 1.7f, 1f).setEase(LeanTweenType.punch).setOnComplete(() => {
                 lTDescr = LeanTween.delayedCall(3.5f, ScalePingPong);
             });
@@ -151,6 +163,12 @@ public class ItemController : MonoBehaviour {
                     }
                 }
 
+                if (Controller.numberSuggestions > 0) {
+                    isPanning = false;
+                    Controller.GameGraft.SuggestItemToSquare(this);
+                    return;
+                }
+
                 if (square) {
                     shouldMoveUp = false;
 
@@ -177,7 +195,7 @@ public class ItemController : MonoBehaviour {
                     }
 
                     // If panning Item in Square, temporary set ItemController to null to simulate this square is empty
-                    ResetCoroutines();
+                    ResetAllActions();
                     originalColor = square.GetColor();
                     square.RemoveItem();
                     originalSquare = square;
@@ -218,14 +236,10 @@ public class ItemController : MonoBehaviour {
                 BackToChoice();
             }
             else if (square && square != originalSquare) {
-                ItemController currentItem = square.GetItemController();
-                if (currentItem && currentItem != this) {
-                    ReplaceItem(replacedItem: currentItem);
-                }
-                else {
-                    square.AttachItem(this, animatedTo: true, checkEndGame: true, checkValidAroundSquares: true);
-                }
-                CheckValidAtOriginalSquare();
+                Controller.GameGraft.ItemAttachSquare(
+                    item: this,
+                    square: square
+                );
             }
             else if (originalSquare) {
                 if (originalSquare.isError) {
@@ -234,7 +248,14 @@ public class ItemController : MonoBehaviour {
                 }
                 else {
                     square = originalSquare;
-                    square.AttachItem(this, animatedTo: true, color: originalColor, playVFX: false, playSound: false);
+                    Controller.GameGraft.SquareAttachItem(
+                        square: square,
+                        item: this,
+                        attachParams: new GameGraft.SquareAttachItemParams {
+                            animatedTo = true,
+                            color = originalColor,
+                        }
+                    );
                     originalSquare = null; // @Tag: Set to null after release
                     originalColor = null;
                 }
@@ -254,22 +275,27 @@ public class ItemController : MonoBehaviour {
         transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
     }
 
-    public void ResetCoroutines() {
+    public void ResetAllActions() {
         LeanTween.cancel(gameObject);
         ResetLtDescr();
         StopAllCoroutines();
         transform.localScale = originalScale;
+        if (animatingToSquare) animatingToSquare = false;
     }
 
-    public void AnimateToSquare(Action callback) {
-        animatingToSquare = true;
-        float duration = 0.1f;
-        LeanTween.scale(gameObject, originalScale, duration).setEase(LeanTweenType.easeOutQuad);
-        LeanTween.move(gameObject, square.Center, duration).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
-            callback.Invoke();
-            Controller.GameGraft.CheckEndGame();
-            animatingToSquare = false;
-            transform.position = square.Center;
+    public void CheckValidAtOriginalSquare() {
+        if (originalSquare) {
+            Controller.GameGraft.CheckValidAroundSquare(originalSquare, hasMatched: false);
+            originalSquare = null;
+        }
+    }
+
+    public void BackToOriginal() {
+        ResetAllActions();
+        capsuleCollider.enabled = false;
+        LeanTween.move(gameObject, originalPos, 0.15f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+            capsuleCollider.enabled = true;
+            animatingToOriginalFromDoubleClick = false;
         });
     }
 
@@ -278,29 +304,6 @@ public class ItemController : MonoBehaviour {
             LeanTween.cancel(lTDescr.id);
             lTDescr = null;
         }
-    }
-
-    void CheckValidAtOriginalSquare() {
-        if (originalSquare) {
-            Controller.GameGraft.CheckValidAroundSquare(originalSquare, hasMatched: false);
-            originalSquare = null;
-        }
-    }
-
-    void ReplaceItem(ItemController replacedItem) {
-        Square sq = replacedItem.square;
-        replacedItem.square = null;
-        replacedItem.BackToOriginal();
-        sq.AttachItem(this, animatedTo: true, checkEndGame: false, checkValidAroundSquares: true);
-    }
-
-    void BackToOriginal() {
-        ResetCoroutines();
-        capsuleCollider.enabled = false;
-        LeanTween.move(gameObject, originalPos, 0.15f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
-            capsuleCollider.enabled = true;
-            animatingToOriginalFromDoubleClick = false;
-        });
     }
 
     Quaternion GetRotation(string dir, float offset, SpriteRenderer sr) {

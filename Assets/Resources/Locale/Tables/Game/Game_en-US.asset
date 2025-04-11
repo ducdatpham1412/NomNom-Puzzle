@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en-US
   m_SharedData: {fileID: 11400000, guid: 09972f08cc61d4bada0aa6d10b6794a5, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 2334271123874906213
   m_TableData:
   - m_Id: 28889885619249152
     m_Localized: Music
@@ -126,6 +127,40 @@ MonoBehaviour:
     m_Localized: View tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 36865451161018368
+    m_Localized: Need a hint?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36879373725327360
+    m_Localized: Suggest {0}
+    m_Metadata:
+      m_Items:
+      - rid: 2334271123874906213
+  - m_Id: 36879434085556224
+    m_Localized: "You have {0} suggestions\nTap a creature  or a square to get a
+      hint! \U0001F4A1\U0001F63D"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36922655696216064
+    m_Localized: 'Oops! Something went wrong
+
+      Please check your internet connection!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36923815073144832
+    m_Localized: Retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36931199485075456
+    m_Localized: Watching ad to see suggestions
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2334271123874906213
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 36879373725327360

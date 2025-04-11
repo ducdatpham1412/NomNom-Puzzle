@@ -39,6 +39,7 @@ public class GameInit : MonoBehaviour {
         if (!Controller) Controller = GetComponent<GameController>();
         level = _level;
         TextLevel.text = $"Lv. {currentLevel}";
+        Controller.numberSuggestions = 0;
 
         InitSquaresBoard();
         StartCoroutine(AnimateSquares());
@@ -192,8 +193,6 @@ public class GameInit : MonoBehaviour {
         List<Item> itemsRecommended = new List<Item>();
         List<MatchStore> itemsStorage = new List<MatchStore>();
 
-
-
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
                 int index = Array.FindIndex(level.init_pos, p => p.Equals(item.pos));
@@ -225,13 +224,18 @@ public class GameInit : MonoBehaviour {
             return controller;
         }
 
-        // Instantiate InitItem
         foreach (Item initItem in itemsRecommended) {
             ItemController ct = InitItem(initItem);
             Square sq = Squares[(int)initItem.pos.y][(int)initItem.pos.x];
-            sq.AttachItem(ct, isRoot: true, playSound: false);
-            ct.GetComponent<CapsuleCollider2D>().enabled = false;
-            sq.GetComponent<BoxCollider2D>().enabled = false;
+            Controller.GameGraft.SquareAttachItem(
+                square: sq,
+                item: ct,
+                attachParams: new GameGraft.SquareAttachItemParams {
+                    isRoot = true,
+                    playSound = false,
+                    setSquareColor = false
+                }
+            );
         }
 
         Helper.Shuffle(itemsInChoicesBoard);
@@ -258,9 +262,25 @@ public class GameInit : MonoBehaviour {
             ct.SetOriginalPos(ct.transform.position);
 
             Square sq = Squares[(int)matchStore.matching.squarePos.y][(int)matchStore.matching.squarePos.x];
-            sq.AttachItem(ct, playVFX: false, playSound: false);
-
+            Controller.GameGraft.SquareAttachItem(
+                square: sq,
+                item: ct,
+                attachParams: new GameGraft.SquareAttachItemParams {
+                    playVFX = false,
+                    playSound = false,
+                }
+            );
             i++;
+        }
+
+        for (int row = 0; row < level.size.y; row++) {
+            for (int col = 0; col < level.size.x; col++) {
+                Square square = Squares[row][col];
+                ItemController item = square.ItemController;
+                if (item != null && !Controller.GameGraft.CheckValidSquare(square, item)) {
+                    Controller.GameGraft.PingErrorSquare(square, shouldScale: false);
+                }
+            }
         }
 
         if (Controller.GameTutorial.GameInitializedAction != null) {
@@ -284,7 +304,14 @@ public class GameInit : MonoBehaviour {
                 controller.SetItem(item);
                 Square sq = Squares[(int)item.pos.y][(int)item.pos.x];
                 NewItem.transform.localScale = boardSize.scale;
-                sq.AttachItem(controller, playVFX: false, playSound: false);
+                Controller.GameGraft.SquareAttachItem(
+                    square: sq,
+                    item: controller,
+                    attachParams: new GameGraft.SquareAttachItemParams {
+                        playVFX = false,
+                        playSound = false
+                    }
+                );
             }
         }
     }

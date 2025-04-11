@@ -86,6 +86,7 @@
     <Compile Include="Assets/Scripts/Common/ToolTip.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralSequencer.cs" />
     <Compile Include="Assets/Scripts/Game/Item/ItemCreature.cs" />
+    <Compile Include="Assets/Scripts/Game/Suggestions.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathBezier2d.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSplinePerformance.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralEasingTypes.cs" />

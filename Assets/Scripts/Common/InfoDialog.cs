@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InfoDialog : MonoBehaviour {
     [SerializeField] RectTransform Content;
     [SerializeField] Image Image;
-    public Text Title;
+    [SerializeField] Text Title;
     [SerializeField] Text BtnTitle;
     [SerializeField] GameObject CloseButton;
     [SerializeField] SoundManager.SF soundEffect = SoundManager.SF.Pop_01;
@@ -19,6 +19,7 @@ public class InfoDialog : MonoBehaviour {
 
     public void Open(Info info) {
         Title.text = info.title;
+        Title.fontSize = info.fontSize;
         BtnTitle.text = info.btnTitle;
         OnClick = info.OnClick;
         CloseButton.SetActive(info.canClose != false);
@@ -41,6 +42,7 @@ public class InfoDialog : MonoBehaviour {
     [SerializeField]
     public class Info {
         public string title;
+        public int fontSize = 24;
         public string btnTitle;
         public bool canClose = true;
         public Action OnClick;

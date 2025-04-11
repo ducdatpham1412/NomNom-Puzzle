@@ -283,9 +283,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc77deac7f6943438c7ad61f593f065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Title: {fileID: 4326234229601603741}
-  audioClick: 0
+  Title: {fileID: 3446676114259374912}
   loadingManager: {fileID: 528005866367838817}
+  audioClick: 0
+  animationClick: 34
 --- !u!1001 &8154063575704678592
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -30,6 +30,9 @@ public class GameManager : Singleton<GameManager> {
         if (profile.music) {
             SoundManager.Instance.PlayMusic(SoundManager.MusicSource.Kid);
         }
+        if (profile.localeID != null) {
+            LocalizationManager.Instance.SetLocale((int)profile.localeID);
+        }
     }
 
     void Start() {
@@ -40,11 +43,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     void OnApplicationQuit() {
-        Controller.SaveLevelStatus();
-        string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
-        string strProfile = JsonConvert.SerializeObject(profile);
-        Storage.SET(Storage.Key.playingLevels, playingLevels);
-        Storage.SET(Storage.Key.profile, strProfile);
+        OnQuit();
     }
 
     void OnApplicationPause(bool pauseStatus) {
@@ -54,6 +53,14 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void Initialize() { }
+
+    public void OnQuit() {
+        Controller.SaveLevelStatus();
+        string playingLevels = JsonConvert.SerializeObject(gameState.playingLevels);
+        string strProfile = JsonConvert.SerializeObject(profile);
+        Storage.SET(Storage.Key.playingLevels, playingLevels);
+        Storage.SET(Storage.Key.profile, strProfile);
+    }
 
     public Sprite GetBackground() {
         if (background != null) return background;

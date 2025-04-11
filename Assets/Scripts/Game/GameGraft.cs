@@ -48,7 +48,7 @@ public class GameGraft : MonoBehaviour {
 
     public bool SetSquareColor(Square square, bool playVFX = true, bool playSound = true) {
         playMatchingSound = playSound;
-        if (square.GetItemController() == null) {
+        if (square.ItemController == null) {
             square.SetColor(Configs.DefaultSquareColor);
             return false;
         }
@@ -70,7 +70,7 @@ public class GameGraft : MonoBehaviour {
         foreach (Square s in squaresChain) {
             List<Square> aroundSquares = GetAroundSquares(s);
             foreach (Square asq in aroundSquares) {
-                if (asq != null && asq.GetItemController() != null && !squaresChain.Contains(asq)) {
+                if (asq != null && asq.ItemController != null && !squaresChain.Contains(asq)) {
                     AroundColorCounting ac = availableColors.Find(_ac => _ac.color.Equals(asq.GetColor()));
                     if (ac != null) {
                         ac.count++;
@@ -90,7 +90,7 @@ public class GameGraft : MonoBehaviour {
         if (squaresChain.Count >= 2) {
             if (playVFX) {
                 foreach (Square s in squaresChain) {
-                    s.PlayMatchedVFX();
+                    PlayMatchedVFX(s);
                 }
             }
             hasMatched = true;
@@ -101,9 +101,9 @@ public class GameGraft : MonoBehaviour {
 
     public void CheckValidAroundSquare(Square square, bool hasMatched) {
         foreach (Square sq in GetAroundSquares(square)) {
-            if (sq == null || sq.GetItemController() == null) continue;
-            if (!CheckValidSquare(sq, sq.GetItemController())) {
-                sq.PingError(shouldScale: !hasMatched);
+            if (sq == null || sq.ItemController == null) continue;
+            if (!CheckValidSquare(sq, sq.ItemController)) {
+                PingErrorSquare(sq, !hasMatched);
             }
             else if (sq.isError) {
                 sq.ResetError();
@@ -111,10 +111,16 @@ public class GameGraft : MonoBehaviour {
         }
     }
 
+    public void PingErrorSquare(Square square, bool shouldScale) {
+        square.ItemController.PingErrorInterval(shouldScale);
+        square.SetColor(Configs.ErrorSquareColor);
+        square.isError = true;
+    }
+
     public void CheckEndGame() {
         foreach (var row in Controller.GameInit.Squares) {
             foreach (Square s in row) {
-                ItemController c = s.GetItemController();
+                ItemController c = s.ItemController;
                 if (c == null || !CheckValidSquare(square: s, controller: c, itemDirNullEnable: false)) {
                     if (playMatchingSound) {
                         if (squaresChain.Count == 1) {
@@ -137,8 +143,104 @@ public class GameGraft : MonoBehaviour {
         Controller.EndGame();
     }
 
+    public void SuggestItemToSquare(ItemController itemController) {
+        Vector2 pos = itemController.Item.pos;
+        Square trueSquare = Controller.GameInit.Squares[(int)pos.y][(int)pos.x];
+        Square currentSquare = itemController.square;
+        if (currentSquare != trueSquare) {
+            itemController.animatingToSquare = true;
+            SoundManager.Instance.PlaySF(SoundManager.SF.Pop_01);
+            Controller.numberSuggestions -= 1;
+
+            if (currentSquare) {
+                currentSquare.RemoveItem();
+                if (currentSquare.isError) currentSquare.ResetError();
+            }
+
+            Vector3 targetScale = itemController.transform.localScale * 3.5f;
+            LeanTween.move(itemController.gameObject, Vector3.zero, 0.2f).setEase(LeanTweenType.easeOutQuad);
+            LeanTween.scale(itemController.gameObject, targetScale, 0.2f).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+                ItemAttachSquare(item: itemController, square: trueSquare, isRoot: true, duration: 0.6f);
+            });
+        }
+        else {
+            LeanTween.scale(itemController.gameObject, itemController.transform.localScale * 2f, 1f).setEase(LeanTweenType.punch);
+        }
+    }
+
+    public void ItemAttachSquare(ItemController item, Square square, bool isRoot = false, float duration = 0.1f) {
+        ItemController currentItem = square.ItemController;
+        if (currentItem && currentItem != item) {
+            currentItem.square = null;
+            currentItem.BackToOriginal();
+        }
+        SquareAttachItem(
+                square: square,
+                item: item,
+                attachParams: new SquareAttachItemParams {
+                    animatedTo = true,
+                    checkEndGame = true,
+                    checkValidAroundSquares = true,
+                    duration = duration,
+                    isRoot = isRoot
+                }
+            );
+        item.CheckValidAtOriginalSquare();
+    }
+
+    public void SquareAttachItem(
+      ItemController item,
+      Square square,
+      SquareAttachItemParams attachParams
+  ) {
+        void CheckAndSet() {
+            if (!square.material) square.material = square.GetComponent<SpriteRenderer>().material;
+
+            bool hasMatched = false;
+
+            if (attachParams.isRoot) {
+                square.material.SetColor("_Color01", Configs.RootSquareColor);
+                foreach (var col in square.GetComponents<Collider2D>()) {
+                    col.enabled = false;
+                }
+                item.GetComponent<Collider2D>().enabled = false;
+            }
+
+            if (attachParams.color != null) {
+                square.SetColor((Color)attachParams.color);
+            }
+            else if (attachParams.setSquareColor) {
+                hasMatched = SetSquareColor(square, attachParams.playVFX, attachParams.playSound);
+            }
+
+            if (attachParams.checkValidAroundSquares) {
+                CheckValidAroundSquare(square, hasMatched);
+            }
+        }
+
+        square.ItemController = item;
+        square.ItemController.square = square;
+        if (attachParams.animatedTo) {
+            item.animatingToSquare = true;
+            LeanTween.scale(item.gameObject, item.originalScale, attachParams.duration).setEase(LeanTweenType.easeOutQuad);
+            LeanTween.move(item.gameObject, square.Center, attachParams.duration).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
+                CheckAndSet();
+                item.animatingToSquare = false;
+                item.transform.position = square.Center;
+                Controller.GameGraft.CheckEndGame();
+            });
+        }
+        else {
+            square.ItemController.gameObject.transform.position = square.Center;
+            if (attachParams.checkEndGame) {
+                CheckEndGame();
+            }
+            CheckAndSet();
+        }
+    }
+
     void RecursiveSquaresChain(Square square) {
-        ItemController itemController = square.GetItemController();
+        ItemController itemController = square.ItemController;
         if (!itemController) return;
 
         Creature creature = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == itemController.Item.creature_id);
@@ -152,11 +254,11 @@ public class GameGraft : MonoBehaviour {
 
             void CheckSqDir() {
                 if (sqDir == null) return;
-                if (sqDir.GetItemController() == null) return;
+                if (sqDir.ItemController == null) return;
                 if (squaresChain.Contains(sqDir)) return;
                 Item.Direction? temp = Helper.StringToEnum<Item.Direction>(dir);
                 if (temp == null) return;
-                if (!CanBeEaten(square, sqDir.GetItemController(), (Item.Direction)temp)) return;
+                if (!CanBeEaten(square, sqDir.ItemController, (Item.Direction)temp)) return;
                 squaresChain.Add(sqDir);
                 nextSquares.Add(sqDir);
             }
@@ -204,7 +306,7 @@ public class GameGraft : MonoBehaviour {
         }
     }
 
-    bool CheckValidSquare(
+    public bool CheckValidSquare(
         Square square,
         ItemController controller,
         bool? eat = null,
@@ -227,8 +329,8 @@ public class GameGraft : MonoBehaviour {
             string dir = GetAvailableDir(controller.Item.direction, creature);
             s = GetSquare(square, dir);
             if (s == null) return false;
-            if (s.GetItemController() == null) return itemDirNullEnable;
-            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.GetItemController().Item.creature_id)) {
+            if (s.ItemController == null) return itemDirNullEnable;
+            if (Controller.GameInit.Relationship[controller.Item.creature_id].eat.Contains(s.ItemController.Item.creature_id)) {
                 return true;
             }
             return false;
@@ -239,7 +341,7 @@ public class GameGraft : MonoBehaviour {
 
         bool isSquareValid(Square sq, bool beEaten, string dir) {
             if (sq == null) return true;
-            ItemController ct = sq.GetItemController();
+            ItemController ct = sq.ItemController;
             if (ct == null) return itemDirNullEnable;
             Creature cr = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == ct.Item.creature_id);
             if (cr == null) return false;
@@ -252,7 +354,7 @@ public class GameGraft : MonoBehaviour {
         bool canInteract(Square sq, bool beEaten) {
             if (beEaten) return true;
             if (sq == null) return false;
-            if (sq.GetItemController() == null) return itemDirNullEnable;
+            if (sq.ItemController == null) return itemDirNullEnable;
             return false;
         }
 
@@ -325,7 +427,7 @@ public class GameGraft : MonoBehaviour {
 
     bool CanBeEaten(Square sq, ItemController controller, Item.Direction dir) {
         if (sq == null) return false;
-        ItemController ct = sq.GetItemController();
+        ItemController ct = sq.ItemController;
         if (ct == null) return false;
         Creature cr = Controller.GameInit.CreaturesObject.Creatures.Find(c => c.id == ct.Item.creature_id);
         if (cr == null) return false;
@@ -387,10 +489,28 @@ public class GameGraft : MonoBehaviour {
         callback?.Invoke();
     }
 
+    void PlayMatchedVFX(Square square) {
+        StartCoroutine(square.ItemController.ScaleAndShake(shakeSpeed: 45f, scale: 1.5f));
+        Controller.PlayVFXLeaf(square.Center);
+    }
+
 
     [SerializeField]
     class AroundColorCounting {
         public Color color;
         public int count;
+    }
+
+    [SerializeField]
+    public class SquareAttachItemParams {
+        public bool animatedTo = false;
+        public bool checkEndGame = false;
+        public bool isRoot = false;
+        public Color? color = null;
+        public bool setSquareColor = true;
+        public bool checkValidAroundSquares = false;
+        public bool playVFX = true;
+        public bool playSound = true;
+        public float duration = 0.1f;
     }
 }

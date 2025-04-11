@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject SettingDialog;
     [SerializeField] GameObject LevelsDialog;
-    [SerializeField] GameObject SuggestionDialog;
+    [SerializeField] Suggestions SuggestionDialog;
     public InfoDialog InfoDialog;
     public ToolTip ToolTip;
     [SerializeField] Transform VFXsContainer;
@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour {
     public int currentLevel;
     public int levelStorage;
     public int totalLevels;
+    public int numberSuggestions = 0;
     public readonly float doubleClickThreshold = 0.3f;
     public bool ended = false;
 
@@ -91,33 +92,51 @@ public class GameController : MonoBehaviour {
 
     public void OpenCloseSuggestionDialog() {
         if (GameTutorial.isTutorial && GameTutorial.StepGameObject != SuggestionDialog.gameObject) return;
-        SuggestionDialog.SetActive(!SuggestionDialog.activeInHierarchy);
+        SuggestionDialog.gameObject.SetActive(!SuggestionDialog.gameObject.activeInHierarchy);
     }
 
     public void ShowAdForSuggestion(int numberSugs) {
-        void OnSuccess(int numberSugs) {
+        SuggestionDialog.gameObject.SetActive(false);
 
+        void OnSuccess() {
+            numberSuggestions = numberSugs;
+            InfoDialog.Open(new InfoDialog.Info {
+                title = Helper.GetLocalizedValue("tapToCreature", args: new string[] { numberSugs.ToString() }),
+                fontSize = 16,
+                btnTitle = "Ok",
+                OnClick = () => {
+                    InfoDialog.Close();
+                },
+                canClose = false,
+            });
+            if (numberSugs == 3) {
+                SuggestionDialog.Use03();
+            }
+            else {
+                SuggestionDialog.Use01();
+            }
         }
 
         void OnError() {
             InfoDialog.Open(new InfoDialog.Info {
-                title = "Opp!\nSome error, check your internet connection"
+                title = Helper.GetLocalizedValue("oppSomeError"),
+                btnTitle = Helper.GetLocalizedValue("retry"),
+                OnClick = () => {
+                    InfoDialog.Close();
+                    ShowAdForSuggestion(numberSugs);
+                }
             });
         }
 
         if (numberSugs == 3) {
             GoogleAds.Instance.ShowReward(
-                success: () => {
-                    OnSuccess(3);
-                },
+                success: OnSuccess,
                 error: OnError
             );
         }
         else {
             GoogleAds.Instance.ShowInterstitial(
-                success: () => {
-                    OnSuccess(1);
-                },
+                success: OnSuccess,
                 error: OnError
             );
         }
@@ -151,7 +170,7 @@ public class GameController : MonoBehaviour {
     }
 
     public bool ShouldHandlePan() {
-        return !LevelsDialog.activeInHierarchy && !ended && !SettingDialog.activeInHierarchy && !InfoDialog.gameObject.activeInHierarchy;
+        return !LevelsDialog.activeInHierarchy && !ended && !SettingDialog.activeInHierarchy && !InfoDialog.gameObject.activeInHierarchy && !SuggestionDialog.gameObject.activeInHierarchy;
     }
 
     public void PlayVFXLeaf(Vector3 pos) {
@@ -251,10 +270,11 @@ public class GameController : MonoBehaviour {
         List<Matching> matching = new();
         foreach (var row in GameInit.Squares) {
             foreach (Square sq in row) {
-                ItemController item = sq.GetItemController();
+                ItemController item = sq.ItemController;
                 if (item == null) continue;
                 int index = Array.FindIndex(GameInit.level.init_pos, p => p.Equals(item.Item.pos));
-                if (index < 0) {
+                bool notInitPos = index < 0;
+                if (notInitPos) {
                     matching.Add(new Matching {
                         itemPos = item.Item.pos,
                         squarePos = sq.Pos,

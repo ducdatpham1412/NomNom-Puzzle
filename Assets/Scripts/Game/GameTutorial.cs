@@ -44,14 +44,12 @@ public class GameTutorial : MonoBehaviour {
         Controller = GameManager.Instance.Controller;
         isTutorial = true;
         StepGameObject = null;
-        int currentFont = Controller.InfoDialog.Title.fontSize;
-        Controller.InfoDialog.Title.fontSize = 16;
         Controller.InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue("startTutorial"),
+            fontSize = 16,
             btnTitle = "Ok",
             OnClick = () => {
                 Controller.InfoDialog.Close();
-                Controller.InfoDialog.Title.fontSize = currentFont;
                 Step02();
             },
             canClose = false,
@@ -237,14 +235,12 @@ public class GameTutorial : MonoBehaviour {
     }
 
     void Step13() {
-        int currentFont = Controller.InfoDialog.Title.fontSize;
-        Controller.InfoDialog.Title.fontSize = 16;
         Controller.InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue("goCreateFoodChain"),
+            fontSize = 16,
             btnTitle = Helper.GetLocalizedValue("letGo"),
             OnClick = () => {
                 Controller.InfoDialog.Close();
-                Controller.InfoDialog.Title.fontSize = currentFont;
                 RunStep(Step14);
             },
             canClose = false,
@@ -252,16 +248,14 @@ public class GameTutorial : MonoBehaviour {
     }
 
     void Step14() {
-        int currentFont = Controller.InfoDialog.Title.fontSize;
-        Controller.InfoDialog.Title.fontSize = 16;
         Controller.InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue("lastCheckAnimalDirection"),
+            fontSize = 16,
             btnTitle = Helper.GetLocalizedValue("completed"),
             OnClick = () => {
                 isTutorial = false;
                 StepGameObject = null;
                 Controller.InfoDialog.Close();
-                Controller.InfoDialog.Title.fontSize = currentFont;
             },
             canClose = false,
         });
