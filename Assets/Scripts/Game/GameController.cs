@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
     [Header("GameObjects")]
     [SerializeField] GameObject SettingDialog;
     [SerializeField] GameObject LevelsDialog;
+    [SerializeField] GameObject SuggestionDialog;
     public InfoDialog InfoDialog;
     public ToolTip ToolTip;
     [SerializeField] Transform VFXsContainer;
@@ -86,6 +87,40 @@ public class GameController : MonoBehaviour {
             Storage.SET(Storage.Key.currentLevel, currentLevel.ToString());
         }
         StartCoroutine(EndGameCoroutine());
+    }
+
+    public void OpenCloseSuggestionDialog() {
+        if (GameTutorial.isTutorial && GameTutorial.StepGameObject != SuggestionDialog.gameObject) return;
+        SuggestionDialog.SetActive(!SuggestionDialog.activeInHierarchy);
+    }
+
+    public void ShowAdForSuggestion(int numberSugs) {
+        void OnSuccess(int numberSugs) {
+
+        }
+
+        void OnError() {
+            InfoDialog.Open(new InfoDialog.Info {
+                title = "Opp!\nSome error, check your internet connection"
+            });
+        }
+
+        if (numberSugs == 3) {
+            GoogleAds.Instance.ShowReward(
+                success: () => {
+                    OnSuccess(3);
+                },
+                error: OnError
+            );
+        }
+        else {
+            GoogleAds.Instance.ShowInterstitial(
+                success: () => {
+                    OnSuccess(1);
+                },
+                error: OnError
+            );
+        }
     }
 
     public void OpenGoToLevelDialog(int level) {
@@ -174,6 +209,7 @@ public class GameController : MonoBehaviour {
         });
         GameInit.InitGame(GameInit.level, currentLevel);
     }
+
 
     IEnumerator EndGameCoroutine() {
         List<AudioSource> audios = new List<AudioSource>();

@@ -23,10 +23,10 @@ public class Configs {
     };
 
     public static readonly _Env Env = new _Env {
-        match_id = GetEnv("match_id"),
-        match_port = GetEnv("match_port"),
-        api_url = GetEnv("API_URL"),
-        socket_url = GetEnv("SOCKET_URL"),
+        API_URL = GetEnv("API_URL"),
+        BANNER_ID = GetAdModID(android: "BANNER_ANDROID_ID", ios: "BANNER_IOS_ID"),
+        REWARD_ID = GetAdModID(android: "REWARD_ANDROID_ID", ios: "REWARD_IOS_ID"),
+        INTERSTITIAL_ID = GetAdModID(android: "INTERSTITIAL_ANDROID_ID", ios: "INTERSTITIAL_IOS_ID"),
     };
 
     public static readonly Color RootSquareColor = Helper.ColorFromHex("#B5B5B5");
@@ -86,6 +86,16 @@ public class Configs {
     }
 
 
+    static string GetAdModID(string android, string ios) {
+#if UNITY_ANDROID
+        return GetEnv(android);
+#elif UNITY_IOS
+    return GetEnv(ios);
+#else
+    return "invalid";
+#endif
+    }
+
 
     [Serializable]
     public class _Color {
@@ -108,9 +118,9 @@ public class Configs {
 
     [Serializable]
     public class _Env {
-        public string match_id;
-        public string match_port;
-        public string api_url;
-        public string socket_url;
+        public string API_URL;
+        public string BANNER_ID;
+        public string REWARD_ID;
+        public string INTERSTITIAL_ID;
     }
 }

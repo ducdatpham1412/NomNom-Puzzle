@@ -265,6 +265,7 @@ MonoBehaviour:
   Title: {fileID: 7687414275839517486}
   BtnTitle: {fileID: 8163040557781477020}
   CloseButton: {fileID: 7737033711469517772}
+  soundEffect: 1
 --- !u!1 &6814313279608166791
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +346,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1.44
+  m_PixelsPerUnitMultiplier: 1.33
 --- !u!114 &8566409788537012987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,6 +488,7 @@ GameObject:
   - component: {fileID: 3857007923110737794}
   - component: {fileID: 1488822582597909703}
   - component: {fileID: 3644624142299751023}
+  - component: {fileID: 4977702744377267978}
   m_Layer: 5
   m_Name: Close
   m_TagString: Untagged
@@ -607,6 +609,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4977702744377267978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7737033711469517772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc77deac7f6943438c7ad61f593f065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: {fileID: 0}
+  loadingManager: {fileID: 0}
+  audioClick: 1
+  animationClick: 34
 --- !u!1001 &6817886375252792796
 PrefabInstance:
   m_ObjectHideFlags: 0
