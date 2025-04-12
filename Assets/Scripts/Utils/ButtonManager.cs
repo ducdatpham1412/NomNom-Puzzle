@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour {
     [Header("GameObjects")]
-    [SerializeField] GameObject Title;
+    public Text Title;
     [SerializeField] LoadingManager loadingManager;
 
     [Header("Stats")]
@@ -55,14 +55,14 @@ public class ButtonManager : MonoBehaviour {
     public void StartLoading() {
         Disable();
         if (loadingManager != null) {
-            Title.SetActive(false);
+            Title.gameObject.SetActive(false);
             loadingManager.StartLoading();
         }
     }
     public void StopLoading() {
         Enable();
         if (loadingManager != null && Title != null) {
-            Title.SetActive(true);
+            Title.gameObject.SetActive(true);
             loadingManager.StopLoading();
         }
     }

@@ -50,6 +50,7 @@ public class GoogleAds : Singleton<GoogleAds> {
             interstitialAd.Show();
         }
         else {
+            LoadInterstitialAd();
             error?.Invoke();
         }
     }
@@ -62,6 +63,7 @@ public class GoogleAds : Singleton<GoogleAds> {
             });
         }
         else {
+            LoadRewardAd();
             error?.Invoke();
         }
     }

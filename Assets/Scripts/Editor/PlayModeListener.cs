@@ -11,7 +11,7 @@ public static class PlayModeListener {
     private static void OnPlayModeStateChanged(PlayModeStateChange state) {
         if (state == PlayModeStateChange.ExitingPlayMode) {
             Debug.Log("Play mode is stopping. Cleanup or save operations can be done here.");
-            // SocketManager.Disconnected();
+            GameManager.Instance.OnQuit();
         }
     }
 }
