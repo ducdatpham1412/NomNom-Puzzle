@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameTutorial : MonoBehaviour {
     [SerializeField] GameObject HandController;
     [SerializeField] RectTransform InfoButton;
     [SerializeField] BlackCover BlackCover;
     [SerializeField] GameObject UIContainer;
+    [SerializeField] Button SuggestBtn;
 
     [Header("Stats")]
     public bool isTutorial = false;
@@ -42,6 +44,7 @@ public class GameTutorial : MonoBehaviour {
 
     public void StartTutorial() {
         Controller = GameManager.Instance.Controller;
+        SuggestBtn.interactable = false;
         isTutorial = true;
         StepGameObject = null;
         Controller.InfoDialog.Open(new InfoDialog.Info {
@@ -248,6 +251,7 @@ public class GameTutorial : MonoBehaviour {
     }
 
     void Step14() {
+        SuggestBtn.interactable = true;
         Controller.InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue("lastCheckAnimalDirection"),
             fontSize = 16,

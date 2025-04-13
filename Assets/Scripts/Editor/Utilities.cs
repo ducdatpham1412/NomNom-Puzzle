@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,9 +10,13 @@ public class Utilities {
         Debug.Log($"C is: {c}");
     }
 
-    [MenuItem("Tools/Set Current Level")]
-    public static void SetPlayerRef() {
-        Storage.SET(Storage.Key.currentLevel, "1");
+    [MenuItem("Tools/Get env")]
+    public static void GetEnv() {
+        TextAsset envText = Resources.Load<TextAsset>("env");
+        var envDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(envText.text);
+        foreach (var (key, value) in envDict) {
+            Debug.Log($"{key} - {value}");
+        }
     }
 }
 

@@ -39,7 +39,6 @@ public class GameManager : Singleton<GameManager> {
         if (Application.isEditor) {
             Application.targetFrameRate = 30;
         }
-        GoogleAds.Instance.ShowBanner();
     }
 
     void OnApplicationQuit() {
@@ -48,7 +47,7 @@ public class GameManager : Singleton<GameManager> {
 
     void OnApplicationPause(bool pauseStatus) {
         if (pauseStatus) {
-            Debug.Log("App is paused (background mode)");
+            OnQuit();
         }
     }
 
@@ -64,7 +63,7 @@ public class GameManager : Singleton<GameManager> {
 
     public Sprite GetBackground() {
         if (background != null) return background;
-        Sprite[] bgSprites = Resources.LoadAll<Sprite>("Images");
+        Sprite[] bgSprites = Resources.LoadAll<Sprite>("Images/Background");
         background = bgSprites[Random.Range(0, bgSprites.Length)];
         return background;
     }

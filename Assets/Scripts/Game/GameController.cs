@@ -59,6 +59,8 @@ public class GameController : MonoBehaviour {
 
         Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
+
+        GoogleAds.Instance.ShowBanner();
     }
 
     Level[] GetLevels() {
@@ -70,7 +72,6 @@ public class GameController : MonoBehaviour {
     }
 
     public void ShowHideSettingDialog() {
-        if (GameTutorial.isTutorial && GameTutorial.StepGameObject != SettingDialog.gameObject) return;
         SettingDialog.SetActive(!SettingDialog.activeInHierarchy);
     }
 
@@ -91,7 +92,6 @@ public class GameController : MonoBehaviour {
     }
 
     public void OpenCloseSuggestionDialog() {
-        if (GameTutorial.isTutorial && GameTutorial.StepGameObject != SuggestionDialog.gameObject) return;
         SuggestionDialog.gameObject.SetActive(!SuggestionDialog.gameObject.activeInHierarchy);
     }
 
@@ -229,6 +229,34 @@ public class GameController : MonoBehaviour {
         GameInit.InitGame(GameInit.level, currentLevel);
     }
 
+    public void SaveLevelStatus() {
+        List<Matching> matching = new();
+        foreach (var row in GameInit.Squares) {
+            foreach (Square sq in row) {
+                ItemController item = sq.ItemController;
+                if (item == null) continue;
+                int index = Array.FindIndex(GameInit.level.init_pos, p => p.Equals(item.Item.pos));
+                bool notInitPos = index < 0;
+                if (notInitPos) {
+                    matching.Add(new Matching {
+                        itemPos = item.Item.pos,
+                        squarePos = sq.Pos,
+                    });
+                }
+            }
+        }
+        GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
+
+        if (level != null) {
+            level.matchings = matching;
+        }
+        else {
+            GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
+                level = currentLevel,
+                matchings = matching,
+            });
+        }
+    }
 
     IEnumerator EndGameCoroutine() {
         List<AudioSource> audios = new List<AudioSource>();
@@ -263,35 +291,6 @@ public class GameController : MonoBehaviour {
         var level = GetPlayingLevel(currentLevel);
         if (level != null) {
             GameManager.Instance.gameState.playingLevels.Remove(level);
-        }
-    }
-
-    public void SaveLevelStatus() {
-        List<Matching> matching = new();
-        foreach (var row in GameInit.Squares) {
-            foreach (Square sq in row) {
-                ItemController item = sq.ItemController;
-                if (item == null) continue;
-                int index = Array.FindIndex(GameInit.level.init_pos, p => p.Equals(item.Item.pos));
-                bool notInitPos = index < 0;
-                if (notInitPos) {
-                    matching.Add(new Matching {
-                        itemPos = item.Item.pos,
-                        squarePos = sq.Pos,
-                    });
-                }
-            }
-        }
-        GameState.PlayingLevel level = GetPlayingLevel(currentLevel);
-
-        if (level != null) {
-            level.matchings = matching;
-        }
-        else {
-            GameManager.Instance.gameState.playingLevels.Add(new GameState.PlayingLevel {
-                level = currentLevel,
-                matchings = matching,
-            });
         }
     }
 }

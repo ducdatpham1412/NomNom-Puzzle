@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public static class GameHelper {
@@ -26,36 +27,42 @@ public static class GameHelper {
     }
 
     public static bool TouchBegin() {
-        if (Input.touchCount == 1) {
-            Touch touch = Input.GetTouch(0);
-            return touch.phase == TouchPhase.Began;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) {
+            return true;
         }
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) {
             return true;
         }
 
         return false;
     }
-    public static bool TouchMove() {
-        if (Input.touchCount == 1) {
-            Touch touch = Input.GetTouch(0);
-            return touch.phase == TouchPhase.Moved;
+
+    public static Vector2 TouchPosition() {
+        if (Touchscreen.current != null) {
+            return Touchscreen.current.primaryTouch.position.ReadValue();
         }
-        return false;
+
+        if (Mouse.current != null) {
+            return Mouse.current.position.ReadValue();
+        }
+
+        return Vector2.zero;
     }
+
     public static bool TouchReleased() {
-        if (Input.touchCount == 1) {
-            Touch touch = Input.GetTouch(0);
-            return touch.phase == TouchPhase.Ended;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame) {
+            return true;
         }
 
-        if (Input.GetMouseButtonUp(0)) {
+        if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame) {
             return true;
         }
 
         return false;
     }
+
+
     public static Vector3 ToWorldPoint(Vector3 localPos) {
         return Camera.main.ScreenToWorldPoint(localPos);
     }

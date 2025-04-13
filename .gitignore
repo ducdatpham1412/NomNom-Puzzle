@@ -45,4 +45,4 @@ Thumbs.db
 
 # Temp directories
 /Temp/
-.env
+env.json

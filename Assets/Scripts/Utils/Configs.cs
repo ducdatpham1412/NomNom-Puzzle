@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 
@@ -58,29 +58,9 @@ public class Configs {
     }
 
     static void ReadEnvFile() {
-        string basePath = Directory.GetCurrentDirectory();
-        if (Application.isEditor) {
-            basePath = basePath.Split("/NomNom")[0] + "/NomNom";
-        }
-
-        string filePath = Path.Combine(basePath, ".env");
-
-        if (!File.Exists(filePath)) {
-            Debug.Log($"File path does not existed: {filePath}");
-            return;
-        }
-
-        foreach (var line in File.ReadAllLines(filePath)) {
-            if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
-                continue;
-
-            var parts = line.Split('=', 2);
-            if (parts.Length != 2)
-                continue;
-
-            var key = parts[0].Trim();
-            var value = parts[1].Trim();
-            Debug.Log("Set env: " + key + " - " + value);
+        TextAsset envText = Resources.Load<TextAsset>("env");
+        var envDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(envText.text);
+        foreach (var (key, value) in envDict) {
             Environment.SetEnvironmentVariable(key, value);
         }
     }

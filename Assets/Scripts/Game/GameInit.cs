@@ -26,6 +26,7 @@ public class GameInit : MonoBehaviour {
     public Square[][] Squares;
     public List<ItemController> Items;
     public Level level;
+    [HideInInspector] public bool isInitializing;
 
     GameController Controller;
 
@@ -36,6 +37,7 @@ public class GameInit : MonoBehaviour {
     }
 
     public void InitGame(Level _level, int currentLevel) {
+        isInitializing = true;
         if (!Controller) Controller = GetComponent<GameController>();
         level = _level;
         TextLevel.text = $"Lv. {currentLevel}";
@@ -117,12 +119,6 @@ public class GameInit : MonoBehaviour {
 
         string method = Helper.GetRandomInArr(new string[] { "move", "rotate" });
 
-        for (int row = 0; row < size.y; row++) {
-            for (int col = 0; col < size.x; col++) {
-                Squares[row][col].GetComponent<Collider2D>().enabled = false;
-            }
-        }
-
         List<AudioSource> audios = new List<AudioSource>();
 
         if (method == "move") {
@@ -167,17 +163,13 @@ public class GameInit : MonoBehaviour {
             }
         }
 
-        yield return new WaitForSeconds(duration); // Wait for the last tween finished to confirm squares're  not be collided
-
-        for (int row = 0; row < size.y; row++) {
-            for (int col = 0; col < size.x; col++) {
-                Squares[row][col].GetComponent<Collider2D>().enabled = true;
-            }
-        }
+        yield return new WaitForSeconds(duration); // Wait for the last tween finished to confirm last square has finished
 
         foreach (AudioSource audio in audios) {
             SoundManager.Instance.RemoveAudioSource(audio);
         }
+
+        isInitializing = false;
     }
 
     void InitChoicesBoard(int currentLevel) {
