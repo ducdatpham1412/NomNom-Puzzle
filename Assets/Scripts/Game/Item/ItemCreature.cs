@@ -6,16 +6,14 @@ public class ItemCreature : MonoBehaviour {
     [SerializeField] Image Img;
     [SerializeField] Text Name;
     [SerializeField] Button Btn;
-    public Creature creature;
+    public string creatureID;
 
-    public void SetCreature(Creature cr, InformationController controller, string localeKey, bool enableClick = false) {
-        creature = cr;
+    public void SetCreature(Creature cr, InformationController controller, string localeKey) {
+        creatureID = cr.id;
         Img.sprite = cr.sprite;
         Name.text = cr.name.Find(n => n.key == localeKey)?.value ?? "";
         Btn.onClick.RemoveAllListeners();
-        if (enableClick) {
-            Btn.onClick.AddListener(() => controller.OnClickCreature(this));
-        }
+        Btn.onClick.AddListener(() => controller.OnClickCreature(creatureID));
     }
 
     public void SetActive(bool active) {

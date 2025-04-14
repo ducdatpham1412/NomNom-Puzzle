@@ -215,12 +215,7 @@ MonoBehaviour:
   Img: {fileID: 4417597547882503430}
   Name: {fileID: 212327919269288462}
   Btn: {fileID: 8242694374471446402}
-  creature:
-    id: 
-    type: 0
-    name: []
-    sprite: {fileID: 0}
-    rotationOffset: 0
+  creatureID: 
 --- !u!114 &-3106285468685382092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   loadingManager: {fileID: 0}
-  audioClick: 1
+  audioClick: 0
   animationClick: 34
 --- !u!1001 &7399162226561617645
 PrefabInstance:
