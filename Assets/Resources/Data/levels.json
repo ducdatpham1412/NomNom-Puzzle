@@ -139,34 +139,34 @@
         },
         {
           "pos": [1, 1],
-          "creature_id": "snake",
+          "creature_id": "mouse",
           "direction": "down"
         },
         {
           "pos": [2, 1],
-          "creature_id": "peanut",
-          "direction": ""
+          "creature_id": "eagle",
+          "direction": "left"
         }
       ],
       [
         {
           "pos": [0, 2],
+          "creature_id": "mouse",
+          "direction": "right"
+        },
+        {
+          "pos": [1, 2],
           "creature_id": "cheese",
           "direction": ""
         },
         {
-          "pos": [1, 2],
+          "pos": [2, 2],
           "creature_id": "mouse",
           "direction": "left"
-        },
-        {
-          "pos": [2, 2],
-          "creature_id": "worm",
-          "direction": "up"
         }
       ]
     ],
-    "init_pos": [[2, 1]],
+    "init_pos": [[1, 2]],
     "status": "active"
   },
   {
@@ -240,7 +240,7 @@
       ]
     ],
     "init_pos": [
-      [0, 2],
+      [1, 2],
       [2, 1]
     ],
     "status": "active"

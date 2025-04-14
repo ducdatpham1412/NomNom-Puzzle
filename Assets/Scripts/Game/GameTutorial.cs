@@ -252,6 +252,19 @@ public class GameTutorial : MonoBehaviour {
 
     void Step14() {
         SuggestBtn.interactable = true;
+        Controller.ToolTip.Open(SuggestBtn.gameObject, new ToolTip.Info {
+            title = Helper.GetLocalizedValue("askingForHelp"),
+            OnClick = () => {
+                StopPing(SuggestBtn.gameObject);
+                _BlackCover.Close();
+                RunStep(Step15);
+            },
+        });
+        _BlackCover.Target(SuggestBtn.gameObject);
+        Ping(SuggestBtn.gameObject);
+    }
+
+    void Step15() {
         Controller.InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue("lastCheckAnimalDirection"),
             fontSize = 16,
