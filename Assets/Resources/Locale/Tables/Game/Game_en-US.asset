@@ -155,6 +155,10 @@ MonoBehaviour:
     m_Localized: Watching ad to see suggestions
     m_Metadata:
       m_Items: []
+  - m_Id: 38070963491823616
+    m_Localized: "Don\u2019t hesitate to ask for a hint!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

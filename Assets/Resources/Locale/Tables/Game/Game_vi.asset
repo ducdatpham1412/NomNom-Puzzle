@@ -159,6 +159,10 @@ MonoBehaviour:
     m_Localized: "Xem qu\u1EA3ng c\xE1o \u0111\u1EC3 xem g\u1EE3i \xFD"
     m_Metadata:
       m_Items: []
+  - m_Id: 38070963491823616
+    m_Localized: "\u0110\u1EEBng ng\u1EA7n ng\u1EA1i h\u1ECFi g\u1EE3i \xFD nh\xE9!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -139,6 +139,10 @@ MonoBehaviour:
     m_Key: watchingAds
     m_Metadata:
       m_Items: []
+  - m_Id: 38070963491823616
+    m_Key: askingForHelp
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
