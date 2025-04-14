@@ -16,8 +16,8 @@ public class ItemController : MonoBehaviour {
     int originalSortingOrder;
     Vector3 originalPos;
     [HideInInspector] public Vector3 originalScale { get; private set; }
-    Vector3 pivotPos;
-    Vector3 touchPos;
+    static Vector3 pivotPos;
+    static Vector3 touchPos;
     Square originalSquare;
     Color? originalColor;
     SpriteRenderer Renderer;
@@ -40,7 +40,7 @@ public class ItemController : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if (animatingToOriginalFromDoubleClick || animatingToSquare) return;
+        if (animatingToOriginalFromDoubleClick || animatingToSquare || Controller.GameInit.isInitializing) return;
 
         if (col.gameObject.tag == Controller.GameInit.SquareTag) {
             Square colSquare = col.GetComponent<Square>();
@@ -142,8 +142,8 @@ public class ItemController : MonoBehaviour {
 
     void HandlePan() {
         if (GameHelper.TouchBegin()) {
-            Vector3 mousePos = Input.mousePosition;
-            isPanning = GameHelper.TouchHitGameObject(mousePos, gameObject);
+            Vector3 _touch = GameHelper.TouchPosition();
+            isPanning = GameHelper.TouchHitGameObject(_touch, gameObject);
             if (isPanning) {
                 bool shouldMoveUp = true;
 
@@ -204,7 +204,7 @@ public class ItemController : MonoBehaviour {
 
                 isFirstTouch = true;
                 pivotPos = transform.position;
-                touchPos = GameHelper.ToWorldPoint(mousePos);
+                touchPos = GameHelper.ToWorldPoint(_touch);
                 Renderer.sortingOrder = originalSortingOrder + 1;
                 SoundManager.Instance.PlaySF(SoundManager.SF.Pop_01);
 
@@ -271,8 +271,8 @@ public class ItemController : MonoBehaviour {
 
         if (isFirstTouch) return;
 
-        Vector3 mouseWorldPos = GameHelper.ToWorldPoint(Input.mousePosition);
-        transform.position = pivotPos + (mouseWorldPos - touchPos) * 1.5f;
+        Vector3 touchWorldPos = GameHelper.ToWorldPoint(GameHelper.TouchPosition());
+        transform.position = pivotPos + (touchWorldPos - touchPos) * 1.5f;
     }
 
     public void ResetAllActions() {

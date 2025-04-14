@@ -130,7 +130,11 @@ public class GoogleAds : Singleton<GoogleAds> {
             bannerView.Destroy();
             bannerView = null;
         }
-        AdSize size = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(Screen.width);
+
+        float scale = MobileAds.Utils.GetDeviceScale();
+        float width = scale == 0 ? Screen.width : Screen.width / scale;
+        AdSize size = width < AdSize.IABBanner.Width ? AdSize.Banner : AdSize.IABBanner;
+        // AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
         bannerView = new BannerView(Configs.Env.BANNER_ID, size, AdPosition.Bottom);
     }
 }

@@ -8,7 +8,11 @@ public class Square : MonoBehaviour {
     public Collider2D PanCollider { get; private set; }
     [HideInInspector] public Material material;
     [HideInInspector] public bool isError = false;
-    Color Color = Configs.DefaultSquareColor;
+    Color Color;
+
+    void Awake() {
+        Color = Configs.DefaultSquareColor;
+    }
 
     void Start() {
         material = GetComponent<SpriteRenderer>().material;
@@ -47,7 +51,7 @@ public class Square : MonoBehaviour {
         if (Controller.numberSuggestions <= 0) return;
         if (ItemController != null) return;
         if (!Controller.ShouldHandlePan()) return;
-        if (GameHelper.TouchBegin() && GameHelper.TouchHitGameObject(Input.mousePosition, gameObject)) {
+        if (GameHelper.TouchBegin() && GameHelper.TouchHitGameObject(GameHelper.TouchPosition(), gameObject)) {
             ItemController trueItem = Controller.GameInit.Items.Find(item => item.Item.pos.Equals(Pos));
             Controller.GameGraft.SuggestItemToSquare(trueItem);
         }

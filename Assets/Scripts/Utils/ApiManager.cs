@@ -19,13 +19,14 @@ public static class ApiManager {
     static HttpClient Client = new() {
         // BaseAddress = new Uri("http://localhost:8000")
     };
-    static string BaseAddress = $"{Configs.Env.API_URL}/api/v1";
+    static string BaseAddress = "";
     static ConcurrentQueue<TaskCompletionSource<string>> taskQueue = new ConcurrentQueue<TaskCompletionSource<string>>();
     static bool isRefreshing = false;
 
     static ApiManager() {
         Client.DefaultRequestHeaders.Accept.Clear();
         Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        BaseAddress = $"{Configs.Env.API_URL}/api/v1";
     }
 
 

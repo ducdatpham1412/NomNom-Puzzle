@@ -317,6 +317,7 @@ MonoBehaviour:
   SettingDialog: {fileID: 1642286456}
   LevelsDialog: {fileID: 938644118}
   SuggestionDialog: {fileID: 446134168}
+  ScaleDeviceText: {fileID: 0}
   InfoDialog: {fileID: 6824417243309966611}
   ToolTip: {fileID: 1755137964}
   VFXsContainer: {fileID: 170655476}
@@ -365,6 +366,7 @@ MonoBehaviour:
   InfoButton: {fileID: 778740087}
   BlackCover: {fileID: -5201339089642473669, guid: 444f50ef783ed40c29b834b54c7b23b1, type: 3}
   UIContainer: {fileID: 305826957}
+  SuggestBtn: {fileID: 670211409}
   isTutorial: 0
   StepGameObject: {fileID: 0}
 --- !u!1 &116539080
@@ -5686,6 +5688,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1553397319}
     m_Modifications:
+    - target: {fileID: 5949941865730417080, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -5712,11 +5718,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 55
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.9
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7876,11 +7882,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 55
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.9
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 6855741194582612288, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7935,16 +7941,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7838092007213569412, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7838092007213569412, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7838092007213569412, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8447256705567763026, guid: 6b67ec32539c24dc9b8b51684f5eb3a3, type: 3}
       propertyPath: m_Name
@@ -8307,6 +8305,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 305826958}
     m_Modifications:
+    - target: {fileID: 3420214036037741623, guid: 065816c9d81a8495689ec4bff6ab38c5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 348cf555b1c4e4acc8792c54265c3961, type: 3}
     - target: {fileID: 5639854476253275835, guid: 065816c9d81a8495689ec4bff6ab38c5, type: 3}
       propertyPath: m_Name
       value: CanvasBackground

@@ -479,6 +479,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3420214036037741623, guid: 065816c9d81a8495689ec4bff6ab38c5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2255eb03451ff48e0b1045ab3343d74c, type: 3}
     - target: {fileID: 5639854476253275835, guid: 065816c9d81a8495689ec4bff6ab38c5, type: 3}
       propertyPath: m_Name
       value: CanvasBackground
