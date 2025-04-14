@@ -18,5 +18,10 @@ public class Utilities {
             Debug.Log($"{key} - {value}");
         }
     }
+
+    [MenuItem("Tools/Test")]
+    public static void Test() {
+        Debug.Log(Mathf.CeilToInt(17f / 2f));
+    }
 }
 

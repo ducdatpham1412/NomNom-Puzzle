@@ -127,7 +127,7 @@ public class LevelScrollDialog : MonoBehaviour {
             if (dragTracker.isDragging) {
                 // Recalculate m_ContentStartPosition and drag pivot
                 PointerEventData ev = new PointerEventData(EventSystem.current) {
-                    position = Input.mousePosition
+                    position = GameHelper.TouchPosition()
                 };
                 ScrollRect.OnBeginDrag(ev);
                 ScrollRect.OnDrag(ev);
@@ -165,7 +165,7 @@ public class LevelScrollDialog : MonoBehaviour {
             if (dragTracker.isDragging) {
                 // Recalculate m_ContentStartPosition and drag pivot
                 PointerEventData ev = new PointerEventData(EventSystem.current) {
-                    position = Input.mousePosition
+                    position = GameHelper.TouchPosition()
                 };
                 ScrollRect.OnBeginDrag(ev);
                 ScrollRect.OnDrag(ev);
