@@ -302,6 +302,7 @@ MonoBehaviour:
     size: {x: 0, y: 0}
     init_pos: []
     status: 
+  isInitializing: 0
 --- !u!114 &77076225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,7 +318,6 @@ MonoBehaviour:
   SettingDialog: {fileID: 1642286456}
   LevelsDialog: {fileID: 938644118}
   SuggestionDialog: {fileID: 446134168}
-  ScaleDeviceText: {fileID: 0}
   InfoDialog: {fileID: 6824417243309966611}
   ToolTip: {fileID: 1755137964}
   VFXsContainer: {fileID: 170655476}
@@ -454,8 +454,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 162.5, y: -84.147156}
-  m_SizeDelta: {x: 285, y: 18.010635}
+  m_AnchoredPosition: {x: 162.5, y: -84.00879}
+  m_SizeDelta: {x: 285, y: 18.425745}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &140011437
 MonoBehaviour:
@@ -1452,7 +1452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 162.5, y: -156.8001}
+  m_AnchoredPosition: {x: 162.5, y: -156.93846}
   m_SizeDelta: {x: 285, y: 64.9903}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &488347800
@@ -6806,7 +6806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc77deac7f6943438c7ad61f593f065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Title: {fileID: 632880440}
+  Title: {fileID: 632880443}
   loadingManager: {fileID: 1853211967}
   audioClick: 1
   animationClick: 34
@@ -8900,6 +8900,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 276.81793
       objectReference: {fileID: 0}
+    - target: {fileID: 7420711920547361451, guid: 39810a4ab24434f759d0fdac510d3238, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d82566c13b86a499e9ec7c9487b0fe09, type: 3}
     - target: {fileID: 7687414275839517486, guid: 39810a4ab24434f759d0fdac510d3238, type: 3}
       propertyPath: m_Text
       value: Nom Nom
