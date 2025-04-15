@@ -21,7 +21,7 @@ public class Utilities {
 
     [MenuItem("Tools/Test")]
     public static void Test() {
-        Debug.Log(Mathf.CeilToInt(17f / 2f));
+        Storage.SET(Storage.Key.currentLevel, 20.ToString());
     }
 }
 

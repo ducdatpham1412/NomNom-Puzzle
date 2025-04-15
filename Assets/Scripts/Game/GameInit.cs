@@ -27,6 +27,7 @@ public class GameInit : MonoBehaviour {
     public List<ItemController> Items;
     public Level level;
     [HideInInspector] public bool isInitializing;
+    float squareSize;
 
     GameController Controller;
 
@@ -85,11 +86,11 @@ public class GameInit : MonoBehaviour {
 
         float t = (size.x - 2f) / (7f - 2f);
         float gap = boardSize.x * Mathf.Lerp(0.02f, 0.008f, t);
-        float squareSize = (boardSize.x - (gap * (size.x - 1))) / size.x;
+        squareSize = (boardSize.x - (gap * (size.x - 1))) / size.x;
 
         Vector2 startPos = new Vector2(SquaresBoard.transform.position.x - boardSize.x / 2, SquaresBoard.transform.position.y + boardSize.y / 2);
 
-        SpriteRenderer sr = Square.GetComponent<SpriteRenderer>();
+        var sr = Square.GetComponent<SpriteRenderer>();
         float sc = squareSize / sr.bounds.size.x;
         Vector3 localScale = new Vector3(sc, sc, 1f);
 
@@ -178,7 +179,6 @@ public class GameInit : MonoBehaviour {
             Destroy(child.gameObject);
         }
         Items = new List<ItemController>();
-        ChoiceBoardSize boardSize = GetChoiceBoardSize();
         GameState.PlayingLevel playingLevel = Controller.GetPlayingLevel(currentLevel);
 
         List<Item> itemsInChoicesBoard = new List<Item>();
@@ -205,6 +205,9 @@ public class GameInit : MonoBehaviour {
                 itemsInChoicesBoard.Add(item);
             }
         }
+
+
+        ChoiceBoardSize boardSize = GetChoiceBoardSize(itemsInChoicesBoard.Count + itemsStorage.Count);
 
         ItemController InitItem(Item item) {
             GameObject NewItem = Instantiate(Item, ChoicesBoard);
@@ -237,8 +240,8 @@ public class GameInit : MonoBehaviour {
         Vector3 GetPos(int _i) {
             int row = _i / boardSize.cols;
             int col = _i % boardSize.cols;
-            float xPos = -boardSize.width / 2 + col * boardSize.gap + boardSize.gap / 2;
-            float yPos = boardSize.height / 2 - row * boardSize.gap - boardSize.gap / 2;
+            float xPos = -boardSize.width / 2 + col * boardSize.gapX;
+            float yPos = boardSize.height / 2 - row * boardSize.gapY;
             return new Vector3(xPos, yPos, 0f);
         }
 
@@ -287,7 +290,7 @@ public class GameInit : MonoBehaviour {
         foreach (Transform child in ChoicesBoard) {
             Destroy(child.gameObject);
         }
-        ChoiceBoardSize boardSize = GetChoiceBoardSize();
+        ChoiceBoardSize boardSize = GetChoiceBoardSize(0);
         foreach (Item[] row in level.data) {
             foreach (Item item in row) {
                 GameObject NewItem = Instantiate(Item, ChoicesBoard);
@@ -308,35 +311,34 @@ public class GameInit : MonoBehaviour {
         }
     }
 
-    ChoiceBoardSize GetChoiceBoardSize() {
-        Vector2 size = level.size;
+    ChoiceBoardSize GetChoiceBoardSize(int totalItems, float gapYRatio = 1f) {
         SpriteRenderer sr = ChoicesBoard.GetComponent<SpriteRenderer>();
         float width = sr.bounds.size.x - 0.2f;
         float height = sr.bounds.size.y - 0.2f;
 
-        int s = (int)Mathf.Sqrt(size.x * size.y) + 1;
+        float gapX = squareSize * 0.9f;
+        float gapY = squareSize * gapYRatio;
 
-        int cols = s + 1;
-        float gap = width / cols;
+        int cols = Mathf.FloorToInt(width / gapX);
+        int rows = Mathf.CeilToInt((float)totalItems / cols);
 
-        float scaleWidth = gap * 0.8f;
+        if (gapY * rows > height) {
+            return GetChoiceBoardSize(totalItems, gapYRatio - 0.05f);
+        }
+
+        float scaleWidth = squareSize * 0.65f;
         float trueWidth = Item.GetComponent<SpriteRenderer>().bounds.size.x;
         float sc = scaleWidth / trueWidth;
         Vector3 scale = new Vector3(sc, sc, 1f);
 
         return new ChoiceBoardSize {
-            width = width,
-            height = height,
-            gap = gap,
+            width = gapX * (cols - 1),
+            height = gapY * (rows - 1),
+            gapX = gapX,
+            gapY = gapY,
             cols = cols,
             scale = scale,
         };
-    }
-
-    [Serializable]
-    public class ChoicePos {
-        public Vector3 localPos;
-        public ItemController item;
     }
 
     [Serializable]
@@ -349,7 +351,8 @@ public class GameInit : MonoBehaviour {
     class ChoiceBoardSize {
         public float width;
         public float height;
-        public float gap;
+        public float gapX;
+        public float gapY;
         public int cols;
         public Vector3 scale;
     }
