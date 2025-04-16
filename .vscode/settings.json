@@ -6,8 +6,6 @@
         "**/.gitmodules": true,
         "**/.vsconfig": true,
         "**/*.meta": true,
-        "build/": true,
-        "Build/": true,
         "Library/": true,
         "library/": true,
         "obj/": true,

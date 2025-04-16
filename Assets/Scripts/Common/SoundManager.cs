@@ -27,7 +27,8 @@ public class SoundManager : Singleton<SoundManager> {
         SFSources[SF.Marimba_04] = LoadSF("sf_marimba_04");
         SFSources[SF.Whoosh_Transition] = LoadSF("sf_whoosh_transition");
         SFSources[SF.Bubble] = LoadSF("sf_bubble");
-        SFSources[SF.LevelWin] = LoadSF("sf_level_win");
+        SFSources[SF.Win01] = LoadSF("sf_win_01");
+        SFSources[SF.Win02] = LoadSF("sf_win_02");
     }
 
     public void PauseUnPauseMusicBackground(MusicSource source = MusicSource.Kid) {
@@ -46,16 +47,16 @@ public class SoundManager : Singleton<SoundManager> {
         }
     }
 
-    public AudioSource PlaySF(SF sf) {
+    public AudioSource PlaySF(SF sf, [UnityEngine.Internal.DefaultValue("1.0F")] float volumeScale = 1f) {
         if (GameManager.Instance.profile.sfx && SFSources.ContainsKey(sf)) {
             AudioSource sfFree = SFAudios.Find(audio => !audio.isPlaying);
             if (sfFree != null) {
-                sfFree.PlayOneShot(SFSources[sf]);
+                sfFree.PlayOneShot(SFSources[sf], volumeScale);
                 return sfFree;
             }
             AudioSource newAudio = gameObject.AddComponent<AudioSource>();
             newAudio.playOnAwake = false;
-            newAudio.PlayOneShot(SFSources[sf]);
+            newAudio.PlayOneShot(SFSources[sf], volumeScale);
             SFAudios.Add(newAudio);
             return newAudio;
         }
@@ -100,7 +101,8 @@ public class SoundManager : Singleton<SoundManager> {
         Marimba_04,
         Whoosh_Transition,
         Bubble,
-        LevelWin,
+        Win01,
+        Win02,
     }
     public enum MusicSource {
         Kid,

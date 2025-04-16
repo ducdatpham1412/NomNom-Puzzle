@@ -142,6 +142,7 @@ public class ItemController : MonoBehaviour {
 
     void HandlePan() {
         if (GameHelper.TouchBegin()) {
+            if (!Controller.isFocusPlayingGame) return;
             Vector3 _touch = GameHelper.TouchPosition();
             isPanning = GameHelper.TouchHitGameObject(_touch, gameObject);
             if (isPanning) {

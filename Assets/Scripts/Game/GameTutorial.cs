@@ -31,6 +31,10 @@ public class GameTutorial : MonoBehaviour {
                     OnFocusAction.Invoke();
                     OnFocusAction = null;
                 }
+                Controller.isFocusPlayingGame = true;
+            }
+            else {
+                Controller.isFocusPlayingGame = false;
             }
         };
         Controller = GameManager.Instance.Controller;

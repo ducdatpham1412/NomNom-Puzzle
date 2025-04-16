@@ -337,6 +337,7 @@ MonoBehaviour:
   totalLevels: 0
   numberSuggestions: 0
   ended: 0
+  isFocusPlayingGame: 1
 --- !u!114 &77076226
 MonoBehaviour:
   m_ObjectHideFlags: 0

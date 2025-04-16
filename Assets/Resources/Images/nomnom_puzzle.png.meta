@@ -161,8 +161,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 19
-        height: 23
+        width: 29
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,10 +181,10 @@ TextureImporter:
       name: nomnom_puzzle_1
       rect:
         serializedVersion: 2
-        x: 18
+        x: 27
         y: 0
-        width: 20
-        height: 18
+        width: 22
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,10 +203,10 @@ TextureImporter:
       name: nomnom_puzzle_2
       rect:
         serializedVersion: 2
-        x: 37
+        x: 49
         y: 0
-        width: 26
-        height: 18
+        width: 34
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -225,10 +225,10 @@ TextureImporter:
       name: nomnom_puzzle_3
       rect:
         serializedVersion: 2
-        x: 64
+        x: 82
         y: 0
-        width: 19
-        height: 23
+        width: 29
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,10 +247,10 @@ TextureImporter:
       name: nomnom_puzzle_4
       rect:
         serializedVersion: 2
-        x: 83
+        x: 110
         y: 0
-        width: 19
-        height: 18
+        width: 22
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -269,10 +269,10 @@ TextureImporter:
       name: nomnom_puzzle_5
       rect:
         serializedVersion: 2
-        x: 102
+        x: 131
         y: 0
-        width: 26
-        height: 18
+        width: 35
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -291,10 +291,10 @@ TextureImporter:
       name: nomnom_puzzle_6
       rect:
         serializedVersion: 2
-        x: 134
+        x: 172
         y: 0
-        width: 36
-        height: 23
+        width: 49
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -313,10 +313,10 @@ TextureImporter:
       name: nomnom_puzzle_7
       rect:
         serializedVersion: 2
-        x: 169
+        x: 220
         y: 0
-        width: 16
-        height: 18
+        width: 19
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -335,10 +335,10 @@ TextureImporter:
       name: nomnom_puzzle_8
       rect:
         serializedVersion: 2
-        x: 184
+        x: 238
         y: 0
-        width: 15
-        height: 18
+        width: 20
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -357,10 +357,10 @@ TextureImporter:
       name: nomnom_puzzle_9
       rect:
         serializedVersion: 2
-        x: 199
+        x: 257
         y: 0
-        width: 8
-        height: 23
+        width: 12
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -379,10 +379,10 @@ TextureImporter:
       name: nomnom_puzzle_10
       rect:
         serializedVersion: 2
-        x: 207
+        x: 268
         y: 0
-        width: 17
-        height: 18
+        width: 20
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
