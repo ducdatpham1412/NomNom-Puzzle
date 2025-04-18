@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
-
 public static class Helper {
     // public static string DeviceID = SystemInfo.deviceUniqueIdentifier;
 
@@ -55,7 +54,12 @@ public static class Helper {
     }
 
     public static string GetLocaleKey() {
-        return LocalizationSettings.SelectedLocale.Identifier.Code;
+        string key = LocalizationSettings.SelectedLocale.Identifier.Code;
+        if (key == "en-US") return "en";
+        if (key == "ja") return "jp";
+        if (key == "ko") return "ko";
+        if (key == "vi") return "vi";
+        return "";
     }
 
     public static T GetRandomInArr<T>(T[] objects) {
@@ -112,6 +116,10 @@ public static class Helper {
 
     public static void Vibrate() {
         Handheld.Vibrate();
+    }
+
+    public static long TimeStamp() {
+        return DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
 

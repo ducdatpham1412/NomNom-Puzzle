@@ -1,12 +1,13 @@
 using System;
 using UnityEngine.Localization.Settings;
 
-
-
 public class LocalizationManager : Singleton<LocalizationManager> {
     public void SetLocale(int localeID, Action callback = null) {
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
         callback?.Invoke();
+
+        FirebaseTracking.SetLanguage(Helper.GetLocaleKey());
+        GameManager.Instance.RescheduleDailyNotification();
     }
 
     public string GetLocale() {

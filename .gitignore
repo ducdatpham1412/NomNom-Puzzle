@@ -46,3 +46,7 @@ Thumbs.db
 # Temp directories
 /Temp/
 env.json
+
+# Firebase
+google-services.json
+GoogleService-Info.plist

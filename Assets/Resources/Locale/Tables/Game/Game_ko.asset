@@ -166,6 +166,11 @@ MonoBehaviour:
       \uB9C8!"
     m_Metadata:
       m_Items: []
+  - m_Id: 39491515456675840
+    m_Localized: "\uADC0\uC5EC\uC6B4 \uB3D9\uBB3C \uCE5C\uAD6C\uB4E4\uACFC \uB450\uB1CC
+      \uC6B4\uB3D9 \uC2DC\uAC04\uC774\uC5D0\uC694"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
