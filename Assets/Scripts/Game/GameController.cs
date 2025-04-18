@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 using Matching = GameState.PlayingLevel.Matching;
 
 public class GameController : MonoBehaviour {
@@ -34,6 +33,7 @@ public class GameController : MonoBehaviour {
     public int numberSuggestions = 0;
     public readonly float doubleClickThreshold = 0.3f;
     public bool ended = false;
+    public bool isFocusPlayingGame = true;
 
     GameObject Vfx;
     List<ParticleSystem> VFXsLeafPool = new List<ParticleSystem>();
@@ -59,8 +59,7 @@ public class GameController : MonoBehaviour {
 
         Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
-
-        GoogleAds.Instance.ShowBanner();
+        GoogleAds.Instance.Initialize();
     }
 
     Level[] GetLevels() {
@@ -270,7 +269,9 @@ public class GameController : MonoBehaviour {
             yield return new WaitForSeconds(deltaTime);
         }
         yield return new WaitForSeconds(0.5f);
-        audios.Add(SoundManager.Instance.PlaySF(SoundManager.SF.LevelWin));
+        audios.Add(SoundManager.Instance.PlaySF(
+            Helper.GetRandomInArr(new SoundManager.SF[] { SoundManager.SF.Win01, SoundManager.SF.Win02, }), volumeScale: 0.67f)
+        );
         InfoDialog.Open(new InfoDialog.Info {
             title = Helper.GetLocalizedValue(Helper.GetRandomInArr(new string[]{
                 "perfect",

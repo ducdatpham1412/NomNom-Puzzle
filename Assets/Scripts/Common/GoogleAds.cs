@@ -29,16 +29,32 @@ public class GoogleAds : Singleton<GoogleAds> {
             if (allReady) {
                 LoadInterstitialAd();
                 LoadRewardAd();
+                ShowBanner();
             }
         });
     }
 
-    public void ShowBanner() {
+    void ShowBanner() {
         if (bannerView == null) {
             CreateBannerView();
         }
-        var adRequest = new AdRequest();
-        bannerView.LoadAd(adRequest);
+        int retry = 0;
+
+        void LoadBanner() {
+            var adRequest = new AdRequest();
+            bannerView.LoadAd(adRequest);
+        }
+
+        void LoadRetry(LoadAdError err) {
+            if (retry <= 3) {
+                retry++;
+                Invoke(nameof(LoadBanner), 2);
+            }
+        }
+
+        bannerView.OnBannerAdLoadFailed += LoadRetry;
+
+        LoadBanner();
     }
 
     public void ShowInterstitial(Action success = null, Action error = null) {
@@ -68,6 +84,7 @@ public class GoogleAds : Singleton<GoogleAds> {
         }
     }
 
+    public void Initialize() { }
 
     void LoadInterstitialAd(int retry = 0) {
         if (interstitialAd != null) {
@@ -94,7 +111,6 @@ public class GoogleAds : Singleton<GoogleAds> {
                 interstitialAd = ad;
             });
     }
-
 
     void LoadRewardAd(int retry = 0) {
         if (rewardedAd != null) {
@@ -123,7 +139,6 @@ public class GoogleAds : Singleton<GoogleAds> {
                 rewardedAd = ad;
             });
     }
-
 
     void CreateBannerView() {
         if (bannerView != null) {
