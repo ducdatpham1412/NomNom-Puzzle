@@ -227,6 +227,7 @@ public class GameGraft : MonoBehaviour {
                 CheckAndSet();
                 item.animatingToSquare = false;
                 item.transform.position = square.Center;
+                item.transform.localScale = item.originalScale;
                 Controller.GameGraft.CheckEndGame();
             });
         }

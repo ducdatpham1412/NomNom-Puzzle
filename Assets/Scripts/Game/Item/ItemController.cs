@@ -81,6 +81,8 @@ public class ItemController : MonoBehaviour {
     }
 
     public IEnumerator ScaleAndShake(float shakeSpeed = 70f, float scale = 2f) {
+        if (animatingToSquare) yield break;
+
         float duration = 0.15f;
         float elapsedTime = 0f;
         Vector3 targetScale = originalScale * scale;
