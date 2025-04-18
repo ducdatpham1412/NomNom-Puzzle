@@ -36,7 +36,7 @@ public class InformationController : MonoBehaviour {
         string json = jsonFile.text;
         Relationship = JsonConvert.DeserializeObject<Dictionary<string, Relationship>>(json);
 
-        localeKey = GetLocaleKey();
+        localeKey = Helper.GetLocaleKey();
 
         foreach (var (cr, index) in CreaturesObject.Creatures.Select((v, i) => (v, i))) {
             ItemCreature newCr = Instantiate(ItemCreature, ScrollContent.transform).GetComponent<ItemCreature>();
@@ -89,15 +89,6 @@ public class InformationController : MonoBehaviour {
         if (playSF) {
             ScrollToIndex(_index);
         }
-    }
-
-    public string GetLocaleKey() {
-        string key = Helper.GetLocaleKey();
-        if (key == "en-US") return "en";
-        if (key == "ja") return "jp";
-        if (key == "ko") return "ko";
-        if (key == "vi") return "vi";
-        return "";
     }
 
     public void GoBackGameScene() {

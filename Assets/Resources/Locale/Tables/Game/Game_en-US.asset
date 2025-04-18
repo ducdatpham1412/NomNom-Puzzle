@@ -159,6 +159,10 @@ MonoBehaviour:
     m_Localized: "Don\u2019t hesitate to ask for a hint!"
     m_Metadata:
       m_Items: []
+  - m_Id: 39491515456675840
+    m_Localized: "It\u2019s brain-training time with our adorable animal friends"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -13,7 +13,7 @@ public class Setting : MonoBehaviour {
         SfxSwitch.ActionChange += SfxChanged;
         MusicSwitch.SetValue(GameManager.Instance.profile.music);
         SfxSwitch.SetValue(GameManager.Instance.profile.sfx);
-        SetLocale(GameManager.Instance.profile.localeID ?? 0);
+        UpdateButtonsLanguage(GameManager.Instance.profile.localeID ?? 0);
     }
 
     void OnDestroy() {
@@ -25,14 +25,7 @@ public class Setting : MonoBehaviour {
         Helper.Haptic();
         LocalizationManager.Instance.SetLocale(localeID);
         GameManager.Instance.profile.localeID = localeID;
-        foreach (var lan in LanguageButtons) {
-            if (lan.Id == localeID) {
-                lan.Image.color = Helper.ColorFromHex(Configs.Color.yellow);
-            }
-            else {
-                lan.Image.color = Color.white;
-            }
-        }
+        UpdateButtonsLanguage(localeID);
     }
 
     void MusicChanged(bool isActive) {
@@ -44,6 +37,17 @@ public class Setting : MonoBehaviour {
     void SfxChanged(bool isActive) {
         Helper.Haptic();
         GameManager.Instance.profile.sfx = isActive;
+    }
+
+    void UpdateButtonsLanguage(int localeID) {
+        foreach (var lan in LanguageButtons) {
+            if (lan.Id == localeID) {
+                lan.Image.color = Helper.ColorFromHex(Configs.Color.yellow);
+            }
+            else {
+                lan.Image.color = Color.white;
+            }
+        }
     }
 
     [Serializable]

@@ -116,6 +116,7 @@
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralUISpace.cs" />
     <Compile Include="Assets/Scripts/Game/Item/ItemLevel.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/PathSplines.cs" />
+    <Compile Include="Assets/Scripts/Classes/Serializable/FirebaseTracking.cs" />
     <Compile Include="Assets/Scripts/Classes/ScriptableObjects/Creature.cs" />
     <Compile Include="Assets/LeanTween/Examples/Scripts/GeneralCameraShake.cs" />
     <Compile Include="Assets/Scripts/Utils/DragTracker.cs" />

@@ -7,6 +7,7 @@ public static class Storage {
         currentLevel,
         playingLevels,
         profile,
+        dailyNoti,
     }
 
     public static void SET(Key key, string value) {

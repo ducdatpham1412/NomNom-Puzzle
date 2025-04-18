@@ -171,10 +171,6 @@ MonoBehaviour:
         type: 3}'
     - line: '|   - {fileID: 11400000, guid: 11079bf9c2b8142148f348dcfbce07c7, type:
         2}'
-    - line: '|   - {fileID: -4083481906525195284, guid: 46990bf912af14708a4258151e8bca8b,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 6163626a54896447b900655f8e9d58b1, type:
-        2}'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
     - line: '|   m_HolographicPauseOnTrackingLoss: 1'
@@ -997,7 +993,7 @@ MonoBehaviour:
         m_ExportAsGoogleAndroidProject: 0
         m_DebugSymbolLevel: 1
         m_DebugSymbolFormat: 5
-        m_CurrentDeploymentTargetId: WSPNMNDY45EICYYD
+        m_CurrentDeploymentTargetId: __builtin__target_default
         m_BuildType: 1
         m_BuildAppBundle: 0
         m_IPAddressToConnect: 
