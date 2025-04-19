@@ -70,7 +70,7 @@ public class SoundManager : Singleton<SoundManager> {
             }
             Music.clip = MusicSources[source];
             Music.Play();
-            Music.volume = 0.1f;
+            Music.volume = 0.27f;
         }
     }
 

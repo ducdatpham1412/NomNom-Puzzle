@@ -65,6 +65,8 @@ public class GameInit : MonoBehaviour {
         }
 
         InitChoicesBoard(currentLevel);
+
+        FirebaseTracking.Instance.StartLevel(currentLevel);
     }
 
     void InitSquaresBoard() {

@@ -126,6 +126,7 @@
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/lz4x64Plastic.dll" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/workspaceserver.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/guihelp.ko.txt" />
+    <None Include="Assets/Firebase/Editor/Firebase.Crashlytics.Editor.dll" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/binmergetool.ja.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/images.ja.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/binmergetool.zh-Hans.txt" />
@@ -144,6 +145,7 @@
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/mergetool.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/clientcommon.ja.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/FileSystemWatcherLicense.txt" />
+    <None Include="Assets/Firebase/Editor/FirebaseAnalytics_version-12.6.0_manifest.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/commontypes.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/clientcommon.zh-Hans.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/basecommands.es.txt" />
@@ -151,10 +153,12 @@
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/differences.es.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/images.zh-Hans.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/mergetool.zh-Hans.txt" />
+    <None Include="Assets/Firebase/Editor/AppDependencies.xml" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/differences.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/configurehelper.en.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/semantic.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/mergetool.ko.txt" />
+    <None Include="Assets/Firebase/Editor/FirebaseCrashlytics_version-12.6.0_manifest.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/workspaceserver.ko.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/i3.en.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/images.en.txt" />
@@ -164,10 +168,12 @@
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/cm.zh-Hant.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/common.en.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/clientcommon.es.txt" />
+    <None Include="Assets/Firebase/Editor/AnalyticsDependencies.xml" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/guihelp.es.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/configurehelper.zh-Hans.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/clientcommon.ko.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/cm.en.txt" />
+    <None Include="Assets/Firebase/Editor/CrashlyticsDependencies.xml" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/semantic.ko.txt" />
     <None Include="Assets/ExternalDependencyManager/Editor/external-dependency-manager_version-1.2.185_manifest.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/configurehelper.ko.txt" />
@@ -177,6 +183,7 @@
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/cm-help.zh-Hans.txt" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/zlib64Plastic.dll" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/plastic-gui.zh-Hans.txt" />
+    <None Include="Assets/Firebase/Editor/Firebase.Editor.dll" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/commontypes.ja.txt" />
     <None Include="Assets/ExternalDependencyManager/Editor/1.2.185/Google.PackageManagerResolver.dll" />
     <None Include="Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Localization/xdiff.zh-Hant.txt" />
@@ -684,6 +691,10 @@
       <HintPath>Assets/ExternalDependencyManager/Editor/Google.VersionHandler.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GoogleMobileAds.Common">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.Common.dll</HintPath>
       <Private>False</Private>
@@ -708,6 +719,10 @@
       <HintPath>Assets/ExternalDependencyManager/Editor/1.2.185/Google.VersionHandlerImpl.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.App">
+      <HintPath>Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library/PackageCache/com.unity.collab-proxy/Lib/Editor/unityplastic.dll</HintPath>
       <Private>False</Private>
@@ -724,6 +739,10 @@
       <HintPath>Library/PackageCache/com.unity.collab-proxy/Lib/Editor/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.TaskExtension">
+      <HintPath>Assets/Firebase/Plugins/Firebase.TaskExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GoogleMobileAds.Core">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.Core.dll</HintPath>
       <Private>False</Private>
@@ -734,6 +753,10 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
       <HintPath>Library/PackageCache/com.unity.visualscripting/Editor/VisualScripting.Core/Dependencies/DotNetZip/Unity.VisualScripting.IonicZip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Crashlytics.Editor">
+      <HintPath>Assets/Firebase/Editor/Firebase.Crashlytics.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
@@ -752,6 +775,10 @@
       <HintPath>Library/PackageCache/com.unity.visualscripting/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Crashlytics">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Crashlytics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GoogleMobileAds.Unity">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.Unity.dll</HintPath>
       <Private>False</Private>
@@ -766,6 +793,18 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library/PackageCache/com.unity.nuget.mono-cecil/Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Platform">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Platform.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.MiniJson">
+      <HintPath>Assets/Firebase/Plugins/Google.MiniJson.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Editor">
+      <HintPath>Assets/Firebase/Editor/Firebase.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Google.PackageManagerResolver">

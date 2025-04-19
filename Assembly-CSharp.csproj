@@ -164,20 +164,27 @@
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile-2-Pass.shader" />
+    <None Include="Assets/Firebase/Plugins/Firebase.Analytics.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Common.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Ump.iOS.dll" />
     <None Include="Assets/LeanTween/ReadMe.txt" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
+    <None Include="Assets/Firebase/Plugins/iOS/Firebase.Analytics.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.dll" />
+    <None Include="Assets/Firebase/Plugins/Firebase.App.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.iOS.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
     <None Include="Assets/LeanTween/License.txt" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF SSD.shader" />
+    <None Include="Assets/Firebase/Plugins/x86_64/FirebaseCppAnalytics.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets/Firebase/Plugins/Firebase.TaskExtension.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Core.dll" />
+    <None Include="Assets/Firebase/m2repository/com/google/firebase/firebase-app-unity/maven-metadata.xml" />
     <None Include="Assets/TextMesh Pro/Shaders/SDFFunctions.hlsl" />
     <None Include="Assets/GoogleMobileAds/link.xml" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds_version-10.0.0_manifest.txt" />
+    <None Include="Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_6_0.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface.shader" />
     <None Include="Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader" />
@@ -186,16 +193,23 @@
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets/TextMesh Pro/Resources/LineBreaking Leading Characters.txt" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Ump.dll" />
+    <None Include="Assets/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/maven-metadata.xml" />
     <None Include="Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc" />
     <None Include="Assets/TextMesh Pro/Shaders/TMPro_Surface.cginc" />
+    <None Include="Assets/Firebase/Plugins/Firebase.Crashlytics.dll" />
     <None Include="Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Unity.dll" />
+    <None Include="Assets/Firebase/Plugins/iOS/Firebase.Crashlytics.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets/Firebase/Plugins/Firebase.Platform.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Android.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF Overlay.shader" />
+    <None Include="Assets/Firebase/m2repository/com/google/firebase/firebase-crashlytics-unity/maven-metadata.xml" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets/Firebase/Plugins/Google.MiniJson.dll" />
     <None Include="Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader" />
+    <None Include="Assets/Firebase/Plugins/iOS/Firebase.App.dll" />
     <None Include="Assets/GoogleMobileAds/GoogleMobileAds.Ump.Android.dll" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_Sprite.shader" />
   </ItemGroup>
@@ -652,6 +666,10 @@
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.29f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.XRModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GoogleMobileAds.Common">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.Common.dll</HintPath>
       <Private>False</Private>
@@ -666,6 +684,14 @@
     </Reference>
     <Reference Include="GoogleMobileAds">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.App">
+      <HintPath>Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.TaskExtension">
+      <HintPath>Assets/Firebase/Plugins/Firebase.TaskExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="GoogleMobileAds.Core">
@@ -688,6 +714,10 @@
       <HintPath>Library/PackageCache/com.unity.visualscripting/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Crashlytics">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Crashlytics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GoogleMobileAds.Unity">
       <HintPath>Assets/GoogleMobileAds/GoogleMobileAds.Unity.dll</HintPath>
       <Private>False</Private>
@@ -698,6 +728,14 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library/PackageCache/com.unity.nuget.mono-cecil/Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Platform">
+      <HintPath>Assets/Firebase/Plugins/Firebase.Platform.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.MiniJson">
+      <HintPath>Assets/Firebase/Plugins/Google.MiniJson.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">

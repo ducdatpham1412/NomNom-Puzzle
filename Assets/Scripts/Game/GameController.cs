@@ -82,6 +82,7 @@ public class GameController : MonoBehaviour {
     public void EndGame() {
         ended = true;
         RemoveLevelStatus();
+        FirebaseTracking.Instance.FinishLevel(currentLevel);
         currentLevel++;
         if (currentLevel > levelStorage) {
             levelStorage = currentLevel;
@@ -166,6 +167,7 @@ public class GameController : MonoBehaviour {
         InfoDialog.Close();
         Level[] levels = GetLevels();
         GameInit.InitGame(levels[currentLevel - 1], currentLevel);
+        FirebaseTracking.Instance.OpenLevel(level);
     }
 
     public bool ShouldHandlePan() {
