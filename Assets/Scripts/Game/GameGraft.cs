@@ -224,10 +224,10 @@ public class GameGraft : MonoBehaviour {
             item.animatingToSquare = true;
             LeanTween.scale(item.gameObject, item.originalScale, attachParams.duration).setEase(LeanTweenType.easeOutQuad);
             LeanTween.move(item.gameObject, square.Center, attachParams.duration).setEase(LeanTweenType.easeOutQuad).setOnComplete(() => {
-                CheckAndSet();
                 item.animatingToSquare = false;
                 item.transform.position = square.Center;
                 item.transform.localScale = item.originalScale;
+                CheckAndSet();
                 Controller.GameGraft.CheckEndGame();
             });
         }

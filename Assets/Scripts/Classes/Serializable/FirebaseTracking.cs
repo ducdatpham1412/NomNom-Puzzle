@@ -1,41 +1,69 @@
+using Firebase;
+using Firebase.Analytics;
+using Firebase.Extensions;
+using UnityEngine;
 
-public class FirebaseTracking {
+public class FirebaseTracking : Singleton<FirebaseTracking> {
     static bool isReady = false;
 
-    public enum Event {
-        custom_app_open,
-        start_level,
-        finish_level,
-        open_level,
-        setting_language,
+    public void Initialize() {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread((task) => {
+            var dependencyStatus = task.Result;
+            if (dependencyStatus == DependencyStatus.Available) {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                isReady = true;
+                OpenApp();
+                Debug.Log("Firebase initialized successfully ✅");
+            }
+            else {
+                Debug.LogWarning($"Could not resolve all Firebase dependencies {dependencyStatus}");
+            }
+        });
     }
 
-    public static void Initialize() {
-
-    }
-
-    static void OpenApp() {
+    void OpenApp() {
         if (!isReady) return;
-        // Params: DeviceID, App Version, Helper.Timestamp
+        FirebaseAnalytics.LogEvent("custom_app_open", new Parameter[] {
+            new Parameter("device_id", GameManager.Instance.profile.device_id),
+            new Parameter("version", Application.version),
+            new Parameter("ts", Helper.TimeStamp())
+        });
     }
 
-    public static void StartLevel(int level) {
+    public void StartLevel(int level) {
         if (!isReady) return;
-        // Params: DeviceID, Level, Helper.Timestamp
+        FirebaseAnalytics.LogEvent("start_level", new Parameter[] {
+            new Parameter("device_id", GameManager.Instance.profile.device_id),
+            new Parameter("level", level),
+            new Parameter("ts", Helper.TimeStamp())
+        });
     }
 
-    public static void FinishLevel(int level) {
+    public void FinishLevel(int level) {
         if (!isReady) return;
-        // Params: DeviceID, Level, Helper.Timestamp
+        FirebaseAnalytics.LogEvent("finish_level", new Parameter[] {
+            new Parameter("device_id", GameManager.Instance.profile.device_id),
+            new Parameter("level", level),
+            new Parameter("ts", Helper.TimeStamp())
+        });
     }
 
-    public static void OpenLevel(int level) {
+    public void OpenLevel(int level) {
         if (!isReady) return;
-        // Params: DeviceID, Level, Helper.Timestamp
+        FirebaseAnalytics.LogEvent("open_level", new Parameter[] {
+            new Parameter("device_id", GameManager.Instance.profile.device_id),
+            new Parameter("level", level),
+            new Parameter("ts", Helper.TimeStamp())
+        });
     }
 
-    public static void SetLanguage(string lan) {
+    public void SetLanguage(string lan) {
         if (!isReady) return;
-        // Params: DeviceID, lan, Helper.Timestamp
+        FirebaseAnalytics.LogEvent("set_language", new Parameter[] {
+            new Parameter("device_id", GameManager.Instance.profile.device_id),
+            new Parameter("language", lan),
+            new Parameter("ts", Helper.TimeStamp())
+        });
     }
 }

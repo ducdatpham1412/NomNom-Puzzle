@@ -29,6 +29,7 @@ public class GameManager : Singleton<GameManager> {
         };
 
         SoundManager.Instance.Initialize();
+        FirebaseTracking.Instance.Initialize();
         ScheduleDailyNotification();
 
         if (profile.music) {

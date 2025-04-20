@@ -22,6 +22,7 @@ public class ItemController : MonoBehaviour {
     Color? originalColor;
     SpriteRenderer Renderer;
     LTDescr lTDescr;
+    bool isShaking = false;
 
     void Start() {
         originalScale = transform.localScale;
@@ -81,8 +82,9 @@ public class ItemController : MonoBehaviour {
     }
 
     public IEnumerator ScaleAndShake(float shakeSpeed = 70f, float scale = 2f) {
-        if (animatingToSquare) yield break;
+        if (animatingToSquare || isShaking) yield break;
 
+        isShaking = true;
         float duration = 0.15f;
         float elapsedTime = 0f;
         Vector3 targetScale = originalScale * scale;
@@ -118,6 +120,7 @@ public class ItemController : MonoBehaviour {
 
         transform.localScale = originalScale;
         transform.localPosition = originalPos;
+        isShaking = false;
     }
 
     public void PingErrorInterval(bool shouldScale) {
