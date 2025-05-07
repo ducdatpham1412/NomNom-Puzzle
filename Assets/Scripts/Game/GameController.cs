@@ -100,6 +100,8 @@ public class GameController : MonoBehaviour {
 
         void OnSuccess() {
             numberSuggestions = numberSugs;
+            Helper.Vibrate();
+            SoundManager.Instance.PlaySF(SoundManager.SF.Bubble);
             InfoDialog.Open(new InfoDialog.Info {
                 title = Helper.GetLocalizedValue("tapToCreature", args: new string[] { numberSugs.ToString() }),
                 fontSize = 16,

@@ -146,8 +146,9 @@ public class GoogleAds : Singleton<GoogleAds> {
             bannerView = null;
         }
 
-        float scale = MobileAds.Utils.GetDeviceScale();
-        float width = scale == 0 ? Screen.width : Screen.width / scale;
+        // float scale = MobileAds.Utils.GetDeviceScale();
+        // float width = scale == 0 ? Screen.width : Screen.width / scale;
+        float width = MobileAds.Utils.GetDeviceSafeWidth() / 2;
         AdSize size = width < AdSize.IABBanner.Width ? AdSize.Banner : AdSize.IABBanner;
         // AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
         bannerView = new BannerView(Configs.Env.BANNER_ID, size, AdPosition.Bottom);
