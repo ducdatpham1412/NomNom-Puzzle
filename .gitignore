@@ -49,5 +49,6 @@ env.json
 
 # Firebase
 google-services.json
+google-services-desktop.json
 GoogleService-Info.plist
 Firebase
